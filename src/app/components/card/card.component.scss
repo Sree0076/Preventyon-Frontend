@@ -1,7 +1,21 @@
-.card {
+.privacy-card {
+    background: linear-gradient(to right, #A27AD7 19%, #554071 100%);
+
+}
+
+.security-card {
+    background: linear-gradient(to right, #3F69BA 86%, #4567AA 100%);
+}
+
+.quality-card {
+    background: linear-gradient(to right, #65A3F6 0%, #106BE6 100%);
+}
+
+.privacy-card,
+.security-card,
+.quality-card {
     height: 226.31px;
     width: 440.04px;
-    background: linear-gradient(to right, #A27AD7 19%, #554071 100%);
     color: white;
     border-radius: 8px;
     padding-right: 35px;
