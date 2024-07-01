@@ -1,4 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+    --privacy-color: linear-gradient(90deg, rgba(162, 122, 215, 1) 19%, rgba(85, 64, 113, 1) 100%);
+    --security-color: linear-gradient(90deg, rgba(47, 79, 140, 1) 86%, rgba(22, 38, 68, 1) 100%);
+    --quality-color: linear-gradient(90deg, rgba(101, 163, 246, 1) 0%, rgba(16, 107, 230, 1) 100%);
+
+    .privacy-card {
+        --card-color: var(--privacy-color);
+    }
+
+    .security-card {
+        --card-color: var(--security-color);
+    }
+
+    .quality-card {
+        --card-color: var(--quality-color);
+    }
+}

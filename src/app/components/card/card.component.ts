@@ -18,20 +18,16 @@ export class CardComponent {
   @Input() iconSvg!: string;
   @Input() cardClass!: string;
 
-  @Input() color1!: string;
-  @Input() color2!: string;
-  @Input() color1Percentage!: string;
-  @Input() color2Percentage!: string;
 
   sanitizedIconSvg!: SafeHtml;
 
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    this.sanitizedIconSvg = this.sanitizer.bypassSecurityTrustHtml(this.iconSvg);
+    this.sanitizedIconSvg = this.sanitizer.bypassSecurityTrustHtml(
+      this.iconSvg
+    );
   }
-  
-  getGradientBackground(): string {
-    return `linear-gradient(to right, ${this.color1} ${this.color1Percentage}, ${this.color2} ${this.color2Percentage})`;
-  }
+
+ 
 }
