@@ -1,0 +1,118 @@
+::ng-deep .p-dialog .p-dialog-header.ng-tns-c662934324-0 {
+    padding: 24px 24px 0px 24px !important; 
+    border-bottom: 2px solid rgba(69, 52, 106, 1)!important;
+  }
+  .forward-button{
+    margin-top: 10px;
+    margin-right: 10px;
+    text-align: right;
+  }
+.dialog-header-content {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    width: 100%;
+  }
+  
+  .dialog-header-title {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .dialog-search-input {
+    padding: 0rem 2rem;
+    border: none;
+    box-shadow: none;
+    flex-grow: 1;
+  }
+  
+  .dialog-search-input:focus {
+    outline: none;
+  }
+.text-message{
+    margin-top: 3px;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    background-color: rgb(250, 246, 255);
+    padding: 10px;
+    border-radius: 10px;
+    input{
+        padding: 0rem 0.5rem;
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+    button{
+        font-size: 13px;
+        color: white;
+        background-color: rgba(123, 93, 187, 1);
+        border: none;
+        border-radius: 30px;
+        padding: 10px;
+        i{  
+            color: rgba(201, 169, 241, 1);
+            rotate: 45deg;
+        }
+    }
+  }
+  .forward-names{
+    margin-left: 20px;
+    margin-right: 20px;
+      .person-details{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        margin-bottom: 2px;
+        background-color: rgb(250, 246, 255); 
+      }   
+      .image-icon{
+        display: flex;
+        align-items: center;
+      }
+      img{
+        width: 50px;
+        border-radius: 50%;
+      } 
+      .name-details{
+        display: flex;
+        flex-direction: column;
+      }     
+      p{
+        margin: 0px;
+      }   
+      .p1{
+        font-size: 13px;
+      }  
+  }
+
+  .selected-users{
+    display: flex;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    gap: 5px;
+    .person-details1{
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgb(181, 181, 181);
+      padding: 5px;
+      background-color: rgb(250, 246, 255); 
+      img{
+        width: 40px;
+        border-radius: 50%;
+      } 
+      p{
+        margin: 0;
+      }
+      button{
+        border: none;
+        background-color: transparent;
+      }
+    }
+  }
