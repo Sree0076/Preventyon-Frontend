@@ -1,14 +1,11 @@
 .chart-container {
   width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px;
+  display: inline-flex;
   box-sizing: border-box;
 }
 
 .chart-wrapper {
-  width: 70%;
-  // height: 400px;
+  width: 90%;
 }
 
 
@@ -16,3 +13,8 @@
   width: 100% !important;
   height: 100% !important;
 }
+ canvas
+{
+  height: 500px !important;
+}
+
