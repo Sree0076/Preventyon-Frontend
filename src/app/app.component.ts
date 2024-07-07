@@ -1,5 +1,10 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+import { CardComponent } from './components/card/card.component';
+import { Incident } from './models/incident.interface';
+import { CardApiService } from './services/card-api.service';
+import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 
 
@@ -8,11 +13,13 @@ import { BarChartComponent } from './components/bar-chart/bar-chart.component';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet,BarChartComponent]
+
+    imports: [RouterOutlet, CardComponent, DashboardComponent,BarChartComponent]
+
 })
 
 
 
 export class AppComponent {
-  title = 'preventyon';
+
 }
