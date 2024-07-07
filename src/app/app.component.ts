@@ -1,5 +1,8 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TableComponent } from './components/table/table.component';
+import { HttpClient } from '@angular/common/http';
+import { TablefetchService } from './service/tablefetch.service';
 
 import { CardComponent } from './components/card/card.component';
 import { Incident } from './models/incident.interface';
@@ -9,17 +12,19 @@ import { BarChartComponent } from './components/bar-chart/bar-chart.component';
 
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
 
-    imports: [RouterOutlet, CardComponent, DashboardComponent,BarChartComponent]
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet,TableComponent,CardComponent, DashboardComponent,BarChartComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 
 })
 
 
 
 export class AppComponent {
+  title = 'preventyon';
+  greeting: any;
 
 }
