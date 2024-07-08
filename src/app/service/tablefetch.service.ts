@@ -13,6 +13,6 @@ export class TablefetchService {
   constructor(private http: HttpClient) { }
 
   public getIncidents(): Observable<any> {
-    return this.http.get("https://api.jsonsilo.com/public/e0259933-a369-4c73-9475-66315ae36922");
+    return this.http.get("http://localhost:5138/api/getList");
   }
 }

@@ -5,6 +5,7 @@ import { Incident } from '../../models/incident.interface';
 import { CardApiService } from '../../services/card-api.service';
 import { CardComponent } from '../../components/card/card.component';
 import { BarChartComponent } from '../../components/bar-chart/bar-chart.component';
+import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 
 
 
@@ -13,7 +14,7 @@ import { BarChartComponent } from '../../components/bar-chart/bar-chart.componen
     standalone: true,
     templateUrl: './admin-dashboard.component.html',
     styleUrl: './admin-dashboard.component.scss',
-    imports: [MatTabsModule, TableComponent,CardComponent,BarChartComponent]
+    imports: [MatTabsModule, TableComponent,CardComponent,BarChartComponent,SideBarComponent]
 })
 export class AdminDashboardComponent {
   details: Incident[] = [];
