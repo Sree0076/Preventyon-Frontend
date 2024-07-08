@@ -43,7 +43,7 @@ export class BarChartComponent implements OnInit {
     this.options = {
       responsive: true,
       maintainAspectRatio: false,
-      aspectRatio: 0.8,
+      aspectRatio: 0.6,
       layout: {
         padding: {
           right: 25,

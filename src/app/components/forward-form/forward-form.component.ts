@@ -163,4 +163,24 @@ export class ForwardFormComponent {
     getSelectedUserIds(): number[] {
       return this.selectedUsers.map(user => user.user_id);
     }
+
+
+    // autoResize(event: Event): void {
+    //   const textarea = event.target as HTMLTextAreaElement;
+    //   textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the scroll height
+    // }
+
+    autoResize(event: Event): void {
+      const textarea = event.target as HTMLTextAreaElement;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the scroll height
+      
+      // Check if the textarea is empty, then reset the height to 1 line
+      if (!textarea.value) {
+        textarea.style.height = 'auto'; // Reset to auto first to ensure proper resizing
+        textarea.rows = 1; // Reset the rows attribute to 1 line
+      }
+    }
+    
+  
 }

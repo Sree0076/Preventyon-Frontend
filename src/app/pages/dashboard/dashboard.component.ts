@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Incident } from '../../models/incident.interface';
 import { CardApiService } from '../../services/card-api.service';
 import { CardComponent } from "../../components/card/card.component";
+import { ForwardFormComponent } from '../../components/forward-form/forward-form.component';
 
 @Component({
     selector: 'app-dashboard',
