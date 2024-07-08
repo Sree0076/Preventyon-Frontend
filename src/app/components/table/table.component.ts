@@ -1,3 +1,4 @@
+
 import { Component, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
@@ -13,46 +14,46 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { LazyLoadEvent } from 'primeng/api';
 
 export interface IncidentData {
-  incident_id: number;
+  incidentId: number;
   title: string;
   description: string;
-  status: 'open' | 'in_progress' | 'closed';
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  reported_by: number;
-  reported_at: string;
-  month_year: string;
-  incident_type: 'Security' | 'Quality' | 'Privacy';
-  category_id: number;
-  investigation_details: string;
-  associated_impacts: string;
-  collection_of_evidence: string;
+  status: string;
+  priority: string;
+  reportedBy: string;
+  reportedAt: Date;
+  incidentType: string;
+  categoryId: string;
+  investigationDetails: string;
+  associatedImpacts: string;
+  collectionOfEvidence: string;
   correction: string;
-  corrective_action: string;
-  correction_completion_target_date: string;
-  correction_actual_completion_date: string | null;
-  corrective_actual_completion_date: string | null;
-  correction_details: string;
-  corrective_details: string;
+  correctiveAction: string;
+  correctionCompletionTargetDate: Date;
+  correctionActualCompletionDate: Date;
+  correctiveActualCompletionDate: Date;
+  correctionDetails: string;
+  correctiveDetails: string;
   remarks: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
+
 @Component({
   selector: 'app-table',
   standalone: true,
   imports: [RouterOutlet,ButtonModule,TableModule, CommonModule,SplitButtonModule,InputIconModule,IconFieldModule,
-     InputTextModule,DropdownModule, DropdownModule,FormsModule,DialogModule,MenuModule],
-
+     InputTextModule,DropdownModule, DropdownModule,FormsModule,DialogModule,MenuModule,OverlayPanelModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss'
 })
 export class TableComponent {
 
   @ViewChild('dt2') dt2: Table | undefined;
-  customers:IncidentData[]=[];
+  incidents:IncidentData[]=[];
   priorities: any[] = [
     { label: 'High', value: 'high' },
     { label: 'Medium', value: 'medium' },
@@ -67,84 +68,16 @@ export class TableComponent {
   rows = 10;
 
   priorityValue: any;
+  selectedIncidents: IncidentData[]=[];
 
 
   constructor(private tablefetchService: TablefetchService) {}
 
   ngOnInit() {
     this.tablefetchService.getIncidents().subscribe(data => {
-      this.customers = data;
+      this.incidents = data;
       console.log(data);
     });
-    this.menuitems = [
-            {
-              label: 'File',
-              icon: 'pi pi-file',
-              items: [
-                  {
-                      label: 'New',
-                      icon: 'pi pi-plus',
-                      items: [
-                          {
-                              label: 'Document',
-                              icon: 'pi pi-file'
-                          },
-                          {
-                              label: 'Image',
-                              icon: 'pi pi-image'
-                          },
-                          {
-                              label: 'Video',
-                              icon: 'pi pi-video'
-                          }
-                      ]
-                  },
-                  {
-                      label: 'Open',
-                      icon: 'pi pi-folder-open'
-                  },
-                  {
-                      label: 'Print',
-                      icon: 'pi pi-print'
-                  }
-              ]
-          },
-          {
-              label: 'Edit',
-              icon: 'pi pi-file-edit',
-              items: [
-                  {
-                      label: 'Copy',
-                      icon: 'pi pi-copy'
-                  },
-                  {
-                      label: 'Delete',
-                      icon: 'pi pi-times'
-                  }
-              ]
-          },
-          {
-              label: 'Search',
-              icon: 'pi pi-search'
-          },
-          {
-              separator: true
-          },
-          {
-              label: 'Share',
-              icon: 'pi pi-share-alt',
-              items: [
-                  {
-                      label: 'Slack',
-                      icon: 'pi pi-slack'
-                  },
-                  {
-                      label: 'Whatsapp',
-                      icon: 'pi pi-whatsapp'
-                  }
-              ]
-          }
-          ];
   }
 
   next() {
@@ -165,11 +98,11 @@ export class TableComponent {
   }
 
   isLastPage(): boolean {
-      return this.customers ? this.first === this.customers.length - this.rows : true;
+      return this.incidents ? this.first === this.incidents.length - this.rows : true;
   }
 
   isFirstPage(): boolean {
-      return this.customers ? this.first === 0 : true;
+      return this.incidents ? this.first === 0 : true;
   }
   clear(table: Table) {
     table.clear();
@@ -178,6 +111,7 @@ export class TableComponent {
 filterGlobal(event: Event) {
   const inputElement = event.target as HTMLInputElement;
   const value = inputElement.value;
+  console.log(value);
   if (this.dt2) {
     this.dt2.filterGlobal(value, 'contains');
   }

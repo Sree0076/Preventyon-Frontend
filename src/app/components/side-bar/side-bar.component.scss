@@ -20,13 +20,14 @@
         background-color: rgba(201, 169, 241,0.16);
         border-radius: 10px;
         box-shadow: 3px 3px 5px grey;
+        cursor: pointer;
     }
     .profile-icon{
         display: flex;
         justify-content: center;
         img{
-            width: 50px;      
-            border-radius: 50%;  
+            width: 50px;
+            border-radius: 50%;
         }
     }
     button{
