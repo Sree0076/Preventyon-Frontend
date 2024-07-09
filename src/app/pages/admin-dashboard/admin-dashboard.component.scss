@@ -4,7 +4,7 @@
   left: 0;
   top: 0;
   height: 100%;
-  width: 250px; /* Adjust the width as needed */
+  width: 270px; /* Adjust the width as needed */
   background-color: #f8f9fa; /* Optional: background color for sidebar */
 
 }
@@ -27,6 +27,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-right: 25px;
 }
 
 .chart-container {

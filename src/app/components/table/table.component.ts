@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { LazyLoadEvent } from 'primeng/api';
+import { ForwardFormComponent } from "../forward-form/forward-form.component";
 
 export interface IncidentData {
   incidentId: number;
@@ -43,12 +44,12 @@ export interface IncidentData {
 }
 
 @Component({
-  selector: 'app-table',
-  standalone: true,
-  imports: [RouterOutlet,ButtonModule,TableModule, CommonModule,SplitButtonModule,InputIconModule,IconFieldModule,
-     InputTextModule,DropdownModule, DropdownModule,FormsModule,DialogModule,MenuModule,OverlayPanelModule],
-  templateUrl: './table.component.html',
-  styleUrl: './table.component.scss'
+    selector: 'app-table',
+    standalone: true,
+    templateUrl: './table.component.html',
+    styleUrl: './table.component.scss',
+    imports: [RouterOutlet, ButtonModule, TableModule, CommonModule, SplitButtonModule, InputIconModule, IconFieldModule,
+        InputTextModule, DropdownModule, DropdownModule, FormsModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent]
 })
 export class TableComponent {
 
@@ -128,6 +129,8 @@ openForwardingModal(incidentId: number) {
   this.selectedIncidentId = incidentId;
   this.displayForwardingModal = true;
 }
-
+onDialogClosed() {
+  this.displayForwardingModal = false;
+}
 
 }
