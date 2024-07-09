@@ -1,5 +1,30 @@
+::ng-deep .p-dialog .p-dialog-content {
+  overflow: auto;
+}
+
+::ng-deep .p-dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+::ng-deep .p-dialog-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::ng-deep .p-dialog-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::ng-deep .p-dialog-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+
+
 ::ng-deep .p-dialog .p-dialog-header.ng-tns-c662934324-0 {
-    padding: 24px 24px 0px 24px !important; 
+    padding: 20px 24px 0px 24px !important; 
     border-bottom: 2px solid rgba(69, 52, 106, 1)!important;
   }
   .forward-button{
@@ -7,11 +32,17 @@
     margin-right: 10px;
     text-align: right;
   }
+
+  .dialog-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 .dialog-header-content {
     display: flex;
     justify-content: start;
     align-items: center;
-    padding-top: 30px;
+    padding-top: 25px;
     padding-bottom: 10px;
     width: 100%;
   }
@@ -39,18 +70,27 @@
     background-color: rgb(250, 246, 255);
     padding: 10px;
     border-radius: 10px;
-    input{
-        padding: 0rem 0.5rem;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
+    .dialog-textarea {
+      border: none;
+      box-shadow: none;
+      background-color: transparent;
+      resize: none; 
+      width: 100%;
+      max-height: calc(1.5em * 3);
+      overflow-y: auto;
+      height: 1.8em;
     }
+    .dialog-textarea:focus{
+      outline: none;
+    }
+
     button{
         font-size: 13px;
         color: white;
         background-color: rgba(123, 93, 187, 1);
         border: none;
         border-radius: 30px;
+        height: 38px;
         padding: 10px;
         i{  
             color: rgba(201, 169, 241, 1);
@@ -58,6 +98,7 @@
         }
     }
   }
+
   .forward-names{
     margin-left: 20px;
     margin-right: 20px;
@@ -91,20 +132,21 @@
 
   .selected-users{
     display: flex;
-    overflow-x: scroll;
-    flex-wrap: nowrap;
-    flex-shrink: 0;
+    flex-wrap: wrap;
     gap: 5px;
+    max-height: calc(2 * 40px + 10px); // Two rows of users, each row height = 35px + gap
+    overflow-y: auto;
     .person-details1{
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
       gap: 5px;
-      border: 1px solid rgb(181, 181, 181);
-      padding: 5px;
+      padding: 3px;
+      font-size: 13px;
+      border-radius: 30px;
       background-color: rgb(250, 246, 255); 
       img{
-        width: 40px;
+        width: 35px;
         border-radius: 50%;
       } 
       p{
@@ -115,4 +157,22 @@
         background-color: transparent;
       }
     }
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
