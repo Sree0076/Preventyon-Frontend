@@ -145,6 +145,15 @@ handleDialogClose() {
       }
     ];
 
+    breakpoints = {
+      '1199px': '60vw',
+      '900px': '70vw',
+      '700px': '75vw',
+      '595px': '90vw',
+      '500px': '95vw',
+      '460px': '99vw',
+      '380px': '99vw'
+    };
     selectedUsers: userDetails[] = [];
     addUser(user: userDetails) {
       if (!this.selectedUsers.find(u => u.user_id === user.user_id)) {

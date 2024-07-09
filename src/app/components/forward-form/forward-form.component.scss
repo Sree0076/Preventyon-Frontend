@@ -20,13 +20,11 @@
   background: #555;
 }
 
-
-
-
 ::ng-deep .p-dialog .p-dialog-header.ng-tns-c662934324-0 {
     padding: 20px 24px 0px 24px !important; 
     border-bottom: 2px solid rgba(69, 52, 106, 1)!important;
   }
+  
   .forward-button{
     margin-top: 10px;
     margin-right: 10px;
@@ -175,4 +173,16 @@
   
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+
+
+  @media screen and (max-width: 440px){
+    ::ng-deep .p-dialog-header {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: end;
+    }
+    .dialog-search-input {
+      padding: 0rem 0rem 0rem 2rem;
+    }
   }
