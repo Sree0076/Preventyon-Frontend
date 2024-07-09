@@ -112,7 +112,7 @@
                 </div>
               </p-overlayPanel>
 
-                <i class="bi bi-send" (click)="openForwardingModal(incident.incidentId)"></i>
+                <i class="bi bi-send" [hidden]="!isadmin" (click)="openForwardingModal(incident.incidentId)"></i>
             </div>
 
 

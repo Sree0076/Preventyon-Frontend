@@ -1,5 +1,5 @@
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputIconModule } from 'primeng/inputicon';
@@ -52,7 +52,7 @@ export interface IncidentData {
         InputTextModule, DropdownModule, DropdownModule, FormsModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent]
 })
 export class TableComponent {
-
+  @Input() isadmin:boolean=false;
   @ViewChild('dt2') dt2: Table | undefined;
   incidents:IncidentData[]=[];
   priorities: any[] = [
