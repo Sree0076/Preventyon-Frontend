@@ -1,12 +1,9 @@
 <div class="flex justify-content-center ">
-    <!-- <div class="forward-button">
-      <p-button (click)="showDialog()" label="Forward" />
-    </div> -->
     <p-dialog
       [modal]="true"
       [(visible)]="visibility"
       [style]="{ width: '40rem', height : '32rem'}"
-      [breakpoints]="{ '1199px': '50vw', '575px': '80vw' }"
+      [breakpoints]="breakpoints"
       [draggable]="false"
       [maximizable]="true"
       (onHide)="handleDialogClose()">
@@ -26,7 +23,7 @@
           }
           </div>
         <div class="dialog-header-content">
-          <span class="dialog-header-title">To :</span>
+          <span class="dialog-header-title">To:</span>
           <input
             type="text"
             pInputText
@@ -57,7 +54,7 @@
         <div class="text-message">
           <textarea placeholder="Type a message" class="dialog-textarea" (input)="autoResize($event)"></textarea>
           <div class="d-flex align-items-center">
-            <button type="submit" class="d-flex align-items-center">Forward <i class="pi pi-send"></i></button>
+            <button type="submit" class="d-flex align-items-center">Forward <i class="bi bi-send"></i></button>
           </div>
         </div>
       </ng-template>
