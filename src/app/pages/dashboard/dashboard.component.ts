@@ -3,15 +3,18 @@ import { Incident } from '../../models/incident.interface';
 import { CardApiService } from '../../services/card-api.service';
 import { CardComponent } from "../../components/card/card.component";
 import { ForwardFormComponent } from '../../components/forward-form/forward-form.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
-    imports: [CardComponent]
+    imports: [CardComponent,ForwardFormComponent,ButtonModule]
 })
 export class DashboardComponent {
+
+  
   details: Incident[] = [];
 
   constructor(private dataService: CardApiService) {}

@@ -18,8 +18,10 @@ export class ForwardFormComponent {
   visible: boolean = false;
 
   showDialog() {
-      this.visible = true;
+    this.visible = true;
   }
+
+
   searchTerm:string='';
 
   user_details:userDetails[]=[
