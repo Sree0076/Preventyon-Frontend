@@ -9,13 +9,14 @@ import { Incident } from './models/incident.interface';
 import { CardApiService } from './services/card-api.service';
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
 
 
 @Component({
 
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,TableComponent,CardComponent, DashboardComponent,BarChartComponent],
+  imports: [RouterOutlet,TableComponent,CardComponent, DashboardComponent,BarChartComponent,UserManagementComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 
