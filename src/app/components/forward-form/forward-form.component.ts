@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,11 +15,12 @@ import { NgFor, NgIf } from '@angular/common';
   styleUrl: './forward-form.component.scss'
 })
 export class ForwardFormComponent {
-  visible: boolean = false;
+handleDialogClose() {
+  this.dialogClosed.emit();
+}
+@Output() dialogClosed = new EventEmitter<void>();
+@Input() visibility:boolean=false;
 
-  showDialog() {
-      this.visible = true;
-  }
   searchTerm:string='';
 
   user_details:userDetails[]=[
@@ -144,6 +145,15 @@ export class ForwardFormComponent {
       }
     ];
 
+    breakpoints = {
+      '1199px': '60vw',
+      '900px': '70vw',
+      '700px': '75vw',
+      '595px': '90vw',
+      '500px': '95vw',
+      '460px': '99vw',
+      '380px': '99vw'
+    };
     selectedUsers: userDetails[] = [];
     addUser(user: userDetails) {
       if (!this.selectedUsers.find(u => u.user_id === user.user_id)) {
@@ -151,16 +161,36 @@ export class ForwardFormComponent {
         this.selectedUsers.push(user);
       }
     }
-  
+
     // Remove user from the selected list
     removeUser(user: userDetails) {
       this.selectedUsers = this.selectedUsers.filter(u => u.user_id !== user.user_id);
       // Also reset the isSelected property
       this.user_details.find(u => u.user_id === user.user_id)!.isSelected = false;
     }
-  
+
     // Get selected user IDs
     getSelectedUserIds(): number[] {
       return this.selectedUsers.map(user => user.user_id);
     }
+
+
+    // autoResize(event: Event): void {
+    //   const textarea = event.target as HTMLTextAreaElement;
+    //   textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the scroll height
+    // }
+
+    autoResize(event: Event): void {
+      const textarea = event.target as HTMLTextAreaElement;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the scroll height
+
+      // Check if the textarea is empty, then reset the height to 1 line
+      if (!textarea.value) {
+        textarea.style.height = 'auto'; // Reset to auto first to ensure proper resizing
+        textarea.rows = 1; // Reset the rows attribute to 1 line
+      }
+    }
+
+
 }

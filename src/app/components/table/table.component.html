@@ -129,7 +129,7 @@
   </p-table>
   </div>
 
-  <p-dialog header="Forward Incident" [(visible)]="displayForwardingModal" [modal]="true" [style]="{width: '50vw'}">
-
-  </p-dialog>
+  <!-- <p-dialog header="Forward Incident" [(visible)]="displayForwardingModal" [modal]="true" [style]="{width: '100%' }"> -->
+   <app-forward-form [visibility]="displayForwardingModal "   (dialogClosed)="onDialogClosed()"></app-forward-form>>
+  <!-- </p-dialog> -->
 
