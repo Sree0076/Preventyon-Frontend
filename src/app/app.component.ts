@@ -15,15 +15,11 @@ import { LoginComponent } from './models/login/login.component';
 
 
 @Component({
-
-  selector: 'app-root',
-  standalone: true,
-
-  imports: [RouterOutlet,TableComponent,CardComponent, DashboardComponent,BarChartComponent,LoginComponent],
-
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
-
+    selector: 'app-root',
+    standalone: true,
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    imports: [RouterOutlet, TableComponent, CardComponent, DashboardComponent, BarChartComponent, LoginComponent]
 })
 
 
