@@ -9,6 +9,11 @@ export class IncidentReportFormApiService {
   constructor(private http: HttpClient) {}
   private createBaseUrl: string = 'http://localhost:5262/api/createIncident';
   private updateBaseUrl: string = 'http://localhost:5262/api/getCoupon';
+  private getIncidentsBaseUrl: string = 'http://localhost:5262/api/getIncident';
+
+  getIncident(id: number): Observable<any> {
+    return this.http.get(`${this.getIncidentsBaseUrl}/${id}`);
+  }
 
   addIncident(incident: any): Observable<any> {
     console.log(incident);
@@ -16,7 +21,7 @@ export class IncidentReportFormApiService {
     return this.http.post(this.createBaseUrl, incident);
   }
 
-  getIncident(id: number): Observable<any> {
+  updateIncident(id: number): Observable<any> {
     console.log(id);
 
     return this.http.get(`${this.updateBaseUrl}/${id}`);
