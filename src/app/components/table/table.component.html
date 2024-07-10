@@ -34,36 +34,36 @@
             <th style="width:12%" pSortableColumn="incidentId">
               <div class="flex align-items-center">
                 <p-sortIcon field="incidentId" />ID
-                <p-columnFilter type="text" field="incidentId" display="menu" />
+                <p-columnFilter type="text" field="incidentId" display="options" />
               </div>
             </th>
 
             <th style="width:20%">
               <div class="flex align-items-center">
                   Title
-                  <p-columnFilter type="text" field="title" display="menu" />
+                  <p-columnFilter type="text" field="title" display="options" />
               </div>
             </th>
 
             <th style="width:10%">
               <div class="flex align-items-center">
                   Type
-                  <p-columnFilter type="text" field="incidentType" display="menu" />
+                  <p-columnFilter type="text" field="incidentType" display="options" />
               </div>
               </th>
               <th style="width:13%">
               <div class="flex align-items-center">
                   Categories
-                  <p-columnFilter type="text" field="category_id" display="menu" />
+                  <p-columnFilter type="text" field="category_id" display="options" />
               </div>
               </th>
             <th style="width:15%">Reported By
-              <p-columnFilter type="text" field="type" display="menu" />
+              <p-columnFilter type="text" field="type" display="options" />
             </th>
             <th style="width:10%" class="column-visible">
               <div class="flex align-items-center ">
                   Priority
-                  <p-columnFilter field="priority" display="menu">
+                  <p-columnFilter field="priority" matchMode="equals"  [showMatchModes]="false" [showOperator]="false" display="menu"  [showApplyButton]="false" [showAddButton]="false">
                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                         <p-dropdown
                             [options]="priorities"
@@ -78,7 +78,7 @@
               <th style="width:10%">
                 <div class="flex align-items-center">
                     Status
-                    <p-columnFilter type="text" field="status" display="menu" />
+                    <p-columnFilter type="text" field="status" display="options" />
                 </div>
                 </th>
             <th style="width:15%">Action</th>

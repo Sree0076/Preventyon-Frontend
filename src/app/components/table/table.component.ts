@@ -39,6 +39,7 @@ export interface IncidentData {
   correctionDetails: string;
   correctiveDetails: string;
   remarks: string;
+  isDraft:boolean;
   createdAt: Date;
   updatedAt: Date;
 }

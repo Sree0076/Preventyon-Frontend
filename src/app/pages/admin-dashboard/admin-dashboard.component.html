@@ -4,7 +4,7 @@
 <div class="top-section">
   <div class="card-container">
     @for (item of details; track item.id) {
-      <app-card
+      <app-card (click)="getCategory(item.title)"
         [title]="item.title"
         [totalCount]="item.total_incidents"
         [pendingCount]="item.pending_incidents"

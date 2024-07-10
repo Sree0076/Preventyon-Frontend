@@ -17,6 +17,9 @@ import { SideBarComponent } from '../../components/side-bar/side-bar.component';
     imports: [MatTabsModule, TableComponent,CardComponent,BarChartComponent,SideBarComponent]
 })
 export class AdminDashboardComponent {
+getCategory(event: any) {
+   console.log(event);
+}
   details: Incident[] = [];
 
   constructor(private dataService: CardApiService) {}

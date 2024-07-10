@@ -17,15 +17,15 @@ body {
   left: 0;
   height: 100vh;
   width: 250px; /* Adjust as needed */
-  background-color: #fefeff; /* Example color */
+  background-color: #f8f9fa; /* Example color */
   color: white;
 }
 
 /* Main content area */
 .main-content {
-  margin-left: 100px; /* Should match sidebar width */
+  margin-left: 80px; /* Should match sidebar width */
   padding: 20px;
-  width: calc(100% - 100px); /* Adjust based on sidebar width */
+  width: calc(100% - 80px); /* Adjust based on sidebar width */
 }
 
 /* Card container */
