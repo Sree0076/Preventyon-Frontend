@@ -12,20 +12,24 @@
     [rowsPerPageOptions]="[5,10, 25, 50]"
     [paginator]="true"
     sortMode="multiple"
-    [globalFilterFields]="['title','incidentId','categoryId']"
+    [globalFilterFields]="['incidentTitle','id','category']"
     [tableStyle]="{ 'min-width': '50rem' }"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     (onPage)="pageChange($event)"
   >
   <ng-template pTemplate="caption">
-    <div class="flex">
-      <i class="bi bi-eraser" (click)="clear(dt2)"></i>
-        <span class="p-input-icon-left ml-auto">
-            <i class="pi pi-search"></i>
-            <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-eraser" (click)="clear(dt2)"></i>
+        <span class="p-input-icon-left ml-2">
+          <i class="pi pi-search"></i>
+          <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
         </span>
+      </div>
+      <button type="button" class="btn btn-primary ml-auto" [hidden]="isadmin" (click)="onAddItem()" >Add Incident</button>
     </div>
   </ng-template>
+
     <ng-template pTemplate="header">
         <tr>
           <th style="width: 4rem">
@@ -33,7 +37,7 @@
         </th>
             <th style="width:12%" pSortableColumn="incidentId">
               <div class="flex align-items-center">
-                <p-sortIcon field="incidentId" />ID
+                <p-sortIcon field="id" />ID
                 <p-columnFilter type="text" field="incidentId" display="options" />
               </div>
             </th>
@@ -41,7 +45,7 @@
             <th style="width:20%">
               <div class="flex align-items-center">
                   Title
-                  <p-columnFilter type="text" field="title" display="options" />
+                  <p-columnFilter type="text" field="incidentTitle" display="options" />
               </div>
             </th>
 
@@ -54,11 +58,11 @@
               <th style="width:13%">
               <div class="flex align-items-center">
                   Categories
-                  <p-columnFilter type="text" field="category_id" display="options" />
+                  <p-columnFilter type="text" field="category" display="options" />
               </div>
               </th>
             <th style="width:15%">Reported By
-              <p-columnFilter type="text" field="type" display="options" />
+              <p-columnFilter type="text" field="reportedBy" display="options" />
             </th>
             <th style="width:10%" class="column-visible">
               <div class="flex align-items-center ">
@@ -78,24 +82,26 @@
               <th style="width:10%">
                 <div class="flex align-items-center">
                     Status
-                    <p-columnFilter type="text" field="status" display="options" />
+                    <p-columnFilter type="text" field="incidentStatus" display="options" />
                 </div>
                 </th>
             <th style="width:15%">Action</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-incident>
+      @if(!incident.isDraft || !isadmin)
+      {
         <tr>
             <td>
             <p-tableCheckbox [value]="incident" />
             </td>
-            <td>{{ incident.incidentId }}</td>
-            <td>{{ incident.title }}</td>
+            <td>{{ incident.id }}</td>
+            <td>{{ incident.incidentTitle }}</td>
             <td>{{ incident.incidentType}}</td>
-            <td>{{ incident.categoryId }}</td>
+            <td>{{ incident.category }}</td>
             <td>{{ incident.reportedBy }}</td>
             <td>{{ incident.priority}}</td>
-            <td>{{ incident.status }}</td>
+            <td>{{ incident.incidentStatus }}</td>
             <td>
               <div class="flex justify-content-center">
                <i class="bi bi-three-dots-vertical" (click)="op.toggle($event)"></i>
@@ -103,7 +109,11 @@
                 <div class="custom-overlay">
                   <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
                     <li class="flex align-items-center gap-2 custom-item">
-                      <i class="bi bi-pencil-square"> </i>Edit
+                      @if(incident.isDraft || isadmin)
+                      {
+                        <i class="bi bi-pencil-square" (click)="editIncidentData(incident.id)"> </i>Edit
+                      }
+
                     </li>
                     <li class="flex align-items-center gap-2 custom-item">
                       <i class="bi bi-eye"></i>View
@@ -112,13 +122,14 @@
                 </div>
               </p-overlayPanel>
 
-                <i class="bi bi-send" [hidden]="!isadmin" (click)="openForwardingModal(incident.incidentId)"></i>
+                <i class="bi bi-send" [hidden]="!isadmin" (click)="openForwardingModal(incident.id)"></i>
             </div>
 
 
 
      </td>
         </tr>
+      }
     </ng-template>
     <ng-template pTemplate="paginatorleft">
         <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" />
@@ -130,6 +141,6 @@
   </div>
 
   <!-- <p-dialog header="Forward Incident" [(visible)]="displayForwardingModal" [modal]="true" [style]="{width: '100%' }"> -->
-   <app-forward-form [visibility]="displayForwardingModal "   (dialogClosed)="onDialogClosed()"></app-forward-form>>
+   <app-forward-form [visibility]="displayForwardingModal "   (dialogClosed)="onDialogClosed()"></app-forward-form>
   <!-- </p-dialog> -->
 

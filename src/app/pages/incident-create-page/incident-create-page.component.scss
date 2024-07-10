@@ -1,0 +1,21 @@
+.reportformcontainer {
+  display: flex;
+}
+
+/* Fixed sidebar */
+.side-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 90px; /* Adjust as needed */
+  background-color:rgb(234, 233, 233); /* Example color */
+  color: white;
+}
+
+.content {
+  margin-left: 80px; /* Should match sidebar width */
+  padding: 20px;
+  width: calc(100% - 80px);
+  z-index: 100; /* Adjust based on sidebar width */
+}
