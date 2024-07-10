@@ -1,0 +1,17 @@
+.content,
+.description-content {
+    width: 100%;
+    height: 2.5rem;
+    border: 1px solid #A27AD7;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.title {
+    padding-top: 1rem;
+}
+
+.description-content {
+    height: fit-content;
+    overflow-wrap: break-word;
+}

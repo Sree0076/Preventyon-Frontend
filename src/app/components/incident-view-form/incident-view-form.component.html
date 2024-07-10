@@ -1,0 +1,59 @@
+<div>
+    <h2 class="text-center title">Incident View Form</h2>
+
+    <div class="container vh-100">
+        <form class="form">
+            <div class="form-group p-4">
+                <label for="incident-title">Incident Title</label>
+                <div class="content">
+                    <p>{{data.incidentTitle}}</p>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <div class="form-group p-4">
+                    <label for="incident-occured-date">Incident Occurred Date</label>
+                    <div class="content">
+                        <p>{{extractDateTime().date}}</p>
+                    </div>
+
+                </div>
+                <div class="form-group p-4">
+                    <label for="incident-occured-time">Incident Occurred Time</label>
+                    <div class="content">
+                        <p>{{extractDateTime().time}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group p-4">
+                <label for="incident-description">Incident Description</label>
+                <div class="description-content">
+                    <p>{{data.incidentDescription}}</p>
+                </div>
+            </div>
+
+            <div class="form-group p-4">
+                <label for="incidents-type">Incident Type</label>
+                <div class="content">
+                    <p>{{data.incidentType}}</p>
+                </div>
+            </div>
+
+            <div class="form-group p-4">
+                <label for="category">Category</label>
+                <div class="content">
+                    <p>{{data.category}}</p>
+                </div>
+            </div>
+
+            <div class="form-group p-4">
+                <label for="priority">Incident Priority</label>
+                <div class="content">
+                    <p>{{data.priority}}</p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
