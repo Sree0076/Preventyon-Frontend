@@ -52,27 +52,41 @@
             <div class="form-group p-4">
                 <label for="incidents-type">Incident Type</label>
                 <select class="form-control" id="incidents-type" formControlName="incidentsType">
-                    <option value="option1">Security Incident</option>
-                    <option value="option2">Privacy Incident</option>
-                    <option value="option3">Quality Incident</option>
+                    <option value="SecurityIncident">Security Incident</option>
+                    <option value="PrivacyIncident">Privacy Incident</option>
+                    <option value="QualityIncident">Quality Incident</option>
                 </select>
             </div>
 
             <div class="form-group p-4">
                 <label for="category">Category</label>
                 <select class="form-control" id="category" formControlName="category">
-                    <option value="option1">Security Incident</option>
-                    <option value="option2">Privacy Incident</option>
-                    <option value="option3">Quality Incident</option>
+                    <option value="denialOfService">Denial of Service</option>
+                    <option value="loss">Loss</option>
+                    <option value="theft">Theft</option>
+                    <option value="malware">Malware</option>
+                    <option value="ransomware">Ransomware</option>
+                    <option value="unauthorizedUse">Unauthorized Use</option>
+                    <option value="disclosure">Disclosure</option>
+                    <option value="unauthorizedAccess">Unauthorized Access</option>
+                    <option value="phishing">Phishing</option>
+                    <option value="unplannedDowntime">Unplanned Downtime</option>
+                    <option value="insecureSite">Insecure Site</option>
+                    <option value="insecureCoding">Insecure Coding</option>
+                    <option value="physicalSecurity">Physical Security</option>
+                    <option value="spoofing">Spoofing</option>
+                    <option value="botnetAttack">Botnet Attack</option>
+                    <option value="exposedAPIs">Exposed APIs</option>
+                    <option value="disclosingIPData">Disclosing IP Data</option>
                 </select>
             </div>
 
             <div class="form-group p-4">
                 <label for="priority">Incident Priority</label>
                 <select class="form-control" id="priority" formControlName="priority">
-                    <option value="option1">High</option>
-                    <option value="option2">Medium</option>
-                    <option value="option3">Low</option>
+                    <option value="High-L1">High</option>
+                    <option value="Medium-L2">Medium</option>
+                    <option value="Low-L3">Low</option>
                 </select>
             </div>
 
