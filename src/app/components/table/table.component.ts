@@ -1,5 +1,5 @@
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputIconModule } from 'primeng/inputicon';
@@ -8,7 +8,7 @@ import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { TablefetchService } from '../../service/tablefetch.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,31 +17,34 @@ import { DialogModule } from 'primeng/dialog';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { LazyLoadEvent } from 'primeng/api';
 import { ForwardFormComponent } from "../forward-form/forward-form.component";
+import { IncidentData } from '../../models/incidentData.interface';
+import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
 
-export interface IncidentData {
-  incidentId: number;
-  title: string;
-  description: string;
-  status: string;
-  priority: string;
-  reportedBy: string;
-  reportedAt: Date;
-  incidentType: string;
-  categoryId: string;
-  investigationDetails: string;
-  associatedImpacts: string;
-  collectionOfEvidence: string;
-  correction: string;
-  correctiveAction: string;
-  correctionCompletionTargetDate: Date;
-  correctionActualCompletionDate: Date;
-  correctiveActualCompletionDate: Date;
-  correctionDetails: string;
-  correctiveDetails: string;
-  remarks: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// export interface IncidentData {
+//   incidentId: number;
+//   title: string;
+//   description: string;
+//   status: string;
+//   priority: string;
+//   reportedBy: string;
+//   reportedAt: Date;
+//   incidentType: string;
+//   categoryId: string;
+//   investigationDetails: string;
+//   associatedImpacts: string;
+//   collectionOfEvidence: string;
+//   correction: string;
+//   correctiveAction: string;
+//   correctionCompletionTargetDate: Date;
+//   correctionActualCompletionDate: Date;
+//   correctiveActualCompletionDate: Date;
+//   correctionDetails: string;
+//   correctiveDetails: string;
+//   remarks: string;
+//   isDraft:boolean;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 
 @Component({
     selector: 'app-table',
@@ -52,6 +55,8 @@ export interface IncidentData {
         InputTextModule, DropdownModule, DropdownModule, FormsModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent]
 })
 export class TableComponent {
+  @Input() isadmin:boolean=false;
+  @Input() getDraft:boolean=false;
 
   @ViewChild('dt2') dt2: Table | undefined;
   incidents:IncidentData[]=[];
@@ -72,13 +77,24 @@ export class TableComponent {
   selectedIncidents: IncidentData[]=[];
 
 
-  constructor(private tablefetchService: TablefetchService) {}
+  constructor(private router:Router,private tablefetchService: TablefetchService,private incidentService: IncidentServiceTsService) {}
 
   ngOnInit() {
-    this.tablefetchService.getIncidents().subscribe(data => {
-      this.incidents = data;
-      console.log(data);
-    });
+
+    if(!this.getDraft)
+    {
+      this.tablefetchService.getIncidents().subscribe(data => {
+        this.incidents = data;
+        console.log(data);
+      });
+    }
+    else{
+      this.tablefetchService.getDraftIncidents().subscribe(data => {
+        this.incidents = data;
+        console.log(data);
+      });
+    }
+
   }
 
   next() {
@@ -123,8 +139,6 @@ filterPriority(event: any) {
     this.dt2.filter(value, 'priority', 'equals');
   }
 }
-
-
 openForwardingModal(incidentId: number) {
   this.selectedIncidentId = incidentId;
   this.displayForwardingModal = true;
@@ -132,5 +146,14 @@ openForwardingModal(incidentId: number) {
 onDialogClosed() {
   this.displayForwardingModal = false;
 }
-
+onAddItem()
+{
+  this.router.navigate(['/form',""]);
+}
+editIncidentData(incidentId: number): void
+{
+  console.log("edit");
+  this.incidentService.setSelectedIncidentId(incidentId);
+  this.router.navigate(['/form',"edit"]);
+}
 }

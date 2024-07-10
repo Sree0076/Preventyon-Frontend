@@ -1,11 +1,12 @@
 /* Sidebar styles */
 .side-bar {
   position: fixed;
-  left: 0;
   top: 0;
-  height: 100%;
-  width: 270px; /* Adjust the width as needed */
-  background-color: #f8f9fa; /* Optional: background color for sidebar */
+  left: 0;
+  height: 100vh;
+  width: 90px; /* Adjust as needed */
+  background-color:rgb(234, 233, 233); /* Example color */
+  color: white;
 
 }
 

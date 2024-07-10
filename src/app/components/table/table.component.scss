@@ -19,15 +19,7 @@
   color: rgb(25, 84, 156);
 
 }
-.bi-eraser:hover
-{
-  cursor: pointer;
-}
 
-.bi-send:hover
-{
-  cursor: pointer;
-}
 
 .bi-send
 {
@@ -56,7 +48,7 @@ th:hover p-sortIcon, th:hover p-columnFilter {
 }
 
 .custom-overlay {
-  width: 150px;
+  width: 100px;
   border-radius: 5px; /* Rounded corners */
   box-shadow: 0 4px 8px rgb(255, 255, 255); /* Subtle shadow for depth */
 }
@@ -88,4 +80,7 @@ th:hover p-sortIcon, th:hover p-columnFilter {
 
 .custom-item:hover i {
   color: #3683d4; /* Blue color on hover */
+}
+.bi{
+  cursor: pointer;
 }

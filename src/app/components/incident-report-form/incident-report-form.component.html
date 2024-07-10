@@ -5,7 +5,7 @@
         <form [formGroup]="viewform" (ngSubmit)="onSubmit()" class="form">
             <div class="form-group p-4">
                 <label for="incident-title">Incident Title</label>
-                <input type="text" class="form-control" id="incident-title" formControlName="incidentTitle" required>
+                <input type="text" class="form-control" id="incident-title" formControlName="incidentTitle" required [(ngModel)]="incident.incidentTitle">
                 <div *ngIf="viewform.get('incidentTitle')!.hasError('required') && viewform.get('incidentTitle')?.touched"
                     class="text-danger validate">
                     Title is required.
@@ -16,7 +16,7 @@
                 <div class="form-group p-4">
                     <label for="incident-occured-date">Incident Occurred Date</label>
                     <input type="date" class="form-control" id="incident-occured-date"
-                        formControlName="incidentOccuredDate" required>
+                        formControlName="incidentOccuredDate" required [(ngModel)]="incident.incidentOccuredDate">
                     <div *ngIf="viewform.get('incidentOccuredDate')!.hasError('required') && viewform.get('incidentOccuredDate')?.touched"
                         class="text-danger validate">
                         Incident Occured Date is required.
@@ -36,7 +36,7 @@
             <div class="form-group p-4">
                 <label for="incident-description">Incident Description</label>
                 <textarea class="form-control" id="incident-description" rows="4" formControlName="incidentDescription"
-                    required></textarea>
+                    required  [(ngModel)]="incident.incidentDescription"></textarea>
                 <div *ngIf="viewform.get('incidentDescription')!.hasError('required') && viewform.get('incidentDescription')?.touched"
                     class="text-danger validate">
                     Incident Description is required.
@@ -51,7 +51,7 @@
 
             <div class="form-group p-4">
                 <label for="incidents-type">Incident Type</label>
-                <select class="form-control" id="incidents-type" formControlName="incidentsType">
+                <select class="form-control" id="incidents-type" formControlName="incidentType" [(ngModel)]="incident.incidentType">
                     <option value="SecurityIncident">Security Incident</option>
                     <option value="PrivacyIncident">Privacy Incident</option>
                     <option value="QualityIncident">Quality Incident</option>
@@ -60,7 +60,7 @@
 
             <div class="form-group p-4">
                 <label for="category">Category</label>
-                <select class="form-control" id="category" formControlName="category">
+                <select class="form-control" id="category" formControlName="category" [(ngModel)]="incident.category">
                     <option value="denialOfService">Denial of Service</option>
                     <option value="loss">Loss</option>
                     <option value="theft">Theft</option>
@@ -83,7 +83,7 @@
 
             <div class="form-group p-4">
                 <label for="priority">Incident Priority</label>
-                <select class="form-control" id="priority" formControlName="priority">
+                <select class="form-control" id="priority" formControlName="priority" [(ngModel)]="incident.priority">
                     <option value="High-L1">High</option>
                     <option value="Medium-L2">Medium</option>
                     <option value="Low-L3">Low</option>
