@@ -1,0 +1,91 @@
+.table-section
+{
+  position: relative;
+  margin-top: 1%;
+}
+.p-input-icon-left
+{
+  margin-left: 10px;
+}
+.search
+{
+  height: 35px;
+  width: 75%;
+}
+.bi-eraser
+{
+
+  font-size:25px;
+  color: rgb(25, 84, 156);
+
+}
+.bi-eraser:hover
+{
+  cursor: pointer;
+}
+
+.bi-send:hover
+{
+  cursor: pointer;
+}
+
+.bi-send
+{
+
+  font-size:20px;
+  color: rgb(116, 15, 156);
+  margin-left: 5px;
+
+}
+
+th {
+  position: relative;
+}
+
+th p-sortIcon, th p-columnFilter {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  right: 5px;
+  top: 51%;
+  transform: translateY(-50%);
+}
+
+th:hover p-sortIcon, th:hover p-columnFilter {
+  opacity: 1;
+}
+
+.custom-overlay {
+  width: 150px;
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgb(255, 255, 255); /* Subtle shadow for depth */
+}
+
+.custom-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.custom-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between icon and text */
+  padding: 10px; /* Padding for clickable area */
+  border-radius: 3px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.custom-item:hover {
+  background-color: #e9ecef; /* Slightly darker grey on hover */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.custom-item i {
+  font-size: 21px; /* Icon size */
+  color: #5e11a0; /* Darker text color */
+}
+
+.custom-item:hover i {
+  color: #3683d4; /* Blue color on hover */
+}

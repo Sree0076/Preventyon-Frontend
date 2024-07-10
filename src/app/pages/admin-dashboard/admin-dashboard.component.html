@@ -1,0 +1,24 @@
+
+<app-side-bar class="side-bar"></app-side-bar>
+<div class="main-content">
+<div class="top-section">
+  <div class="card-container">
+    @for (item of details; track item.id) {
+      <app-card
+        [title]="item.title"
+        [totalCount]="item.total_incidents"
+        [pendingCount]="item.pending_incidents"
+        [closedCount]="item.closed_incidents"
+        [iconSvg]="item.svg"
+        [cardClass]="item.class">
+      </app-card>
+    }
+  </div>
+  <div class="chart-container">
+    <app-bar-chart></app-bar-chart>
+  </div>
+</div>
+
+<app-table></app-table>
+
+</div>
