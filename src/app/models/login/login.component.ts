@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthApiService } from '../../services/auth-api.service';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class LoginComponent {
 
+  constructor(public api:AuthApiService){}
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('',[Validators.required, Validators.minLength(6)]),
@@ -19,6 +22,15 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
+      this.api.getAuthentication(this.loginForm.value).subscribe(res=>{
+       if(res.status == true){
+        console.log("Authentication Successfully");
+       }
+       else{
+        console.log("Authentication Failed");
+       }
+          
+      });
     }
   }
 
