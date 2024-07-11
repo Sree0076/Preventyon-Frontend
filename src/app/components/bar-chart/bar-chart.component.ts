@@ -48,6 +48,7 @@ export class BarChartComponent implements OnInit {
         padding: {
           right: 25,
         },
+        width:130,
       },
       plugins: {
         legend: {
