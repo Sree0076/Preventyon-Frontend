@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -10,12 +9,11 @@ import { IncidentData } from '../models/incidentData.interface';
 export class IncidentReportFormApiService {
   constructor(private http: HttpClient) {}
 
-
-
-  private createBaseUrl: string = 'https://localhost:7209/Incident/PostIncident';
-  private fetchBaseUrl: string = 'https://localhost:7209/Incident/GetIncident';
-  private updateBaseUrl :string='https://localhost:7209/Incident/PutIncident'
-
+  private createBaseUrl: string =
+    'https://localhost:7209/Incident/PostIncident';
+  // private fetchBaseUrl: string = 'https://localhost:7209/Incident/GetIncident';
+  private fetchBaseUrl: string = 'https://localhost:7147/api/getIncident';
+  private updateBaseUrl: string = 'https://localhost:7209/Incident/PutIncident';
 
   addIncident(incident: any): Observable<any> {
     console.log(incident);
@@ -23,13 +21,10 @@ export class IncidentReportFormApiService {
     return this.http.post(this.createBaseUrl, incident);
   }
 
-
   getIncident(id: number): Observable<any> {
     return this.http.get(`${this.fetchBaseUrl}/${id}`);
-    }
-  updateIncident(id: number,incident:any): Observable<any>
-  {
-    return this.http.put(`${this.updateBaseUrl}/${id}`,incident);
-
+  }
+  updateIncident(id: number, incident: any): Observable<any> {
+    return this.http.put(`${this.updateBaseUrl}/${id}`, incident);
   }
 }
