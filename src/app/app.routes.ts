@@ -3,9 +3,6 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
 import { UserDashboardComponent } from './pages/user-dashboard/user-dashboard.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { IncidentReportFormComponent } from './components/incident-report-form/incident-report-form.component';
-
-import { IncidentViewFormComponent } from './components/incident-view-form/incident-view-form.component';
-
 import { IncidentCreatePageComponent } from './pages/incident-create-page/incident-create-page.component';
 
 export const routes: Routes = [
@@ -13,7 +10,5 @@ export const routes: Routes = [
   { path: 'user', component: UserDashboardComponent },
   { path: '', component: DashboardComponent },
   { path: 'form', component: IncidentReportFormComponent },
-  { path: 'view-incident', component: IncidentViewFormComponent },
   { path: 'form/:action', component: IncidentCreatePageComponent },
-
 ];

@@ -22,7 +22,6 @@ export class IncidentViewFormComponent {
       console.log(response);
       this.data = response;
     });
-    console.log(this.data.monthYear);
   }
 
   extractDateTime(): { date: string; time: string } {
