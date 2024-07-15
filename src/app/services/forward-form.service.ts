@@ -11,7 +11,7 @@ export class ForwardFormService {
   constructor(private http: HttpClient) {}
 
   getAllUsers():Observable<userDetails[]>{
-    return this.http.get<userDetails[]>('https://localhost:7006/Employee/GetEmployees');
+    return this.http.get<userDetails[]>('https://api.jsonsilo.com/public/af4a4e7a-f439-4c47-b967-00bd7ed71eab');
   }
 
 }

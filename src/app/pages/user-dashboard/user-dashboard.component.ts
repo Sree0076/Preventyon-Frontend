@@ -14,7 +14,20 @@ import { Incident } from '../../models/incident.interface';
 })
 export class UserDashboardComponent {
   details: Incident[] = [];
+  selectedCategory: string="";
+  getCategory(event: any) {
+    var tableRef= document.getElementById("tableRef")
+    if (tableRef) {
+        tableRef.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest"
+        });
+    }
+    this.selectedCategory = event;
 
+     console.log(event);
+  }
   constructor(private dataService: CardApiService) {}
 
   ngOnInit() {

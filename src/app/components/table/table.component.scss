@@ -84,3 +84,18 @@ th:hover p-sortIcon, th:hover p-columnFilter {
 .bi{
   cursor: pointer;
 }
+
+::ng-deep .p-inputtext  {
+  height: 35px;
+
+  padding: 0.25rem 0.1rem;
+  font-size: 0.8rem;/* Adjust width as needed */
+}
+::ng-deep .p-column-filter-matchmode-dropdown  {
+  height: 35px;
+   /* Adjust width as needed */
+}
+::ng-deep .p-dropdown-items
+{
+  padding: 0%;
+}
