@@ -1,5 +1,5 @@
 
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, SimpleChanges, Type, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputIconModule } from 'primeng/inputicon';
@@ -57,6 +57,7 @@ import { IncidentServiceTsService } from '../../services/sharedService/incident-
 export class TableComponent {
   @Input() isadmin:boolean=false;
   @Input() getDraft:boolean=false;
+  @Input() filterCategory: string = '';
 
   @ViewChild('dt2') dt2: Table | undefined;
   incidents:IncidentData[]=[];
@@ -85,18 +86,24 @@ export class TableComponent {
     {
       this.tablefetchService.getIncidents().subscribe(data => {
         this.incidents = data;
+        this.applyCategoryFilter();
         console.log(data);
       });
     }
     else{
       this.tablefetchService.getDraftIncidents().subscribe(data => {
         this.incidents = data;
+        this.applyCategoryFilter();
         console.log(data);
       });
     }
 
   }
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['filterCategory'] && !changes['filterCategory'].isFirstChange()) {
+      this.applyCategoryFilter();
+    }
+  }
   next() {
       this.first = this.first + this.rows;
   }
@@ -150,10 +157,24 @@ onAddItem()
 {
   this.router.navigate(['/form',""]);
 }
+
+applyCategoryFilter() {
+  console.log(this.filterCategory);
+    if (this.dt2) {
+      this.dt2.filter(this.filterCategory,'incidentType', 'contains');
+    }
+}
+
 editIncidentData(incidentId: number): void
 {
   console.log("edit");
   this.incidentService.setSelectedIncidentId(incidentId);
   this.router.navigate(['/form',"edit"]);
+}
+viewIncidentData(incidentId: number): void
+{
+  console.log("view");
+  this.incidentService.setSelectedIncidentId(incidentId);
+  this.router.navigate(['/view-incident']);
 }
 }

@@ -8,7 +8,7 @@ import { User } from '../models/user-management.interface';
 })
 export class UserManagementService {
   private apiUrl =
-    'https://localhost:7274/Users';
+    'https://api.jsonsilo.com/public/f1bed98f-1857-4dc5-a567-c22901af1a74';
 
   constructor(private http: HttpClient) {}
 

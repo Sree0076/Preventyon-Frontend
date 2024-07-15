@@ -37,7 +37,7 @@ export class ForwardFormComponent {
   constructor(public forwardFormService : ForwardFormService){}
 
   ngOnInit():void{
-    this.forwardFormService.getAllUsers().subscribe(data => 
+    this.forwardFormService.getAllUsers().subscribe(data =>
     {
       this.user_details = data;
       console.log(data);
@@ -50,19 +50,19 @@ export class ForwardFormComponent {
     }
 
     addUser(user: userDetails) {
-      if (!this.selectedUsers.find(u => u.id === user.id)) {
+      if (!this.selectedUsers.find(u => u.user_id === user.user_id)) {
         this.selectedUsers.push(user);
       }
     }
 
     // Remove user from the selected list
     removeUser(user: userDetails) {
-      this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
+      this.selectedUsers = this.selectedUsers.filter(u => u.user_id !== user.user_id);
     }
 
     // Get selected user IDs
     getSelectedUserIds(): number[] {
-      return this.selectedUsers.map(user => user.id);
+      return this.selectedUsers.map(user => user.user_id);
     }
 
     autoResize(event: Event): void {
