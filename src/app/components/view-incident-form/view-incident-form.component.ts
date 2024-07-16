@@ -8,7 +8,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+
 import { Router } from '@angular/router';
+import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
+
 
 @Component({
   selector: 'app-view-incident-form',
@@ -28,18 +31,31 @@ import { Router } from '@angular/router';
 export class ViewIncidentFormComponent {
   constructor(
     private apiService: IncidentReportFormApiService,
-    private datePipe: DatePipe,
+
+  
     private router: Router
+
+    private incidentService: IncidentServiceTsService,
+    private datePipe: DatePipe
+
   ) {}
   data: any = {};
   id: number = 0;
 
   ngOnInit() {
+
+    this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
+      this.id = incidentId;
+      this.fetchIncident();
+      console.log('Selected incident ID:', this.id);
+    });
+    console.log(this.data.monthYear);
+  }
+  fetchIncident() {
     this.apiService.getIncident(this.id).subscribe((response) => {
       console.log(response);
       this.data = response;
     });
-    console.log(this.data.monthYear);
   }
 
   extractDateTime(): { date: string; time: string } {

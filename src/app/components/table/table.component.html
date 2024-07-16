@@ -38,36 +38,37 @@
             <th style="width:12%" pSortableColumn="incidentId">
               <div class="flex align-items-center">
                 <p-sortIcon field="id" />ID
-                <p-columnFilter type="text" field="incidentId" display="options" />
+                <p-columnFilter type="text" field="incidentId" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" display="options" [showClearButton]="false"/>
               </div>
             </th>
 
             <th style="width:20%">
               <div class="flex align-items-center">
                   Title
-                  <p-columnFilter type="text" field="incidentTitle" display="options" />
+                  <p-columnFilter type="text" field="incidentTitle" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" display="options" [showClearButton]="false"/>
               </div>
             </th>
 
             <th style="width:10%">
               <div class="flex align-items-center">
                   Type
-                  <p-columnFilter type="text" field="incidentType" display="options" />
+                  <p-columnFilter type="text" field="incidentType" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" display="options" [showClearButton]="false" />
               </div>
               </th>
               <th style="width:13%">
               <div class="flex align-items-center">
                   Categories
-                  <p-columnFilter type="text" field="category" display="options" />
+                  <p-columnFilter type="text" field="category" display="options" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false"[showClearButton]="false"/>
               </div>
               </th>
             <th style="width:15%">Reported By
-              <p-columnFilter type="text" field="reportedBy" display="options" />
+              <p-columnFilter type="text" field="reportedBy" display="options" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" [showClearButton]="false" />
+
             </th>
             <th style="width:10%" class="column-visible">
               <div class="flex align-items-center ">
                   Priority
-                  <p-columnFilter field="priority" matchMode="equals"  [showMatchModes]="false" [showOperator]="false" display="menu"  [showApplyButton]="false" [showAddButton]="false">
+                  <p-columnFilter field="priority" matchMode="equals"  [showMatchModes]="false" [showOperator]="false" display="options"  [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter" [showClearButton]="false">
                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                         <p-dropdown
                             [options]="priorities"
@@ -116,7 +117,7 @@
 
                     </li>
                     <li class="flex align-items-center gap-2 custom-item">
-                      <i class="bi bi-eye"></i>View
+                      <i class="bi bi-eye"  (click)="viewIncidentData(incident.id)"></i>View
                     </li>
                   </ul>
                 </div>
