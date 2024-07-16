@@ -12,7 +12,7 @@ export class IncidentReportFormApiService {
   private createBaseUrl: string =
     'https://localhost:7209/Incident/CreateIncident';
 
-  private fetchBaseUrl: string = 'https://localhost:7209/Incident/GetIncident';
+  private fetchBaseUrl: string = 'https://localhost:7209/Incident/GetIncident/2';
   private updateBaseUrl: string = 'https://localhost:7209/Incident/PutIncident';
 
   addIncident(incident: any): Observable<any> {
@@ -22,7 +22,7 @@ export class IncidentReportFormApiService {
   }
 
   getIncident(id: number): Observable<any> {
-    return this.http.get(`${this.fetchBaseUrl}/${id}`);
+    return this.http.get(`${this.fetchBaseUrl}`);
   }
   updateIncident(id: number, incident: any): Observable<any> {
     return this.http.put(`${this.updateBaseUrl}/${id}`, incident);

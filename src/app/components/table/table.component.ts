@@ -155,7 +155,7 @@ onDialogClosed() {
 }
 onAddItem()
 {
-  this.router.navigate(['/form',""]);
+  this.router.navigate(['/create-incident']);
 }
 
 applyCategoryFilter() {
@@ -169,7 +169,7 @@ editIncidentData(incidentId: number): void
 {
   console.log("edit");
   this.incidentService.setSelectedIncidentId(incidentId);
-  this.router.navigate(['/form',"edit"]);
+  this.router.navigate(['/edit-incident']);
 }
 viewIncidentData(incidentId: number): void
 {

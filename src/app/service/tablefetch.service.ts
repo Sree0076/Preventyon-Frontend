@@ -15,7 +15,7 @@ export class TablefetchService {
   }
 
   public getDraftIncidents(): Observable<any> {
-    return this.http.get("https://localhost:7209/Incident/GetDraftIncidentsByEmployeeId?employeeId=1");
+    return this.http.get("https://localhost:7209/Incident/GetDraftIncidentsByEmployeeId?employeeId=2");
   }
 }
 // https://api.jsonsilo.com/public/da8e7333-5488-46ff-a295-a7dfd499d9fa
