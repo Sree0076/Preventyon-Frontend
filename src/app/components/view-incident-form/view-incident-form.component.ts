@@ -31,10 +31,7 @@ import { IncidentServiceTsService } from '../../services/sharedService/incident-
 export class ViewIncidentFormComponent {
   constructor(
     private apiService: IncidentReportFormApiService,
-
-  
-    private router: Router
-
+    private router: Router,
     private incidentService: IncidentServiceTsService,
     private datePipe: DatePipe
 

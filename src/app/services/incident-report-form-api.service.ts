@@ -13,7 +13,6 @@ export class IncidentReportFormApiService {
     'https://localhost:7209/Incident/CreateIncident';
 
   private fetchBaseUrl: string = 'https://localhost:7209/Incident/GetIncident';
-  private fetchBaseUrl: string = 'https://localhost:7209/api/getIncident';
   private updateBaseUrl: string = 'https://localhost:7209/Incident/PutIncident';
 
   addIncident(incident: any): Observable<any> {
