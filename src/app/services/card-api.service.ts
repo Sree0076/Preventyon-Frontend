@@ -2,16 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Incident } from '../models/incident.interface';
+import { IncidentStatsDTO } from '../models/incidentdto.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CardApiService {
   private jsonUrl = 'assets/data.json';
+  private fetchUrl =
+    'https://localhost:7209/Employee/GetIncidentStatsByEmployeeId/employee/2';
 
   constructor(private http: HttpClient) {}
 
-  getData(): Observable<Incident[]> {    
-    return this.http.get<Incident[]>(this.jsonUrl);
+  getData(): Observable<Incident[]> {
+    console.log(this.http.get<Incident[]>(`${this.fetchUrl}`));
+
+    return this.http.get<Incident[]>(`${this.fetchUrl}`);
+  }
+
+  getDataBasedOnStatus(): Observable<IncidentStatsDTO> {
+    console.log(this.http.get<IncidentStatsDTO>(`${this.fetchUrl}`));
+
+    return this.http.get<IncidentStatsDTO>(`${this.fetchUrl}`);
   }
 }

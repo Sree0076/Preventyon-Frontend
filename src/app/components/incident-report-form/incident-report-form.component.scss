@@ -1,39 +1,68 @@
-.form-control {
-    border-color: #A27AD7;
-    border-radius: 0px;
+.report-form {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 800px;
+  width: 100%;
 }
 
-.custom-select-container select {
-    width: 100%;
-    padding-right: 50px;
-
+.form-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 -4px 8px rgba(0, 0, 0, 0.1), -4px 0 8px rgba(0, 0, 0, 0.1), 4px 0 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
 }
 
-.custom-select-container svg {
-    position: absolute;
-    top: 102%;
-    right: 60px;
-    transform: translateY(-50%);
-    pointer-events: none;
+.p-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
-.submit,
-.draft {
-    width: 211px;
-    height: 50px;
-    margin: 2px;
-    background: var(--privacy-color);
-    color: white;
-    border-radius: 8px;
-    border: 1px solid white;
-    box-shadow: 3px 3px 5px 0px #A27AD7;
-    margin-right: 2rem;
+.savebutton {
+  border: 1px solid white;
+  width: 15rem;
+  height: 3.2rem;
+  background: var(--privacy-color);
+  margin: 1rem;
+  color: white;
+  border-radius: 0.4rem;
 }
 
-.validate {
-    font-size: 1rem;
+.p-md-3,
+.p-md-4 {
+  padding: 0 !important;
+  margin: 2px !important;
 }
 
-.title {
-    padding-top: 1rem;
+::ng-deep input,
+button,
+select,
+optgroup,
+textarea {
+  border: 1px solid #a27ad7 !important;
+}
+
+::ng-deep .p-fileupload .p-fileupload-buttonbar {
+  border: 1px solid #a27ad7 !important;
+}
+
+::ng-deep .p-dropdown {
+  border: 1px solid #a27ad7;
+}
+
+::ng-deep .p-fileupload .p-fileupload-content {
+  border: 1px solid #a27ad7;
+}
+
+@media (min-width: 768px) {
+  .p-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .p-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

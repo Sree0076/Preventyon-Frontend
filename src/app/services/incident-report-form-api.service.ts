@@ -10,7 +10,7 @@ export class IncidentReportFormApiService {
   constructor(private http: HttpClient) {}
 
   private createBaseUrl: string =
-    'https://localhost:7209/Incident/PostIncident';
+    'https://localhost:7209/Incident/CreateIncident';
   // private fetchBaseUrl: string = 'https://localhost:7209/Incident/GetIncident';
   private fetchBaseUrl: string = 'https://localhost:7147/api/getIncident';
   private updateBaseUrl: string = 'https://localhost:7209/Incident/PutIncident';

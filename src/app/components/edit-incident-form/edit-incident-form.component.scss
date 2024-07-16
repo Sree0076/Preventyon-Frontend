@@ -2,7 +2,7 @@
     max-width: 1200px;
 }
 
-mat-form-field {
+::ng-deep mat-form-field {
     width: 100%;
     font-size: 15px;
     stroke: #a27ad7;
@@ -27,5 +27,5 @@ p {
     background: var(--privacy-color);
     color: white;
     border-radius: 0.4rem;
-    margin: 1rem;
+    margin-bottom: 1rem;
 }
