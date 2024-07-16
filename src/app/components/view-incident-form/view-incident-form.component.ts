@@ -8,7 +8,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+
+import { Router } from '@angular/router';
 import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
+
 
 @Component({
   selector: 'app-view-incident-form',
@@ -28,8 +31,13 @@ import { IncidentServiceTsService } from '../../services/sharedService/incident-
 export class ViewIncidentFormComponent {
   constructor(
     private apiService: IncidentReportFormApiService,
+
+  
+    private router: Router
+
     private incidentService: IncidentServiceTsService,
     private datePipe: DatePipe
+
   ) {}
   data: any = {};
   id: number = 0;
@@ -55,5 +63,9 @@ export class ViewIncidentFormComponent {
     const date = this.datePipe.transform(parsedDate, 'yyyy-MM-dd')!;
     const time = this.datePipe.transform(parsedDate, 'HH:mm:ss')!;
     return { date, time };
+  }
+
+  redirectToEditPage(): void {
+    this.router.navigate(['/edit-form', this.data.incidentNo]);
   }
 }
