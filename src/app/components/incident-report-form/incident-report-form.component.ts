@@ -43,9 +43,9 @@ export class IncidentReportFormComponent {
   editAction: Boolean = false;
 
   incidentTypes = [
-    { label: 'Security Incident', value: 'SecurityIncident' },
-    { label: 'Privacy Incident', value: 'PrivacyIncident' },
-    { label: 'Quality Incident', value: 'QualityIncident' },
+    { label: 'Security Incident', value: 'Security Incidents' },
+    { label: 'Privacy Incident', value: 'Privacy Incidents' },
+    { label: 'Quality Incident', value: 'Quality Incidents' },
   ];
 
   categories = [
@@ -69,9 +69,9 @@ export class IncidentReportFormComponent {
   ];
 
   priorities = [
-    { label: 'High', value: 'High-L1' },
-    { label: 'Medium', value: 'Medium-L2' },
-    { label: 'Low', value: 'Low-L3' },
+    { label: 'High', value: 'High' },
+    { label: 'Medium', value: 'Medium' },
+    { label: 'Low', value: 'Low' },
   ];
 
   constructor(

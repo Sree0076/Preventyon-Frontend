@@ -9,20 +9,22 @@ import { IncidentStatsDTO } from '../models/incidentdto.interface';
 })
 export class CardApiService {
   private jsonUrl = 'assets/data.json';
-  private fetchUrl =
-    'https://localhost:7209/Employee/GetIncidentStatsByEmployeeId/employee/2';
-
+  private fetchCardUrl =
+    'https://localhost:7209/Incident/GetIncidentsByEmployeeId?employeeId=2';
+    private fetchUrl =
+    'https://localhost:7209/Incident/GetIncident/2';
   constructor(private http: HttpClient) {}
 
   getData(): Observable<Incident[]> {
+    console.log("edit");
     console.log(this.http.get<Incident[]>(`${this.fetchUrl}`));
 
     return this.http.get<Incident[]>(`${this.fetchUrl}`);
   }
 
   getDataBasedOnStatus(): Observable<IncidentStatsDTO> {
-    console.log(this.http.get<IncidentStatsDTO>(`${this.fetchUrl}`));
+    console.log(this.http.get<IncidentStatsDTO>(`${this.fetchCardUrl}`));
 
-    return this.http.get<IncidentStatsDTO>(`${this.fetchUrl}`);
+    return this.http.get<IncidentStatsDTO>(`${this.fetchCardUrl}`);
   }
 }

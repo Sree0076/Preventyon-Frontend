@@ -55,41 +55,11 @@
                     </ng-template>
                 </p-fileUpload>
 
-                <input type="file" class="form-control-file" id="incident-attachment"
-                    formControlName="incidentAttachment" multiple>
+
             </div>
 
-            <div class="form-group p-4">
-                <label for="incidents-type">Incident Type</label>
-                <select class="form-control" id="incidents-type" formControlName="incidentType" >
-                    <option value="Security Incidents">Security Incident</option>
-                    <option value="Privacy Incidents">Privacy Incident</option>
-                    <option value="Quality Incidents">Quality Incident</option>
-                </select>
-            </div>
 
-            <div class="form-group p-4">
-                <label for="category">Category</label>
-                <select class="form-control" id="category" formControlName="category" >
-                    <option value="denialOfService">Denial of Service</option>
-                    <option value="loss">Loss</option>
-                    <option value="theft">Theft</option>
-                    <option value="malware">Malware</option>
-                    <option value="ransomware">Ransomware</option>
-                    <option value="unauthorizedUse">Unauthorized Use</option>
-                    <option value="disclosure">Disclosure</option>
-                    <option value="unauthorizedAccess">Unauthorized Access</option>
-                    <option value="phishing">Phishing</option>
-                    <option value="unplannedDowntime">Unplanned Downtime</option>
-                    <option value="insecureSite">Insecure Site</option>
-                    <option value="insecureCoding">Insecure Coding</option>
-                    <option value="physicalSecurity">Physical Security</option>
-                    <option value="spoofing">Spoofing</option>
-                    <option value="botnetAttack">Botnet Attack</option>
-                    <option value="exposedAPIs">Exposed APIs</option>
-                    <option value="disclosingIPData">Disclosing IP Data</option>
-                </select>
-            </div>
+
 
             <div class="p-grid p-fluid m-3">
                 <div class="p-field p-col-12 p-md-4">
@@ -105,7 +75,7 @@
                     <label for="priority">Incident Priority</label>
                     <p-dropdown id="priority" [options]="priorities" formControlName="priority"></p-dropdown>
             </div>
-            </div>
+              </div>
             <div class="d-flex align-items-center justify-content-center">
                 <button type="submit" label="Submit" class="savebutton">Submit</button>
                 <button type="button" label="Save as Draft" (click)="saveAsDraft()" class="savebutton">Save as
