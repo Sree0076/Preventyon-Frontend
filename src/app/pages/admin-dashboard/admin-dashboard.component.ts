@@ -10,10 +10,6 @@ import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { IncidentStatsDTO } from '../../models/incidentdto.interface';
 import { NgClass, NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
-export class AdminDashboardComponent {
-
-  }
-
 
 @Component({
     selector: 'app-admin-dashboard',
