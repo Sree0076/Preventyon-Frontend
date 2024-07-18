@@ -7,20 +7,35 @@ import { userDetails } from '../models/users_forward_form.interface';
 })
 export class FilterPipe implements PipeTransform {
 
-  transform(items: userDetails[], searchTerm: string, selectedUserIds: number[]): userDetails[] {
+  transform(items: userDetails[], searchTerm: string, selectedUserIds?: number[], isForwardform?:boolean): userDetails[] {
+    console.log(searchTerm);
+    console.log(items);
     if (!items) {
       return [];
     }
-    var selectedUsers:userDetails[] = items.filter(user => !selectedUserIds.includes(user.id)); // Exclude already selected users
+
+    var nonSelectedUsers: userDetails[] = selectedUserIds && selectedUserIds.length > 0 
+    ? items.filter(user => !selectedUserIds.includes(user.id)) 
+    : items;
+    //var nonSelectedUsers:userDetails[] = items.filter(user => !selectedUserIds.includes(user.id)); // Exclude already selected users
+    
 
     if (!searchTerm) {
       // return [];
-      return selectedUsers;
+      if(isForwardform){
+        return nonSelectedUsers;
+      }
+      else{
+        return [];
+      }
     }
+
     searchTerm = searchTerm.toLowerCase();
-    return selectedUsers.filter(it => {
-        return it.name.toLowerCase().includes(searchTerm) ||
-               it.designation.toLowerCase().includes(searchTerm) ||
+
+    return nonSelectedUsers.filter(it => {
+        return it.empName.toLowerCase().includes(searchTerm) ||
+               it.empDesignation.toLowerCase().includes(searchTerm) ||
+
                it.email.toLowerCase().includes(searchTerm);
       });
   }

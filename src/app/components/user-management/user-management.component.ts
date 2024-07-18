@@ -105,11 +105,12 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user-management.interface';
 import { UserManagementService } from '../../services/user-management.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { AddAdminModalComponent } from "../add-admin-modal/add-admin-modal.component";
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [FormsModule, NgFor, NgIf, CommonModule],
+  imports: [FormsModule, NgFor, NgIf, CommonModule, AddAdminModalComponent],
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
 })

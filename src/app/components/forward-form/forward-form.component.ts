@@ -39,13 +39,16 @@ export class ForwardFormComponent {
   selectedUsers: userDetails[] = [];
   selectedUsersId:number [] =[];
   message:string='';
+
   constructor(public forwardFormService : ForwardFormService,
        private incidentService: IncidentServiceTsService,
        private router: Router,
       ){}
+  isForwardform:boolean=true;
+
 
   ngOnInit():void{
-    this.forwardFormService.getAllUsers().subscribe(data =>
+    this.forwardFormService.getAllUsers().subscribe(data => 
     {
       this.user_details = data;
       console.log(data);
@@ -72,21 +75,12 @@ export class ForwardFormComponent {
     }
 
     getSelectedUserIds(): number[] {
-      this.selectedUsersId=this.selectedUsers.map(user => user.id);
-      return  this.selectedUsersId;
+
+
+      return this.selectedUsers.map(user => user.id);
+
     }
 
-    autoResize(event: Event): void {
-      const textarea = event.target as HTMLTextAreaElement;
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the scroll height
-
-      // Check if the textarea is empty, then reset the height to 1 line
-      if (!textarea.value) {
-        textarea.style.height = 'auto'; // Reset to auto first to ensure proper resizing
-        textarea.rows = 1; // Reset the rows attribute to 1 line
-      }
-    }
 
     forward(): void{
       console.log(this.selectedUsers);
@@ -104,4 +98,18 @@ export class ForwardFormComponent {
       this.searchTerm = '';
       this.message = '';
     }
+
+    autoResize(event: Event): void {
+      const textarea = event.target as HTMLTextAreaElement;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the scroll height
+
+      // Check if the textarea is empty, then reset the height to 1 line
+      if (!textarea.value) {
+        textarea.style.height = 'auto'; // Reset to auto first to ensure proper resizing
+        textarea.rows = 1; // Reset the rows attribute to 1 line
+      }
+    }
+
+
 }
