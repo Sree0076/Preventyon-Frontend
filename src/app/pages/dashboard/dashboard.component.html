@@ -1,9 +1,0 @@
-<div *ngFor="let item of details; let i = index" [ngClass]="cardClass[i]">
-    <app-card [iconSvg]="svg[i]" [totalCount]="item.total_incidents" [closedCount]="item.closed_incidents"
-        [pendingCount]="item.pending_incidents" [title]="item.title">
-    </app-card>
-</div>
-
-
-
-<app-forward-form></app-forward-form>

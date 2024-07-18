@@ -1,7 +1,9 @@
 export interface userDetails{
   id: number,
-  icon:string,
-  empName: string,
-  empDesignation: string,
+
+  user_icon: string,
+  name: string,
+  department:string,
+  designation:string,
   email:string,
 }

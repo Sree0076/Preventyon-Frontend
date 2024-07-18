@@ -4,7 +4,7 @@
     <div class="card-container">
       <div *ngFor="let item of incidentData; let i = index" [ngClass]="cardClass[i]">
         <app-card [title]="item.title" [totalCount]="item.total_incidents" [pendingCount]="item.pending_incidents"
-          [closedCount]="item.closed_incidents" [iconSvg]="svg[i]" [cardClass]="item.class">
+          [closedCount]="item.closed_incidents" [iconSvg]="svg[i]" [cardClass]="item.class" (click)="getCategory(item.title)">
         </app-card>
       </div>
 

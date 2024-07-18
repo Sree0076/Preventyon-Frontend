@@ -1,7 +1,7 @@
 <div class="report-form">
-    <h2 class="text-center title">Incident Report Form</h2>
+    <h4 class="text-center title">Incident Report Form</h4>
 
-    <div class="container vh-100">
+    <div class="form-container">
         <form [formGroup]="viewform" (ngSubmit)="onSubmit()" class="form p-fluid form-container">
             <div class="p-grid p-fluid m-3">
                 <div class="p-field p-col-12 p-md-4">
@@ -41,26 +41,6 @@
                     Incident Description is required.
                 </div>
             </div>
-
-            <div class="p-field m-3">
-                <label for="incident-attachment">Attach Documents</label>
-
-                <p-fileUpload id="incident-attachment" formControlName="incidentAttachment" [showUploadButton]="false"
-                    multiple>
-                    <ng-template pTemplate="empty">
-                        <div class="flex align-items-center justify-content-center flex-column">
-                            <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"></i>
-                            <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
-                        </div>
-                    </ng-template>
-                </p-fileUpload>
-
-
-            </div>
-
-
-
-
             <div class="p-grid p-fluid m-3">
                 <div class="p-field p-col-12 p-md-4">
                     <label for="incidents-type">Incident Type</label>

@@ -2,14 +2,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import { TableComponent } from "../../components/table/table.component";
-import { Incident } from '../../models/incident.interface';
 import { CardApiService } from '../../services/card-api.service';
 import { CardComponent } from '../../components/card/card.component';
 import { BarChartComponent } from '../../components/bar-chart/bar-chart.component';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
-import { IncidentStatsDTO } from '../../models/incidentdto.interface';
 import { NgClass, NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { IncidentStatsDTO } from '../../models/incidentData.interface';
+import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -21,6 +21,8 @@ import { CommonModule } from '@angular/common';
 })
 export class AdminDashboardComponent {
   selectedCategory: string="";
+
+
 getCategory(event: any) {
   var tableRef= document.getElementById("tableRef")
   if (tableRef) {
@@ -35,7 +37,6 @@ getCategory(event: any) {
    console.log(event);
 }
 
-  details: Incident[] = [];
   incidentData: any;
 
   svg: string[] = [
@@ -45,36 +46,37 @@ getCategory(event: any) {
   ];
   cardClass: string[] = ['privacy-card', 'security-card', 'quality-card'];
 
-  constructor(private dataService: CardApiService, private el: ElementRef) {}
+  constructor(private incidentDataService: IncidentDataServiceTsService) {}
 
   ngOnInit() {
-    this.dataService
-      .getDataBasedOnStatus()
-      .subscribe((data: IncidentStatsDTO) => {
+    this.incidentDataService.incidentData.subscribe(data => {
+      if (data) {
         this.incidentData = [
           {
             title: 'Privacy Incidents',
             total_incidents: data.privacyTotalIncidents,
             pending_incidents: data.privacyPendingIncidents,
             closed_incidents: data.privacyClosedIncidents,
+            class: 'privacy-card'
           },
           {
             title: 'Security Incidents',
             total_incidents: data.securityTotalIncidents,
             pending_incidents: data.securityPendingIncidents,
             closed_incidents: data.securityClosedIncidents,
+            class: 'security-card'
           },
           {
             title: 'Quality Incidents',
             total_incidents: data.qualityTotalIncidents,
             pending_incidents: data.qualityPendingIncidents,
             closed_incidents: data.qualityClosedIncidents,
-          },
+            class: 'quality-card'
+          }
         ];
-      });
-    this.dataService.getData().subscribe((data: Incident[]) => {
-      this.details = data;
+      }
     });
-  }
 
+    this.incidentDataService.fetchIncidentData();
+  }
 }

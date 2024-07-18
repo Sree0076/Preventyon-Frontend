@@ -9,43 +9,22 @@ import { MenuItem } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
-import { TablefetchService } from '../../service/tablefetch.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { LazyLoadEvent } from 'primeng/api';
 import { ForwardFormComponent } from "../forward-form/forward-form.component";
 import { IncidentData } from '../../models/incidentData.interface';
 import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
+import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
+import { CardApiService } from '../../services/card-api.service';
 
-// export interface IncidentData {
-//   incidentId: number;
-//   title: string;
-//   description: string;
-//   status: string;
-//   priority: string;
-//   reportedBy: string;
-//   reportedAt: Date;
-//   incidentType: string;
-//   categoryId: string;
-//   investigationDetails: string;
-//   associatedImpacts: string;
-//   collectionOfEvidence: string;
-//   correction: string;
-//   correctiveAction: string;
-//   correctionCompletionTargetDate: Date;
-//   correctionActualCompletionDate: Date;
-//   correctiveActualCompletionDate: Date;
-//   correctionDetails: string;
-//   correctiveDetails: string;
-//   remarks: string;
-//   isDraft:boolean;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
+interface PriorityOrder {
+  High: number;
+  Medium: number;
+  Low: number;
+}
 @Component({
     selector: 'app-table',
     standalone: true,
@@ -62,10 +41,17 @@ export class TableComponent {
   @ViewChild('dt2') dt2: Table | undefined;
   incidents:IncidentData[]=[];
   priorities: any[] = [
-    { label: 'High', value: 'high' },
-    { label: 'Medium', value: 'medium' },
-    { label: 'Low', value: 'low' }
+    { label: 'High', value: 'High' },
+    { label: 'Medium', value: 'Medium' },
+    { label: 'Low', value: 'Low' }
   ];
+  statuses: any[] = [
+    { label: 'Pending', value: 'pending' },
+    { label: 'In Progress', value: 'progress' },
+    { label: 'In Review', value: 'review' },
+    { label: 'Closed', value: 'closed' }
+  ];
+
   searchValue: string | undefined;
   displayForwardingModal: boolean = false;
   selectedIncidentId: number | null = null;
@@ -75,29 +61,32 @@ export class TableComponent {
   rows = 10;
 
   priorityValue: any;
+  incidentTypeValue :any;
   selectedIncidents: IncidentData[]=[];
 
 
-  constructor(private router:Router,private tablefetchService: TablefetchService,private incidentService: IncidentServiceTsService) {}
+  constructor(private router:Router,private tablefetchService: CardApiService,private incidentDataService: IncidentDataServiceTsService,private incidentService: IncidentServiceTsService) {}
 
   ngOnInit() {
-
-    if(!this.getDraft)
-    {
-      this.tablefetchService.getIncidents().subscribe(data => {
-        this.incidents = data;
-        this.applyCategoryFilter();
-        console.log(data);
+    if (!this.getDraft) {
+      this.incidentDataService.incidentData.subscribe(data => {
+        if (data) {
+          this.incidents = data.incidents;
+          this.sortByPriority();
+          console.log(data);
+        }
       });
-    }
-    else{
+    } else {
       this.tablefetchService.getDraftIncidents().subscribe(data => {
-        this.incidents = data;
-        this.applyCategoryFilter();
-        console.log(data);
+        if (Array.isArray(data)) {
+          this.incidents = data;
+          this.sortByPriority();
+          console.log(data);
+        } else {
+          console.error("Unexpected data format for draft incidents:", data);
+        }
       });
     }
-
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filterCategory'] && !changes['filterCategory'].isFirstChange()) {
@@ -146,8 +135,17 @@ filterPriority(event: any) {
     this.dt2.filter(value, 'priority', 'equals');
   }
 }
+filterStatus(event: any) {
+  const value = event.value;
+  if (this.dt2) {
+    this.dt2.filter(value, 'incidentStatus', 'equals');
+  }
+}
+
+
 openForwardingModal(incidentId: number) {
   this.selectedIncidentId = incidentId;
+  this.incidentService.setSelectedIncidentId(incidentId);
   this.displayForwardingModal = true;
 }
 onDialogClosed() {
@@ -171,10 +169,18 @@ editIncidentData(incidentId: number): void
   this.incidentService.setSelectedIncidentId(incidentId);
   this.router.navigate(['/edit-incident']);
 }
+
 viewIncidentData(incidentId: number): void
 {
   console.log("view");
   this.incidentService.setSelectedIncidentId(incidentId);
   this.router.navigate(['/view-incident']);
+}
+sortByPriority() {
+  const priorityOrder: PriorityOrder = { High: 1, Medium: 2, Low: 3 };
+
+  this.incidents.sort((a, b) => {
+    return priorityOrder[a.priority as keyof PriorityOrder] - priorityOrder[b.priority as keyof PriorityOrder];
+  });
 }
 }

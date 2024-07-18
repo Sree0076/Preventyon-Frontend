@@ -13,11 +13,13 @@ export class FilterPipe implements PipeTransform {
     if (!items) {
       return [];
     }
+
     var nonSelectedUsers: userDetails[] = selectedUserIds && selectedUserIds.length > 0 
     ? items.filter(user => !selectedUserIds.includes(user.id)) 
     : items;
     //var nonSelectedUsers:userDetails[] = items.filter(user => !selectedUserIds.includes(user.id)); // Exclude already selected users
     
+
     if (!searchTerm) {
       // return [];
       if(isForwardform){
@@ -29,9 +31,11 @@ export class FilterPipe implements PipeTransform {
     }
 
     searchTerm = searchTerm.toLowerCase();
+
     return nonSelectedUsers.filter(it => {
         return it.empName.toLowerCase().includes(searchTerm) ||
                it.empDesignation.toLowerCase().includes(searchTerm) ||
+
                it.email.toLowerCase().includes(searchTerm);
       });
   }
