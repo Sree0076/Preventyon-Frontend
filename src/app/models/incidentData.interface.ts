@@ -25,12 +25,18 @@ export interface IncidentData {
   correctiveDetailsTimeTakenToCloseIncident: number;
   isDraft: boolean;
   employeeId: number;
-  employee: {
-        id: number;
-        name: string;
-        department: string;
-        role: string;
-        incidents: IncidentData[];
-  };
   createdAt: string; // Use Date if you handle dates in ISO format
+}
+
+export interface IncidentStatsDTO {
+  privacyTotalIncidents: number;
+  privacyPendingIncidents: number;
+  privacyClosedIncidents: number;
+  securityTotalIncidents: number;
+  securityPendingIncidents: number;
+  securityClosedIncidents: number;
+  qualityTotalIncidents: number;
+  qualityPendingIncidents: number;
+  qualityClosedIncidents: number;
+  incidents: IncidentData[];
 }

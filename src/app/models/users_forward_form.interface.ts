@@ -6,9 +6,10 @@
 // }
 
 export interface userDetails{
-  user_id: number,
+  id: number,
   user_icon: string,
-  user_name: string,
-  user_role:string,
-  user_email:string,
+  name: string,
+  department:string,
+  designation:string,
+  email:string,
 }

@@ -11,7 +11,12 @@ export class ForwardFormService {
   constructor(private http: HttpClient) {}
 
   getAllUsers():Observable<userDetails[]>{
-    return this.http.get<userDetails[]>('https://api.jsonsilo.com/public/af4a4e7a-f439-4c47-b967-00bd7ed71eab');
+    return this.http.get<userDetails[]>('https://localhost:7209/Employee/GetEmployees');
+  }
+
+  forwardIncident(incidentId: number, assignedEmployeeIds: number[]): Observable<any> {
+    const url = `https://localhost:7209/api/AssignedIncident/AssignIncidentToEmployees/${incidentId}`;
+    return this.http.post(url, assignedEmployeeIds);
   }
 
 }

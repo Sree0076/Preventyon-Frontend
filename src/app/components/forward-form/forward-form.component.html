@@ -10,13 +10,13 @@
       <ng-template pTemplate="header">
         <div class="dialog-header">
         <div class="selected-users">
-          @for(user of selectedUsers; track user.user_id){
+          @for(user of selectedUsers; track user.id){
               <div class="person-details1" >
                 <div class="image-icon">
                   <img src={{user.user_icon}} alt="" />
                 </div>
                 <div class="name-details1">
-                  <p>{{user.user_name}}</p>
+                  <p>{{user.name}}</p>
                 </div>
                 <button type="button" (click)="removeUser(user)"><i class="bi bi-x fs-5"></i></button>
               </div>
@@ -37,14 +37,14 @@
       </ng-template>
 
       <div class="forward-names">
-        @for(items of user_details | filter: searchTerm: getSelectedUserIds(); track items.user_id){
+        @for(items of user_details | filter: searchTerm: getSelectedUserIds(); track items.id){
             <div class="person-details" type="button" (click)="addUser(items)">
                 <div class="image-icon">
                     <img src={{items.user_icon}} alt="">
                 </div>
                 <div class="name-details">
-                    <p>{{items.user_name}}</p>
-                    <p class="p1">{{items.user_role}}</p>
+                    <p>{{items.name}}</p>
+                    <p class="p1">{{items.designation}}</p>
                 </div>
             </div>
         }

@@ -11,7 +11,7 @@ export class FilterPipe implements PipeTransform {
     if (!items) {
       return [];
     }
-    var selectedUsers:userDetails[] = items.filter(user => !selectedUserIds.includes(user.user_id)); // Exclude already selected users
+    var selectedUsers:userDetails[] = items.filter(user => !selectedUserIds.includes(user.id)); // Exclude already selected users
 
     if (!searchTerm) {
       // return [];
@@ -19,9 +19,9 @@ export class FilterPipe implements PipeTransform {
     }
     searchTerm = searchTerm.toLowerCase();
     return selectedUsers.filter(it => {
-        return it.user_name.toLowerCase().includes(searchTerm) ||
-               it.user_role.toLowerCase().includes(searchTerm) ||
-               it.user_email.toLowerCase().includes(searchTerm);
+        return it.name.toLowerCase().includes(searchTerm) ||
+               it.designation.toLowerCase().includes(searchTerm) ||
+               it.email.toLowerCase().includes(searchTerm);
       });
   }
 }

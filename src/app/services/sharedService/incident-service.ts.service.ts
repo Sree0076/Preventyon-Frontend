@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class IncidentServiceTsService {
+
   private selectedIncidentIdSource = new BehaviorSubject<number>(0);
   selectedIncidentId$ = this.selectedIncidentIdSource.asObservable();
 
@@ -13,4 +14,5 @@ export class IncidentServiceTsService {
   setSelectedIncidentId(incidentId: number): void {
     this.selectedIncidentIdSource.next(incidentId);
   }
+
 }

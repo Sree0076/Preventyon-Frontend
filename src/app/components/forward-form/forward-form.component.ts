@@ -7,6 +7,8 @@ import { userDetails } from '../../models/users_forward_form.interface';
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { NgFor, NgIf } from '@angular/common';
 import { ForwardFormService } from '../../services/forward-form.service';
+import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forward-form',
@@ -30,11 +32,17 @@ export class ForwardFormComponent {
   @Output() dialogClosed = new EventEmitter<void>();
   @Input() visibility:boolean=false;
 
+  forwardIncidentId : number=0;
+
   user_details:userDetails[]=[];
   searchTerm:string='';
   selectedUsers: userDetails[] = [];
+  selectedUsersId:number [] =[];
   message:string='';
-  constructor(public forwardFormService : ForwardFormService){}
+  constructor(public forwardFormService : ForwardFormService,
+       private incidentService: IncidentServiceTsService,
+       private router: Router,
+      ){}
 
   ngOnInit():void{
     this.forwardFormService.getAllUsers().subscribe(data =>
@@ -43,6 +51,9 @@ export class ForwardFormComponent {
       console.log(data);
     }
     )
+    this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
+      this.forwardIncidentId = incidentId;
+    });
   }
 
     handleDialogClose() {
@@ -50,19 +61,19 @@ export class ForwardFormComponent {
     }
 
     addUser(user: userDetails) {
-      if (!this.selectedUsers.find(u => u.user_id === user.user_id)) {
+      if (!this.selectedUsers.find(u => u.id === user.id)) {
         this.selectedUsers.push(user);
       }
     }
 
     // Remove user from the selected list
     removeUser(user: userDetails) {
-      this.selectedUsers = this.selectedUsers.filter(u => u.user_id !== user.user_id);
+      this.selectedUsers = this.selectedUsers.filter(u => u.id !== user.id);
     }
 
-    // Get selected user IDs
     getSelectedUserIds(): number[] {
-      return this.selectedUsers.map(user => user.user_id);
+      this.selectedUsersId=this.selectedUsers.map(user => user.id);
+      return  this.selectedUsersId;
     }
 
     autoResize(event: Event): void {
@@ -80,10 +91,14 @@ export class ForwardFormComponent {
     forward(): void{
       console.log(this.selectedUsers);
       console.log(this.message);
+      this.forwardFormService.forwardIncident(this.forwardIncidentId,this.selectedUsersId).subscribe((response) => {
+        console.log('Incident added successfully', response);
+        this.router.navigate(['/admin']);
+      });
       this.handleDialogClose();
       this.resetForm();
-    }
 
+    }
     resetForm(): void {
       this.selectedUsers = [];
       this.searchTerm = '';
