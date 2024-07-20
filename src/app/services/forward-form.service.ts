@@ -10,12 +10,13 @@ export class ForwardFormService {
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers():Observable<userDetails[]>{
-    return this.http.get<userDetails[]>('https://localhost:7209/Employee/GetEmployees');
+  getAllUsers():Observable<any>{
+    return this.http.get<any>('http://localhost:7209/Employee/GetEmployees');
   }
 
   forwardIncident(incidentId: number, assignedEmployeeIds: number[]): Observable<any> {
-    const url = `https://localhost:7209/api/AssignedIncident/AssignIncidentToEmployees/${incidentId}`;
+    console.log(assignedEmployeeIds);
+    const url = `http://localhost:7209/api/AssignedIncident/AssignIncidentToEmployees/${incidentId}`;
     return this.http.post(url, assignedEmployeeIds);
   }
 

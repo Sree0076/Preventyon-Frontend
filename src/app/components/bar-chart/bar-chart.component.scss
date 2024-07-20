@@ -13,8 +13,8 @@
   width: 100% !important;
   height: 100% !important;
 }
- canvas
-{
-  height: 500px !important;
-}
 
+:host ::ng-deep  canvas
+{
+ width: 798px;
+}

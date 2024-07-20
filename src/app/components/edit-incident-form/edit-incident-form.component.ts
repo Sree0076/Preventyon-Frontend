@@ -7,11 +7,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { IncidentReportFormApiService } from '../../services/incident-report-form-api.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IncidentData } from '../../models/incidentData.interface';
 import { Router } from '@angular/router';
 import { MatOptionModule } from '@angular/material/core';
+import { IncidentServiceService } from '../../services/incident-service.service';
 
 @Component({
   selector: 'app-edit-incident-form',
@@ -34,7 +34,7 @@ import { MatOptionModule } from '@angular/material/core';
 })
 export class EditIncidentFormComponent {
   constructor(
-    private apiService: IncidentReportFormApiService,
+    private apiService: IncidentServiceService,
     private datePipe: DatePipe,
     private router: Router
   ) {}
@@ -77,12 +77,12 @@ export class EditIncidentFormComponent {
     { label: 'Low', value: 'Low-L3' },
   ];
 
-  
+
 
   ngOnInit() {
     console.log(this.id);
 
-    this.apiService.getIncident(this.id).subscribe((response) => {
+    this.apiService.getSingleFullIncident(this.id).subscribe((response) => {
       console.log(response);
       this.data = response;
     });

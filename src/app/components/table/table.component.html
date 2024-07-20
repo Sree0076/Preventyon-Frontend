@@ -2,17 +2,20 @@
   <p-table
     #dt2
     [value]="incidents"
+    [rowHover]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
     [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    currentPageReportTemplate="Showing {last} of {totalRecords} entries"
+    [filterDelay]="0"
     sortMode="multiple"
     [globalFilterFields]="['incidentTitle', 'id', 'category']"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     (onPage)="pageChange($event)"
   >
     <ng-template pTemplate="caption">
-      <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center justify-content-between table-top">
         <div class="d-flex align-items-center">
           <i class="bi bi-eraser" (click)="clear(dt2)"></i>
           <span class="p-input-icon-left ml-2">
@@ -20,6 +23,7 @@
             <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
           </span>
         </div>
+
         <button type="button" class="btn btn-primary ml-auto" [hidden]="isadmin" (click)="onAddItem()">Add Incident</button>
       </div>
     </ng-template>
@@ -43,7 +47,7 @@
           </div>
         </th>
 
-        <th style="width: 16%" pSortableColumn="incidentType" class="column-visible">
+        <th style="width: 17%" pSortableColumn="incidentType" class="column-visible">
           <div class="flex align-items-center">
             Type
           </div>
@@ -96,19 +100,29 @@
         </td>
         <td>{{ incident.id }}</td>
         <td>{{ incident.incidentTitle }}</td>
-        <td>{{ incident.incidentType }}</td>
+        <td>
+          <span [ngClass]="getTypeSeverityClass(incident.incidentType)">
+            {{ incident.incidentType }}
+          </span>
+</td>
         <td>{{ incident.category }}</td>
         <td>{{ incident.reportedBy }}</td>
-        <td>{{ incident.priority }}</td>
-        <td>{{ incident.incidentStatus }}</td>
+        <td>
+          <span [ngClass]="getSeverityClass(incident.priority)">
+            {{ incident.priority }}
+          </span>
+        </td>
+        <td>
+          <p-tag [value]="incident.incidentStatus" [severity]="getSeverity(incident.incidentStatus)" />
+       </td>
         <td>
           <div class="flex justify-content-center">
             <i class="bi bi-three-dots-vertical" (click)="op.toggle($event)"></i>
             <p-overlayPanel #op>
               <div class="custom-overlay">
                 <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
-                  <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin">
-                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident.id)"></i>Edit
+                  <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin || getAssigned">
+                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident)"></i>Edit
                   </li>
                   <li class="flex align-items-center gap-2 custom-item">
                     <i class="bi bi-eye" (click)="viewIncidentData(incident.id)"></i>View
@@ -116,7 +130,13 @@
                 </ul>
               </div>
             </p-overlayPanel>
-            <i class="bi bi-send" *ngIf="isadmin" (click)="openForwardingModal(incident.id)"></i>
+            <i
+              class="bi bi-send"
+              *ngIf="isadmin"
+              (click)="onIconClick(incident)"
+              [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}">
+            </i>
+
           </div>
         </td>
       </tr>
