@@ -1,3 +1,5 @@
+import { DatePipe } from "@angular/common";
+
 export interface IncidentData {
   id: number;
   incidentNo: string;
