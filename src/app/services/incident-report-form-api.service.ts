@@ -17,9 +17,7 @@ export class IncidentReportFormApiService {
   private updateBaseUrl: string = 'https://localhost:7209/Incident/PutIncident';
 
   addIncident(incident: any): Observable<any> {
-    console.log(incident);
-
-    return this.http.post(this.createBaseUrl, incident)
+    return this.http.post(this.createBaseUrl, incident);
   }
 
   getIncident(id: number): Observable<any> {
