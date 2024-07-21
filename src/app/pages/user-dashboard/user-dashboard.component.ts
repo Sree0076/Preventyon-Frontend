@@ -1,24 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { TableComponent } from '../../components/table/table.component';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { CardComponent } from '../../components/card/card.component';
 import { NgClass, NgFor } from '@angular/common';
 import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
-
+import { TabViewModule } from 'primeng/tabview';
+import { TableComponent } from '../../components/table/table.component';
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
   templateUrl: './user-dashboard.component.html',
   styleUrl: './user-dashboard.component.scss',
   imports: [
-    TableComponent,
     MatTabsModule,
     SideBarComponent,
     CardComponent,
     NgClass,
     NgFor,
-  ],
+    TabViewModule,
+    TableComponent,
+],
 })
 export class UserDashboardComponent implements OnInit {
   incidentData: any;
@@ -33,7 +34,7 @@ export class UserDashboardComponent implements OnInit {
   constructor(private incidentDataService: IncidentDataServiceTsService) {}
 
   ngOnInit() {
-    
+
     this.incidentDataService.incidentData.subscribe(data => {
       if (data) {
         this.incidentData = [

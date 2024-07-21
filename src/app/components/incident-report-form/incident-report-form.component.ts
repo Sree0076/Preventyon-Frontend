@@ -6,19 +6,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { IncidentReportFormApiService } from '../../services/incident-report-form-api.service';
 import { DatePipe, NgIf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
-import { Subscription } from 'rxjs';
 import { IncidentData } from '../../models/incidentData.interface';
-import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
+import { IncidentServiceService } from '../../services/incident-service.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-incident-report-form',
@@ -32,15 +33,16 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     DropdownModule,
     FileUploadModule,
     InputTextareaModule,
+    ToastModule,
+    ButtonModule,
+    RippleModule,
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, MessageService, HttpClient],
   templateUrl: './incident-report-form.component.html',
   styleUrl: './incident-report-form.component.scss',
 })
 export class IncidentReportFormComponent {
-  editIncidentId: number = 0;
   incident!: IncidentData;
-  editAction: Boolean = false;
 
   incidentTypes = [
     { label: 'Security Incident', value: 'Security Incidents' },
@@ -76,33 +78,36 @@ export class IncidentReportFormComponent {
 
   constructor(
     private router: Router,
-    private apiService: IncidentReportFormApiService,
-    private incidentService: IncidentServiceTsService,
-    private route: ActivatedRoute,
-    private datePipe: DatePipe
+    private apiService: IncidentServiceService,
+    private messageService: MessageService
   ) {}
+
+  showSuccess(message: string) {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `${message}`,
+      });
+      setTimeout(() => {
+        this.router.navigate(['/user']); // Navigate to '/user' route after success message displayed
+      }, 2000); // Adjust delay as needed for the success message to display
+    }, 100);
+  }
+
   saveAsDraft() {
     this.viewform.value.isDraft = true;
     console.log(this.viewform.value);
-    if (this.editAction) {
-      this.apiService
-        .updateIncident(this.editIncidentId, this.viewform.value)
-        .subscribe((response) => {
-          console.log('Incident updated successfully', response);
-          this.router.navigate(['/user']);
-        });
-    } else {
-      this.apiService.addIncident(this.viewform.value).subscribe((response) => {
-        console.log('Incident added successfully', response);
-        this.router.navigate(['/user']);
-      });
-    }
+
+    this.apiService.addIncident(this.viewform.value).subscribe((response) => {
+      console.log('Incident added successfully', response);
+      this.showSuccess('Incident saved as draft successfully');
+    });
   }
   viewform!: FormGroup;
   selectedFiles!: File[];
 
   ngOnInit() {
-    console.log(this.editAction);
     this.viewform = new FormGroup({
       IncidentTitle: new FormControl('', Validators.required),
       Category: new FormControl(''),
@@ -134,7 +139,6 @@ export class IncidentReportFormComponent {
     console.log('fileupload', <File>event.files);
 
     this.selectedFiles = <File[]>event.files;
-    
   }
 
   onSubmit() {
@@ -185,6 +189,4 @@ export class IncidentReportFormComponent {
       this.incident = response;
     });
   }
-
- 
 }

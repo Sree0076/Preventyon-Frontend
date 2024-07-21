@@ -7,6 +7,7 @@ import { IncidentCreatePageComponent } from './pages/incident-create-page/incide
 import { IncidentVewPageComponent } from './pages/incident-vew-page/incident-vew-page.component';
 import { AdminmanagementComponent } from './pages/adminmanagement/adminmanagement.component';
 import { IncidenteditpageComponent } from './pages/incidenteditpage/incidenteditpage.component';
+import { UserEditFormComponent } from './components/user-edit-form/user-edit-form.component';
 
 
 
@@ -15,6 +16,6 @@ export const routes: Routes = [
   { path: 'user', component: UserDashboardComponent },
   { path: 'create-incident', component: IncidentCreatePageComponent },
   { path: 'view-incident', component:IncidentVewPageComponent },
-  { path: 'edit-incident', component:IncidenteditpageComponent },
+  { path: 'edit-incident', component:UserEditFormComponent },
   { path: 'usermanage', component: AdminmanagementComponent },
 ];

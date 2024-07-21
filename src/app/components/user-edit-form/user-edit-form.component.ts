@@ -9,8 +9,11 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { IncidentData } from '../../models/incidentData.interface';
-import { IncidentReportFormApiService } from '../../services/incident-report-form-api.service';
-import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
+import { IncidentServiceService } from '../../services/incident-service.service';
+import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-edit-form',
@@ -24,8 +27,9 @@ import { IncidentServiceTsService } from '../../services/sharedService/incident-
     DropdownModule,
     FileUploadModule,
     InputTextareaModule,
+    ToastModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe,MessageService,HttpClient],
   templateUrl: './user-edit-form.component.html',
   styleUrl: './user-edit-form.component.scss'
 })
@@ -68,21 +72,21 @@ export class UserEditFormComponent {
 
   constructor(
     private router: Router,
-    private apiService: IncidentReportFormApiService,
-    private incidentService: IncidentServiceTsService,
+    private apiService: IncidentServiceService,
+    private incidentService:IncidentDataServiceTsService,
     private route: ActivatedRoute,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private messageService: MessageService,
   ) {}
 
   saveAsDraft() {
     this.viewform.value.isDraft = true;
     console.log(this.viewform.value);
-
+    this.viewform.value.employeeId=2;
       this.apiService
-        .updateIncident(this.editIncidentId, this.viewform.value)
+        .updateUserIncident(this.editIncidentId, this.viewform.value)
         .subscribe((response) => {
-          console.log('Incident updated successfully', response);
-          this.router.navigate(['/user']);
+          this.showSuccess("Incident updated suscessfully");
         });
 
   }
@@ -102,48 +106,48 @@ export class UserEditFormComponent {
       reportedDate: new FormControl('', Validators.required),
       priority: new FormControl(''),
       isDraft: new FormControl(false),
+      employeeId: new FormControl(0),
     });
-    this.route.params.subscribe((params) => {
-      if (params['action'] === 'edit') {
-        console.log('edit1');
-        this.editAction = true;
+
         this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
           this.editIncidentId = incidentId;
           this.fetchIncident();
           console.log('Selected incident ID:', this.editIncidentId);
         });
-      }
-    });
+
   }
 
   onSubmit() {
     console.log(this.viewform.value);
     this.viewform.value.isDraft = false;
     console.log(this.viewform.value.isDraft);
-    if (this.editAction) {
-      this.apiService
-        .updateIncident(this.editIncidentId, this.viewform.value)
-        .subscribe((response) => {
-          console.log('Incident updated successfully', response);
-          this.router.navigate(['/user']);
+     this.viewform.value.employeeId=2;
+      this.apiService.updateUserIncident(this.editIncidentId, this.viewform.value).subscribe((response) => {
+        this.showSuccess("Incident submitted successfully");;
         });
-    } else {
-      this.apiService.addIncident(this.viewform.value).subscribe((response) => {
-        console.log('Incident added successfully', response);
-        this.router.navigate(['/user']);
-      });
-    }
   }
+
+  showSuccess(message:string) {
+    setTimeout(() => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message}` });
+      setTimeout(() => {
+        this.router.navigate(['/user']); // Navigate to '/user' route after success message displayed
+      }, 2000); // Adjust delay as needed for the success message to display
+    }, 100);
+}
   fetchIncident() {
-    this.apiService.getIncident(this.editIncidentId).subscribe((response) => {
+    this.apiService.getSingleIncident(this.editIncidentId).subscribe((response) => {
       console.log('Incident Fetched successfully', response);
-      response.incidentOccuredDate = this.datePipe.transform(
-        response.incidentOccuredDate,
-        'yyyy-MM-dd'
-      );
+
+      if (response.incidentOccuredDate) {
+        const incidentDate = new Date(response.incidentOccuredDate);
+        response.incidentOccuredDate = incidentDate
+      }
+
       this.incident = response;
     });
   }
+
 
   public onUploadSuccess(event: any): void {
     console.log('File uploaded successfully:', event);
