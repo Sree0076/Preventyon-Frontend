@@ -99,21 +99,23 @@ export class IncidentReportFormComponent {
     }
   }
   viewform!: FormGroup;
+  selectedFiles!: File[];
 
   ngOnInit() {
     console.log(this.editAction);
     this.viewform = new FormGroup({
-      incidentTitle: new FormControl('', Validators.required),
-      category: new FormControl(''),
-      incidentType: new FormControl(''),
-      incidentAttachment: new FormControl(''),
-      incidentOccuredDate: new FormControl('', Validators.required),
-      incidentOccuredTime: new FormControl('', Validators.required),
-      incidentDescription: new FormControl('', Validators.required),
-      reportedBy: new FormControl('', Validators.required),
-      reportedDate: new FormControl('', Validators.required),
-      priority: new FormControl(''),
-      isDraft: new FormControl(false),
+      IncidentTitle: new FormControl('', Validators.required),
+      Category: new FormControl(''),
+      IncidentType: new FormControl(''),
+      IncidentAttachment: new FormControl(''),
+      IncidentOccuredDate: new FormControl('', Validators.required),
+      IncidentOccuredTime: new FormControl(''),
+      IncidentDescription: new FormControl('', Validators.required),
+      ReportedBy: new FormControl('', Validators.required),
+      ReportedDate: new FormControl('', Validators.required),
+      Priority: new FormControl(''),
+      IsDraft: new FormControl(false),
+      DocumentFiles: new FormControl(null),
     });
     this.route.params.subscribe((params) => {
       if (params['action'] === 'edit') {
@@ -128,7 +130,35 @@ export class IncidentReportFormComponent {
     });
   }
 
+  onFileUpload(event: any) {
+    console.log('fileupload', <File>event.files);
+
+    this.selectedFiles = <File[]>event.files;
+    // formData.append('files', this.selectedFiles);
+  }
+
   onSubmit() {
+    const formData = new FormData();
+    this.selectedFiles.forEach((image) => {
+      formData.append('DocumentFiles', image);
+    });
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'DocumentFiles') {
+        if (key == 'IncidentOccuredDate') {
+          console.log(key, typeof value);
+
+          const x = value as Date;
+          formData.append(key, x.toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+    this.apiService.addIncident(formData).subscribe((response) => {
+      console.log('Incident added successfully', response);
+      this.router.navigate(['/user']);
+    });
+
     console.log(this.viewform.value);
     this.viewform.value.isDraft = false;
     console.log(this.viewform.value.isDraft);
@@ -140,7 +170,9 @@ export class IncidentReportFormComponent {
           this.router.navigate(['/user']);
         });
     } else {
-      this.apiService.addIncident(this.viewform.value).subscribe((response) => {
+      console.log(this.viewform.value);
+
+      this.apiService.addIncident(formData).subscribe((response) => {
         console.log('Incident added successfully', response);
         this.router.navigate(['/user']);
       });
