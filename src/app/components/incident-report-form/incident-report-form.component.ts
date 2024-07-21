@@ -134,7 +134,7 @@ export class IncidentReportFormComponent {
     console.log('fileupload', <File>event.files);
 
     this.selectedFiles = <File[]>event.files;
-    // formData.append('files', this.selectedFiles);
+    
   }
 
   onSubmit() {
@@ -145,8 +145,6 @@ export class IncidentReportFormComponent {
     for (const [key, value] of Object.entries(this.viewform.value)) {
       if (key !== 'DocumentFiles') {
         if (key == 'IncidentOccuredDate') {
-          console.log(key, typeof value);
-
           const x = value as Date;
           formData.append(key, x.toISOString());
         } else {
@@ -155,7 +153,6 @@ export class IncidentReportFormComponent {
       }
     }
     this.apiService.addIncident(formData).subscribe((response) => {
-      console.log('Incident added successfully', response);
       this.router.navigate(['/user']);
     });
 
@@ -189,11 +186,5 @@ export class IncidentReportFormComponent {
     });
   }
 
-  public onUploadSuccess(event: any): void {
-    console.log('File uploaded successfully:', event);
-  }
-
-  public onUploadError(event: any): void {
-    console.log('Error uploading file:', event);
-  }
+ 
 }
