@@ -27,6 +27,7 @@ export interface IncidentData {
   correctiveDetailsTimeTakenToCloseIncident: number;
   isDraft: boolean;
   employeeId: number;
+  documentUrls : string;
   createdAt: string; // Use Date if you handle dates in ISO format
 }
 

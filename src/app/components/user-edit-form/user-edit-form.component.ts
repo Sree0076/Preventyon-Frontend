@@ -1,5 +1,5 @@
 import { NgIf, DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -29,15 +29,17 @@ import { HttpClient } from '@angular/common/http';
     InputTextareaModule,
     ToastModule
   ],
-  providers: [DatePipe,MessageService,HttpClient],
+  providers: [DatePipe, MessageService, HttpClient],
   templateUrl: './user-edit-form.component.html',
-  styleUrl: './user-edit-form.component.scss'
+  styleUrls: ['./user-edit-form.component.scss']
 })
-export class UserEditFormComponent {
+export class UserEditFormComponent implements OnInit {
   editIncidentId: number = 0;
   incident!: IncidentData;
-  editAction: Boolean = false;
-
+  editAction: boolean = false;
+  selectedFiles!: File[];
+  viewform!: FormGroup;
+  previewUrl:string="";
   incidentTypes = [
     { label: 'Security Incident', value: 'Security Incidents' },
     { label: 'Privacy Incident', value: 'Privacy Incidents' },
@@ -73,7 +75,7 @@ export class UserEditFormComponent {
   constructor(
     private router: Router,
     private apiService: IncidentServiceService,
-    private incidentService:IncidentDataServiceTsService,
+    private incidentService: IncidentDataServiceTsService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private messageService: MessageService,
@@ -81,16 +83,30 @@ export class UserEditFormComponent {
 
   saveAsDraft() {
     this.viewform.value.isDraft = true;
-    console.log(this.viewform.value);
-    this.viewform.value.employeeId=2;
-      this.apiService
-        .updateUserIncident(this.editIncidentId, this.viewform.value)
-        .subscribe((response) => {
-          this.showSuccess("Incident updated suscessfully");
-        });
-
+    const formData = new FormData();
+    this.selectedFiles.forEach((image) => {
+      formData.append('documentUrls', image);
+    });
+    const files: FileList = this.viewform.get('documentUrls')?.value;
+    if (files) {
+      Array.from(files).forEach((file) => formData.append('documentUrls', file));
+    }
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'documentUrls') {
+        if (key === 'incidentOccuredDate') {
+          const dateValue = value as Date;
+          formData.append(key, dateValue.toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+    console.log(formData.getAll);
+    this.apiService.updateUserIncident(this.editIncidentId, formData).subscribe((response) => {
+      this.showSuccess("Incident saved as draft successfully");
+      console.log(response);
+    });
   }
-  viewform!: FormGroup;
 
   ngOnInit() {
     console.log(this.editAction);
@@ -106,54 +122,85 @@ export class UserEditFormComponent {
       reportedDate: new FormControl('', Validators.required),
       priority: new FormControl(''),
       isDraft: new FormControl(false),
-      employeeId: new FormControl(0),
+      documentUrls: new FormControl(null),
     });
 
-        this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
-          this.editIncidentId = incidentId;
-          this.fetchIncident();
-          console.log('Selected incident ID:', this.editIncidentId);
-        });
-
+    this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
+      this.editIncidentId = incidentId;
+      this.fetchIncident();
+      console.log('Selected incident ID:', this.editIncidentId);
+    });
   }
 
   onSubmit() {
-    console.log(this.viewform.value);
     this.viewform.value.isDraft = false;
-    console.log(this.viewform.value.isDraft);
-     this.viewform.value.employeeId=2;
-      this.apiService.updateUserIncident(this.editIncidentId, this.viewform.value).subscribe((response) => {
-        this.showSuccess("Incident submitted successfully");;
-        });
+    const formData = new FormData();
+    this.selectedFiles.forEach((image) => {
+      formData.append('documentUrls', image);
+    });
+    const files: FileList = this.viewform.get('documentUrls')?.value;
+    if (files) {
+      Array.from(files).forEach((file) => formData.append('documentUrls', file));
+    }
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'documentUrls') {
+        if (key === 'incidentOccuredDate') {
+          const dateValue = value as Date;
+          formData.append(key, dateValue.toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+    console.log(formData.getAll);
+    this.apiService.updateUserIncident(this.editIncidentId, formData).subscribe((response) => {
+      this.showSuccess("Incident Reported successfully");
+    });
   }
 
-  showSuccess(message:string) {
+  showSuccess(message: string) {
     setTimeout(() => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message}` });
       setTimeout(() => {
-        this.router.navigate(['/user']); // Navigate to '/user' route after success message displayed
-      }, 2000); // Adjust delay as needed for the success message to display
+        this.router.navigate(['/user']);
+      }, 2000);
     }, 100);
-}
+  }
+
   fetchIncident() {
     this.apiService.getSingleIncident(this.editIncidentId).subscribe((response) => {
       console.log('Incident Fetched successfully', response);
 
       if (response.incidentOccuredDate) {
         const incidentDate = new Date(response.incidentOccuredDate);
-        response.incidentOccuredDate = incidentDate
+        response.incidentOccuredDate = incidentDate;
       }
 
-      this.incident = response;
+      this.viewform.patchValue({
+        incidentTitle: response.incidentTitle,
+        category: response.category,
+        incidentType: response.incidentType,
+        incidentAttachment: response.documentUrls,
+        incidentOccuredDate: response.incidentOccuredDate,
+        // incidentOccuredTime: response.incidentOccuredTime,
+        incidentDescription: response.incidentDescription,
+        reportedBy: response.reportedBy,
+        priority: response.priority,
+        isDraft: response.isDraft,
+        documentUrls: response.documentUrls,
+      });
+      this.previewUrl = this.previewUrl = `http://localhost:7209${response.documentUrls[0]}`;
     });
+
   }
 
-
-  public onUploadSuccess(event: any): void {
-    console.log('File uploaded successfully:', event);
+  onFileUpload(event: any) {
+    console.log('fileupload', <File>event.files);
+    this.selectedFiles = <File[]>event.files;
   }
-
-  public onUploadError(event: any): void {
-    console.log('Error uploading file:', event);
+  removeFile(file: any) {
+    // Implement removal logic here (e.g., delete from backend and update list)
+    this.selectedFiles = this.selectedFiles.filter(f => f !== file);
+    this.messageService.add({severity: 'info', summary: 'Success', detail: 'File Removed'});
   }
 }

@@ -19,25 +19,24 @@ export class IncidentServiceService {
 
   }
 
-  public getDraftIncidents(): Observable<IncidentData> {
-    return this.http.get<IncidentData>("http://localhost:7209/Incident/GetDraftIncidentsByEmployeeId?employeeId=2").pipe(
-      catchError(this.handleError)
-    );
-  }
+  // public getDraftIncidents(): Observable<IncidentData> {
+  //   return this.http.get<IncidentData>("http://localhost:7209/Incident/GetDraftIncidentsByEmployeeId?employeeId=3").pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   public getSingleIncident(incidentId: number): Observable<IncidentData> {
     return this.http.get<IncidentData>(`http://localhost:7209/Incident/GetUserUpdateIncident/${incidentId}`).pipe(
       catchError(this.handleError)
     );
   }
-
   public getSingleFullIncident(incidentId: number): Observable<IncidentData> {
     return this.http.get<IncidentData>(`http://localhost:7209/Incident/GetIncident/${incidentId}`).pipe(
       catchError(this.handleError)
     );
   }
 
-  public updateUserIncident(incidentId: number, incident: any): Observable<any> {
+  public updateUserIncident(incidentId: number, incident: FormData): Observable<any> {
     return this.http.put<any>(`http://localhost:7209/Incident/UserUpdateIncident/${incidentId}`, incident);
   }
 
@@ -47,14 +46,12 @@ export class IncidentServiceService {
     );
   }
 
-  public addIncident(incident: IncidentData): Observable<IncidentData> {
+  public addIncident(incident: FormData): Observable<IncidentData> {
     console.log(incident);
     return this.http.post<IncidentData>(this.createBaseUrl, incident);
   }
   public updateIncident(incidentId: number, incident: IncidentData): Observable<IncidentData> {
-    return this.http.put<IncidentData>(`http://localhost:7209/Incident/UpdateIncident/${incidentId}`, incident).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.put<IncidentData>(`http://localhost:7209/Incident/UpdateIncident/${incidentId}`, incident);
   }
   private handleError(error: HttpErrorResponse) {
 

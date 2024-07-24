@@ -73,6 +73,7 @@ export class IncidentReportFormComponent {
     { label: 'Medium', value: 'Medium' },
     { label: 'Low', value: 'Low' },
   ];
+  selectedFiles!: File[];
 
   constructor(
     private router: Router,
@@ -90,16 +91,35 @@ export class IncidentReportFormComponent {
 }
 
   saveAsDraft() {
+   this.viewform.value.employeeId=2;
     this.viewform.value.isDraft = true;
-    console.log(this.viewform.value);
-
-      this.apiService.addIncident(this.viewform.value).subscribe((response) => {
-        console.log('Incident added successfully', response);
-        this.showSuccess("Incident saved as draft successfully");
-
-      });
-
+    const formData = new FormData();
+    this.selectedFiles.forEach((image)=>{
+      formData.append('documentUrls',image);
+    })
+  const files: FileList = this.viewform.get('documentUrls')?.value;
+  if (files) {
+    Array.from(files).forEach((file) => formData.append('documentUrls', file));
   }
+  for (const [key, value] of Object.entries(this.viewform.value)) {
+    if (key !== 'documentUrls') {
+      if (key === 'incidentOccuredDate') {
+        const dateValue = value as Date;
+        formData.append(key, dateValue.toISOString());
+      } else {
+        formData.append(key, value as string);
+      }
+    }
+  }
+  console.log(formData.getAll);
+  this.apiService.addIncident(formData).subscribe((response) => {
+      this.showSuccess("Incident saved as draft successfully");
+
+    });
+
+
+}
+
   viewform!: FormGroup;
 
   ngOnInit() {
@@ -108,7 +128,6 @@ export class IncidentReportFormComponent {
       incidentTitle: new FormControl('', Validators.required),
       category: new FormControl(''),
       incidentType: new FormControl(''),
-      incidentAttachment: new FormControl(''),
       incidentOccuredDate: new FormControl('', Validators.required),
       incidentOccuredTime: new FormControl('', Validators.required),
       incidentDescription: new FormControl('', Validators.required),
@@ -116,25 +135,41 @@ export class IncidentReportFormComponent {
       reportedDate: new FormControl('', Validators.required),
       priority: new FormControl(''),
       isDraft: new FormControl(false),
+      employeeId :new FormControl(0),
+      documentUrls: new FormControl(null),
     });
+  }
+  onFileUpload(event: any) {
+    console.log('fileupload', <File>event.files);
+    this.selectedFiles = <File[]>event.files;
   }
 
   onSubmit() {
-    console.log(this.viewform.value);
+    this.viewform.value.employeeId=2;
     this.viewform.value.isDraft = false;
-      this.apiService.addIncident(this.viewform.value).subscribe( (response) => {
-        console.log('Incident added successfully', response);
-         this.showSuccess("Incident added successfully");
-
-      });
-
+    const formData = new FormData();
+    this.selectedFiles.forEach((image)=>{
+      formData.append('documentUrls',image);
+    })
+  const files: FileList = this.viewform.get('documentUrls')?.value;
+  if (files) {
+    Array.from(files).forEach((file) => formData.append('documentUrls', file));
   }
-
-  public onUploadSuccess(event: any): void {
-    console.log('File uploaded successfully:', event);
+  for (const [key, value] of Object.entries(this.viewform.value)) {
+    if (key !== 'documentUrls') {
+      if (key === 'incidentOccuredDate') {
+        const dateValue = value as Date;
+        formData.append(key, dateValue.toISOString());
+      } else {
+        formData.append(key, value as string);
+      }
+    }
   }
+  console.log(formData.getAll);
+  this.apiService.addIncident(formData).subscribe((response) => {
+      this.showSuccess("Incident Reported successfully");
 
-  public onUploadError(event: any): void {
-    console.log('Error uploading file:', event);
+    });
+
   }
 }

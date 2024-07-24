@@ -23,7 +23,7 @@
             <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
           </span>
         </div>
-
+        <button type="button" class="btn btn-primary ml-auto" [hidden]="!isadmin" (click)="exportExcel(dt2)">Export <i class="bi bi-cloud-download"></i></button>
         <button type="button" class="btn btn-primary ml-auto" [hidden]="isadmin" (click)="onAddItem()">Add Incident</button>
       </div>
     </ng-template>
@@ -122,11 +122,15 @@
               <div class="custom-overlay">
                 <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
                   <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin || getAssigned">
-                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident)"></i>Edit
+                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"></i>Edit
                   </li>
                   <li class="flex align-items-center gap-2 custom-item">
                     <i class="bi bi-eye" (click)="viewIncidentData(incident.id)"></i>View
                   </li>
+                  <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
+
+                    <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Export
+                </li>
                 </ul>
               </div>
             </p-overlayPanel>
@@ -136,7 +140,6 @@
               (click)="onIconClick(incident)"
               [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}">
             </i>
-
           </div>
         </td>
       </tr>

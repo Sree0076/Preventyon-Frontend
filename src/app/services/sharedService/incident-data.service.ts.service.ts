@@ -5,15 +5,12 @@ import { IncidentServiceService } from '../incident-service.service';
 
 @Injectable({
   providedIn: 'root'
- 
 })
 export class IncidentDataServiceTsService {
-
   private incidentDataSubject: BehaviorSubject<IncidentStatsDTO | null> = new BehaviorSubject<IncidentStatsDTO | null>(null);
   public incidentData: Observable<IncidentStatsDTO | null> = this.incidentDataSubject.asObservable();
   private selectedIncidentIdSource = new BehaviorSubject<number>(0);
   selectedIncidentId$ = this.selectedIncidentIdSource.asObservable();
-
 
   constructor(private cardApiService: IncidentServiceService) {}
 
@@ -22,7 +19,6 @@ export class IncidentDataServiceTsService {
       this.incidentDataSubject.next(data);
     });
   }
-
 
   setSelectedIncidentId(incidentId: number): void {
     this.selectedIncidentIdSource.next(incidentId);
