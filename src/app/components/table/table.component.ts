@@ -22,6 +22,7 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { HttpClient } from '@angular/common/http';
+import { Incident } from '../../models/incident.interface';
 
 interface PriorityOrder {
   High: number;
@@ -100,13 +101,12 @@ export class TableComponent {
   }
 
   fetchDraftIncidents() {
-    this.tablefetchService.getDraftIncidents().subscribe(data => {
-      if (Array.isArray(data)) {
-        this.incidents = data;
+    this.incidentDataService.incidentData.subscribe(data => {
+      if (data) {
+        this.incidents = data.incidents;
         this.sortByPriority();
-        console.log(data);
-      } else {
-        console.error("Unexpected data format for draft incidents:", data);
+        this.incidents = this.incidents.filter(incident => incident.isDraft);
+        console.log('Draft Incidents:', this.incidents);
       }
     });
   }
@@ -197,11 +197,21 @@ export class TableComponent {
     }
   }
 
-  editIncidentData(incident: IncidentData): void {
+  editIncidentData(incident: IncidentData,incidentId : number): void {
     console.log(this.getAssigned);
+    console.log(incident.id);
     if (incident.incidentStatus !== 'closed') {
-    this.incidentDataService.setSelectedIncidentId(incident.id);
-    this.router.navigate(['/edit-incident']);
+
+      this.incidentDataService.setSelectedIncidentId(incidentId);
+      if(!this.getAssigned)
+        {
+         this.router.navigate(['/edit-incident']);
+        }
+        else
+        {
+          this.router.navigate(['/resolve-incident']);
+        }
+
     }
   }
 
@@ -247,16 +257,21 @@ export class TableComponent {
   }
 
   getTypeSeverityClass(type: string): string {
-    switch (type.toLowerCase()) {
-      case 'security incidents':
-        return 'security';
-      case 'privacy incidents':
-        return 'privacy';
-      case 'quality incidents':
-        return 'quality';
-      default:
-        return '';
+    if(type)
+    {
+      switch (type.toLowerCase()) {
+        case 'security incidents':
+          return 'security';
+        case 'privacy incidents':
+          return 'privacy';
+        case 'quality incidents':
+          return 'quality';
+        default:
+          return '';
+      }
     }
+    return '';
+
   }
   onIconClick(incident: any): void {
     if (incident.incidentStatus !== 'closed') {
@@ -275,24 +290,40 @@ export class TableComponent {
 
   }
 
-  exportPDF(): void {
+  exportPDF(incident: any): void {
     // Create a new jsPDF instance
     const doc = new jsPDF();
 
-    // Define the columns for your table
-    const columns = ['Name', 'Priority', 'Status'];
-
-    // Map your data to the rows
-    const rows = this.incidents.map(incident => [
-      incident.incidentTitle,
-      incident.priority,
-      incident.incidentStatus
-    ]);
-
-
+    // Add Title
+    doc.setFontSize(18);
+    doc.text('Incident Report', 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Title: ${incident.incidentTitle}`, 14, 40);
+    doc.text(`Description: ${incident.incidentDescription}`, 14, 50);
+    doc.text(`Reported By: ${incident.reportedBy}`, 14, 60);
+    doc.text(`Role of Reporter: ${incident.roleOfReporter}`, 14, 70);
+    doc.text(`Incident Occurred Date: ${new Date(incident.incidentOccuredDate).toLocaleDateString()}`, 14, 80);
+    doc.text(`Month/Year: ${incident.monthYear}`, 14, 90);
+    doc.text(`Incident Type: ${incident.incidentType}`, 14, 100);
+    doc.text(`Category: ${incident.category}`, 14, 110);
+    doc.text(`Priority: ${incident.priority}`, 14, 120);
+    doc.text(`Action Assigned To: ${incident.actionAssignedTo}`, 14, 130);
+    doc.text(`Dept of Assignee: ${incident.deptOfAssignee}`, 14, 140);
+    doc.text(`Investigation Details: ${incident.investigationDetails}`, 14, 150);
+    doc.text(`Associated Impacts: ${incident.associatedImpacts}`, 14, 160);
+    doc.text(`Collection of Evidence: ${incident.collectionOfEvidence}`, 14, 170);
+    doc.text(`Correction: ${incident.correction}`, 14, 180);
+    doc.text(`Corrective Action: ${incident.correctiveAction}`, 14, 190);
+    doc.text(`Correction Completion Target Date: ${new Date(incident.correctionCompletionTargetDate).toLocaleDateString()}`, 14, 200);
+    doc.text(`Correction Actual Completion Date: ${new Date(incident.correctionActualCompletionDate).toLocaleDateString()}`, 14, 210);
+    doc.text(`Corrective Actual Completion Date: ${new Date(incident.correctiveActualCompletionDate).toLocaleDateString()}`, 14, 220);
+    doc.text(`Incident Status: ${incident.incidentStatus}`, 14, 230);
+    doc.text(`Correction Details Time Taken To Close Incident: ${incident.correctionDetailsTimeTakenToCloseIncident} hours`, 14, 240);
+    doc.text(`Corrective Details Time Taken To Close Incident: ${incident.correctiveDetailsTimeTakenToCloseIncident} hours`, 14, 250);
+    doc.text(`Created At: ${new Date(incident.createdAt).toLocaleDateString()}`, 14, 280);
 
     // Save the PDF
-    doc.save('DataExport.pdf');
+    doc.save(`incident_${incident.incidentTitle}.pdf`);
   }
 
 }

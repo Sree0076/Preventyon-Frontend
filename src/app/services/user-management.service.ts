@@ -8,16 +8,16 @@ import { User } from '../models/user-management.interface';
 })
 export class UserManagementService {
   private apiUrl =
-    'https://api.jsonsilo.com/public/f1bed98f-1857-4dc5-a567-c22901af1a74';
+    'http://localhost:7209/api/Admins';
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
   }
 
-  createUser(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
+  createUser(data: any): Observable<User> {
+    return this.http.post<User>('http://localhost:7209/api/Admins', data);
   }
 
   updateUser(id: number, user: User): Observable<User> {

@@ -9,7 +9,7 @@
 }
 
 .form {
-    background-color: #f9f9f9;
+    background-color: #ffffff;
 }
 
 .title {
@@ -24,8 +24,19 @@ p {
     border: 1px solid white;
     width: 6rem;
     height: 2rem;
-    background: var(--privacy-color);
+    background: var(--quality-color);
     color: white;
     border-radius: 0.4rem;
     margin-bottom: 1rem;
+}
+.mat-datepicker-content.year-picker .mat-calendar {
+  width: 300px; /* Adjust width as needed */
+}
+
+.mat-datepicker-content.year-picker .mat-calendar-period-button {
+  display: none;
+}
+
+.mat-datepicker-content.year-picker .mat-calendar-body-cell {
+  line-height: 2.5em; /* Adjust line height as needed */
 }
