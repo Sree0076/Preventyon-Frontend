@@ -19,7 +19,7 @@
     <div class="card">
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
   <mat-tab label="All Incidents"><app-table [getDraft]="false" [isadmin]="false" [filterCategory]="selectedCategory"></app-table></mat-tab>
-  <mat-tab label="Drafts"> <app-table [getDraft]="true" [filterCategory]="selectedCategory"></app-table> </mat-tab>
+  <!-- <mat-tab label="Drafts"> <app-table [getDraft]="true" [filterCategory]="selectedCategory"></app-table> </mat-tab> -->
   <mat-tab label="Assigned Incident"><app-table [getDraft]="false"[getAssigned]="true" [filterCategory]="selectedCategory"></app-table> </mat-tab>
 </mat-tab-group>
 </div>

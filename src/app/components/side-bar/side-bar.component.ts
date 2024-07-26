@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BadgeModule } from 'primeng/badge';
+import { AuthService } from '../../services/auth-service.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -10,4 +11,12 @@ import { BadgeModule } from 'primeng/badge';
 })
 export class SideBarComponent {
 
+
+  constructor(
+    private authService: AuthService, // Inject AuthService
+  ) {}
+  logout() {
+    console.log("logout");
+    this.authService.logout();
+  }
 }

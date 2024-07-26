@@ -22,7 +22,8 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { HttpClient } from '@angular/common/http';
-import { Incident } from '../../models/incident.interface';
+import { MultiSelectModule } from 'primeng/multiselect';
+
 
 interface PriorityOrder {
   High: number;
@@ -37,9 +38,14 @@ interface PriorityOrder {
   styleUrl: './table.component.scss',
   providers: [HttpClient],
   imports: [RouterOutlet, ButtonModule, TableModule, CommonModule, SplitButtonModule, InputIconModule, IconFieldModule,
-      InputTextModule, DropdownModule, DropdownModule, FormsModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent, TagModule]
+      InputTextModule, DropdownModule, DropdownModule, FormsModule, MultiSelectModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent, TagModule]
 })
 export class TableComponent {
+
+
+  cols:any []=[];
+  _selectedColumns: any[]=[];
+
   @Input() isadmin: boolean = false;
   @Input() getDraft: boolean = false;
   @Input() getAssigned: boolean = false;
@@ -82,7 +88,24 @@ export class TableComponent {
     } else {
       this.fetchAllIncidents();
     }
+    this.cols = [
+      { field: 'id', header: 'ID' },
+      { field: 'category', header: 'Categories' },
+      { field: 'reportedBy', header: 'Reported By' },
+      { field: 'priority', header: 'Priority' },
+      { field: 'incidentStatus', header: 'Status' },
+      { field: 'action', header: 'Action' }
+    ];
+    this._selectedColumns = this.cols;
   }
+get selectedColumns(): any[] {
+    return this._selectedColumns;
+}
+
+set selectedColumns(val: any[]) {
+    //restore original order
+    this._selectedColumns = this.cols.filter((col) => val.includes(col));
+}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filterCategory'] && !changes['filterCategory'].isFirstChange()) {
@@ -112,13 +135,21 @@ export class TableComponent {
   }
 
   fetchAssignedIncidents() {
-    this.tablefetchService.getAssignedIncident(2).subscribe(data => {
-      if (Array.isArray(data)) {
-        this.incidents = data;
+    // this.tablefetchService.getAssignedIncident(2).subscribe(data => {
+    //   if (Array.isArray(data)) {
+    //     this.incidents = data;
+    //     this.sortByPriority();
+    //     console.log(data);
+    //   } else {
+    //     console.error("Unexpected data format for assigned incidents:", data);
+    //   }
+    // });
+
+    this.incidentDataService.incidentData.subscribe(data => {
+      if (data) {
+        this.incidents = data.assignedIncidents;
         this.sortByPriority();
         console.log(data);
-      } else {
-        console.error("Unexpected data format for assigned incidents:", data);
       }
     });
   }
@@ -325,5 +356,20 @@ export class TableComponent {
     // Save the PDF
     doc.save(`incident_${incident.incidentTitle}.pdf`);
   }
+
+  isColumnVisible(columnField: string): boolean {
+    return this.selectedColumns.some(col => col.field === columnField);
+  }
+  onSubmitReview(incident: IncidentData) {
+    const submitData = {
+      id: incident.id,
+      isSubmittedForReview: true,
+    };
+    console.log(submitData);
+        this.tablefetchService.submitForUser(incident.id,submitData).subscribe(response => {
+          console.log(response);
+    });
+
+    }
 
 }

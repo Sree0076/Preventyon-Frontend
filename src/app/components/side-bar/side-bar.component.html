@@ -1,6 +1,6 @@
 <div class="side-bar">
   <div class="icons">
-      <div class="dash-icon">
+      <div class="dash-icon" (click)="logout()">
           <img src="icons/dashboard-icon.svg" alt="Dashboard icon">
       </div>
       <div class="noti">
@@ -10,7 +10,7 @@
           <button><i class="bi bi-gear"></i></button>
       </div>
   </div>
-  <div class="profile-icon">
-      <img src="icons/profile-circle-svgrepo-com.svg" alt="Profile icon">
+  <div class="profile-icon" (click)="logout()">
+    <button ><img src="icons/profile-circle-svgrepo-com.svg" alt="Profile icon" ></button>
   </div>
 </div>
