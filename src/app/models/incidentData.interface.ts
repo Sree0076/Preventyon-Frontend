@@ -26,6 +26,8 @@ export interface IncidentData {
   correctionDetailsTimeTakenToCloseIncident: number;
   correctiveDetailsTimeTakenToCloseIncident: number;
   isDraft: boolean;
+  isCorrectionFilled : boolean;
+  IsSubmittedForReview :boolean;
   employeeId: number;
   documentUrls : string;
   createdAt: string; // Use Date if you handle dates in ISO format
@@ -42,4 +44,6 @@ export interface IncidentStatsDTO {
   qualityPendingIncidents: number;
   qualityClosedIncidents: number;
   incidents: IncidentData[];
+  assignedIncidents : IncidentData[];
 }
+

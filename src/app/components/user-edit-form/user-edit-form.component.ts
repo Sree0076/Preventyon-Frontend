@@ -39,7 +39,6 @@ export class UserEditFormComponent implements OnInit {
   editAction: boolean = false;
   selectedFiles!: File[];
   viewform!: FormGroup;
-  previewUrl:string="";
   incidentTypes = [
     { label: 'Security Incident', value: 'Security Incidents' },
     { label: 'Privacy Incident', value: 'Privacy Incidents' },
@@ -189,7 +188,7 @@ export class UserEditFormComponent implements OnInit {
         isDraft: response.isDraft,
         documentUrls: response.documentUrls,
       });
-      this.previewUrl = this.previewUrl = `http://localhost:7209${response.documentUrls[0]}`;
+
     });
 
   }

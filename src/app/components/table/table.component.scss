@@ -245,4 +245,51 @@ th{
   color: #607D8B; /* Adjust the opacity value as needed */
   pointer-events: none;  /* Optional: Disable click events */
 }
+::ng-deep .p-multiselect
+{
+  height: 35px;
+}
+::ng-deep .p-multiselect-token
+{
+  height: 18px;
+  background: none;
+}
+::ng-deep .p-multiselect-token-icon
+{
+  height: 13px;
+  width: 13px;
+}
+::ng-deep .p-multiselect-items
+{
+  z-index: 100;
+  padding-left: 0px;
+  height: 110px;
+} 
+::ng-deep .p-multiselect-filter
+{
+ min-height: 3px;
+}
+p-table th, p-table td {
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.resize-handle {
+  font-size: 20px; /* Match the font size */
+  color: #898686; /* Light color to make it distinguishable */
+}
 
+.resize-handle:hover {
+  color: #000; /* Darken color on hover */
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}

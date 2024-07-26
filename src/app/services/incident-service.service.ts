@@ -1,7 +1,8 @@
+
 import { Injectable } from '@angular/core';
 import { IncidentData, IncidentStatsDTO } from '../models/incidentData.interface';
 import { catchError, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,7 @@ export class IncidentServiceService {
 
   getDataBasedOnStatus(): Observable<any> {
     return this.http.get<any>(`${this.fetchCardUrl}`);
-
   }
-
-  // public getDraftIncidents(): Observable<IncidentData> {
-  //   return this.http.get<IncidentData>("http://localhost:7209/Incident/GetDraftIncidentsByEmployeeId?employeeId=3").pipe(
-  //     catchError(this.handleError)
-  //   );
-  // }
 
   public getSingleIncident(incidentId: number): Observable<IncidentData> {
     return this.http.get<IncidentData>(`http://localhost:7209/Incident/GetUserUpdateIncident/${incidentId}`).pipe(
@@ -41,7 +35,7 @@ export class IncidentServiceService {
   }
 
   public getAssignedIncident(employeeId: number): Observable<IncidentData> {
-    return this.http.get<IncidentData>(`http://localhost:7209/api/AssignedIncident?employeeId=${employeeId}`).pipe(
+    return this.http.get<IncidentData>(`http://localhost:7209/api/AssignedIncident/${employeeId}`).pipe(
       catchError(this.handleError)
     );
   }
@@ -57,5 +51,10 @@ export class IncidentServiceService {
 
     console.error('An error occurred:', error.message);
     return throwError(() => new Error('Something went wrong; please try again later.'));
+  }
+
+
+  public submitForUser(incidentId: number, incident: any): Observable<any> {
+    return this.http.put<any>(`http://localhost:7209/api/updateIncidentByReview/${incidentId}`, incident);
   }
 }

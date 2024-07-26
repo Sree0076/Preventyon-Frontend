@@ -23,6 +23,8 @@
     "@angular/platform-server": "^18.0.0",
     "@angular/router": "^18.0.6",
     "@angular/ssr": "^18.0.4",
+    "@azure/msal-angular": "^3.0.23",
+    "@azure/msal-browser": "^3.20.0",
     "apexcharts": "^3.49.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
