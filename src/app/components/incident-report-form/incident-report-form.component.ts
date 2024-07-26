@@ -1,8 +1,10 @@
 import { Incident } from './../../models/incident.interface';
-import { Component } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
+  NgModel,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -20,6 +22,12 @@ import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { HttpClient } from '@angular/common/http';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-incident-report-form',
@@ -33,9 +41,16 @@ import { HttpClient } from '@angular/common/http';
     DropdownModule,
     FileUploadModule,
     InputTextareaModule,
-    ToastModule, ButtonModule, RippleModule
+    ToastModule,
+    ButtonModule,
+    RippleModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  providers: [DatePipe,MessageService,HttpClient],
+  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule],
   templateUrl: './incident-report-form.component.html',
   styleUrl: './incident-report-form.component.scss',
 })
@@ -74,56 +89,84 @@ export class IncidentReportFormComponent {
     { label: 'Low', value: 'Low' },
   ];
   selectedFiles!: File[];
+  date1!: Date | null;
+  maxDate: Date = new Date();
 
   constructor(
     private router: Router,
     private apiService: IncidentServiceService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private dialog: MatDialog
   ) {}
 
-  showSuccess(message:string) {
+  openDialog() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    dialogRef.componentInstance.dialogResult.subscribe((result) => {
+      console.log(result);
+
+      if (result) {
+        console.log(result);
+
+        this.submitForm();
+      }
+    });
+  }
+
+  showSuccess(message: string) {
     setTimeout(() => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message}` });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `${message}`,
+      });
       setTimeout(() => {
-        this.router.navigate(['/user']); // Navigate to '/user' route after success message displayed
-      }, 2000); // Adjust delay as needed for the success message to display
+        this.router.navigate(['/user']);
+      }, 2000);
     }, 100);
-}
+  }
+
+  showError(message: string) {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `${message}`,
+      });
+    }, 100);
+  }
 
   saveAsDraft() {
-   this.viewform.value.employeeId=2;
+    this.viewform.value.employeeId = 2;
     this.viewform.value.isDraft = true;
     const formData = new FormData();
-    this.selectedFiles.forEach((image)=>{
-      formData.append('documentUrls',image);
-    })
-  const files: FileList = this.viewform.get('documentUrls')?.value;
-  if (files) {
-    Array.from(files).forEach((file) => formData.append('documentUrls', file));
-  }
-  for (const [key, value] of Object.entries(this.viewform.value)) {
-    if (key !== 'documentUrls') {
-      if (key === 'incidentOccuredDate') {
-        const dateValue = value as Date;
-        formData.append(key, dateValue.toISOString());
-      } else {
-        formData.append(key, value as string);
+    this.selectedFiles.forEach((image) => {
+      formData.append('documentUrls', image);
+    });
+    const files: FileList = this.viewform.get('documentUrls')?.value;
+    if (files) {
+      Array.from(files).forEach((file) =>
+        formData.append('documentUrls', file)
+      );
+    }
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'documentUrls') {
+        if (key === 'incidentOccuredDate') {
+          const dateValue = value as Date;
+          formData.append(key, dateValue.toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
       }
     }
-  }
-  console.log(formData.getAll);
-  this.apiService.addIncident(formData).subscribe((response) => {
-      this.showSuccess("Incident saved as draft successfully");
-
+    console.log(formData.getAll);
+    this.apiService.addIncident(formData).subscribe((response) => {
+      this.showSuccess('Incident saved as draft successfully');
     });
-
-
-}
+  }
 
   viewform!: FormGroup;
 
   ngOnInit() {
-
     this.viewform = new FormGroup({
       incidentTitle: new FormControl('', Validators.required),
       category: new FormControl(''),
@@ -135,41 +178,59 @@ export class IncidentReportFormComponent {
       reportedDate: new FormControl('', Validators.required),
       priority: new FormControl(''),
       isDraft: new FormControl(false),
-      employeeId :new FormControl(0),
+      employeeId: new FormControl(0),
       documentUrls: new FormControl(null),
     });
+    console.log(this.viewform);
   }
   onFileUpload(event: any) {
     console.log('fileupload', <File>event.files);
     this.selectedFiles = <File[]>event.files;
   }
 
-  onSubmit() {
-    this.viewform.value.employeeId=2;
+  submitForm() {
+    this.viewform.value.employeeId = 2;
     this.viewform.value.isDraft = false;
     const formData = new FormData();
-    this.selectedFiles.forEach((image)=>{
-      formData.append('documentUrls',image);
-    })
-  const files: FileList = this.viewform.get('documentUrls')?.value;
-  if (files) {
-    Array.from(files).forEach((file) => formData.append('documentUrls', file));
-  }
-  for (const [key, value] of Object.entries(this.viewform.value)) {
-    if (key !== 'documentUrls') {
-      if (key === 'incidentOccuredDate') {
-        const dateValue = value as Date;
-        formData.append(key, dateValue.toISOString());
-      } else {
-        formData.append(key, value as string);
+    if (this.selectedFiles) {
+      this.selectedFiles.forEach((image) => {
+        formData.append('documentUrls', image);
+      });
+      const files: FileList = this.viewform.get('documentUrls')?.value;
+      if (files) {
+        Array.from(files).forEach((file) =>
+          formData.append('documentUrls', file)
+        );
       }
+      for (const [key, value] of Object.entries(this.viewform.value)) {
+        if (key !== 'documentUrls') {
+          if (key === 'incidentOccuredDate') {
+            const dateValue = value as Date;
+            formData.append(key, dateValue.toISOString());
+          } else {
+            formData.append(key, value as string);
+          }
+        }
+      }     
     }
-  }
-  console.log(formData.getAll);
-  this.apiService.addIncident(formData).subscribe((response) => {
-      this.showSuccess("Incident Reported successfully");
 
+    console.log(formData.getAll);
+    this.apiService.addIncident(formData).subscribe((response) => {
+      this.showSuccess('Incident Reported successfully');
     });
+  }
 
+  onSubmit() {
+    if (
+      !this.viewform.value.incidentTitle ||
+      !this.viewform.value.incidentOccuredDate ||
+      !this.viewform.value.incidentOccuredTime ||
+      !this.viewform.value.incidentDescription
+    ) {
+      this.showError('Please Fill Out Required Details');
+      return;
+    }
+
+    this.openDialog();
   }
 }

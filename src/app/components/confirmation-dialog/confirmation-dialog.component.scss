@@ -1,0 +1,13 @@
+.mat-dialog-content,
+.mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.mat-dialog-actions {
+    margin-top: 20px;
+}
+
+::ng-deep .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 0;
+}

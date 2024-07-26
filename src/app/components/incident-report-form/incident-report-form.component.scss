@@ -1,7 +1,9 @@
 .report-form {
   margin: 0 auto;
   padding: 1rem;
-  width: 100%;
+  width: 80%;
+  border-radius: 0.3rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-container {
@@ -18,9 +20,9 @@
 .savebutton {
   width: 10rem;
   height: 3.2rem;
-  background: var(--quality-color);
+  background: var(--quality-color) !important;
   margin: 1rem;
-  color: white;
+  color: white !important;
   border-radius: 0.4rem;
 }
 
@@ -38,6 +40,28 @@ textarea {
   border: 1px solid #a27ad7 !important;
 }
 
+
+::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
+.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+  display: block;
+  border: none !important;
+
+}
+
+::ng-deep .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+  height: 3.2rem;
+  background-color: white;
+  margin-left: 1.5rem;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: white !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  border: 1px solid #a27ad7;
+}
+
 ::ng-deep .p-fileupload .p-fileupload-buttonbar {
   border: 1px solid #a27ad7 !important;
 }
@@ -48,6 +72,37 @@ textarea {
 
 ::ng-deep .p-fileupload .p-fileupload-content {
   border: 1px solid #a27ad7;
+}
+
+::ng-deep button:not(:disabled),
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled) {
+  cursor: pointer;
+  background: white;
+  color: black;
+  border: none;
+}
+
+
+
+::ng-deep .p-calendar .p-datepicker {
+  width: 100%;
+  border: 1px solid rgb(110, 110, 228);
+}
+
+::ng-deep .p-calendar .p-input {
+  width: 100%;
+}
+
+::ng-deep .p-calendar .p-datepicker .p-datepicker-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:first-child {
+
+  width: 90%;
 }
 
 @media (min-width: 768px) {
