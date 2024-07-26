@@ -24,6 +24,6 @@ export const appConfig: ApplicationConfig = {
     IncidentDataServiceTsService,
     IncidentServiceService,
     ForwardFormService,
-    ChartDataService,
+    ChartDataService, provideAnimationsAsync(),
   ],
 };

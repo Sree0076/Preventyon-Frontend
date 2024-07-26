@@ -11,6 +11,12 @@
       </div>
   </div>
   <div class="profile-icon">
-      <img src="icons/profile-circle-svgrepo-com.svg" alt="Profile icon">
+    <!-- <p-menu #menu [model]="items" [popup]="true"></p-menu>
+    <p-button (onClick)="menu.toggle($event)" icon="pi pi-user"></p-button> -->
+    <button (click)="openProfile($event)">
+        <i class="bi bi-person-circle" style="font-size: 2.5rem;"></i>
+      <!-- <i class="pi pi-user" style="font-size: 1.5rem;"></i> -->
+    </button>
+    <!-- <img src="icons/profile-circle-svgrepo-com.svg" alt="Profile icon"> -->
   </div>
 </div>

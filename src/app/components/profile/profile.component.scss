@@ -1,0 +1,275 @@
+// .profile-image {
+//   width: 50px;
+//   height: 50px;
+//   border-radius: 50%;
+// }
+
+// .card {
+//   width: 20px;
+//   padding: 20px;
+// }
+
+// .role-tag {
+//   background-color: #e0e0e0;
+//   border-radius: 12px;
+//   padding: 4px 8px;
+//  //border-radius: 4px;
+//   padding: 5px;
+
+//  display: inline-block;
+//   margin-top: 5px;
+//   color: #333;
+// }
+
+
+//-------------------------------------------------------------
+// .profile-popup {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 20px; // Increased padding for better spacing
+//   border-radius: 10px;
+//   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+//   background-color: #f9f9f9;
+//   max-width: 300px;
+//   min-width: 200px;
+//   text-align: center;
+// }
+
+// .profile-header {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   margin-bottom: 15px; // Space between header and other content
+// }
+
+// .profile-image {
+//   width: 60px; // Larger avatar for emphasis
+//   height: 60px;
+//   border-radius: 50%;
+//   margin-bottom: 10px; // Space between image and name
+// }
+
+// .user-info {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
+
+// .user-name {
+//   margin: 0;
+//   font-size: 1.2rem; // Larger font for name
+//   font-weight: bold;
+//   color: #333;
+// }
+
+// .role-tag {
+//   background-color: #1976d2; // More prominent background color
+//   color: white;
+//   padding: 4px 8px;
+//   border-radius: 8px;
+//   font-size: 0.8rem;
+//   margin-top: 5px;
+// }
+
+// .designation {
+//   margin: 5px 0;
+//   font-size: 0.9rem;
+//   color: #555;
+// }
+
+// .logout-button {
+//   margin-top: 15px; // Space above the logout button
+//   width: 100%;
+//   padding: 10px 0; // Button height
+//   font-size: 1rem;
+//   border-radius: 20px; // Rounded rectangle shape
+// }
+
+// ::ng-deep .backdropBackground {
+//   background-color: rgba(0, 0, 0, 0.4);
+// }
+
+// --------------------------------------------------------------------------------
+
+
+// .profile-popup {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 10px;
+//   border-radius: 8px;
+//   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+//   background-color: #ffffff;
+//   max-width: 250px; // Maximum width of the modal
+//   min-width: 200px; // Minimum width of the modal
+//   position: absolute; // Allows positioning control
+//   top: -50px; // Move the modal upwards
+// }
+
+
+
+// .profile-header {
+//   display: flex;
+//   align-items: center;
+//   width: 100%;
+// }
+
+// .profile-image {
+//   width: 40px; // Smaller size for compactness
+//   height: 40px;
+//   border-radius: 50%;
+//   margin-right: 10px;
+// }
+
+// .user-info {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// }
+
+// .user-name {
+//   margin: 0;
+//   font-size: 0.9rem; // Slightly smaller font size
+//   font-weight: bold;
+//   color: #333;
+// }
+
+// .role-tag {
+//   background-color: #e0e0e0;
+//   color: #333;
+//   padding: 2px 6px;
+//   border-radius: 4px;
+//   margin-top: 4px;
+//   font-size: 0.8rem;
+// }
+
+// .designation {
+//   margin: 8px 0;
+//   font-size: 0.8rem;
+//   color: #666;
+// }
+
+// .logout-button {
+//   margin-top: 10px;
+//   padding: 8px 20px; // Adjusted padding for a compact size
+//   font-size: 0.9rem;
+//   border-radius: 12px; // Rounded rectangle shape
+//   background-color: #f44336;
+//   color: white;
+//   border: none;
+//   cursor: pointer;
+//   transition: background-color 0.3s;
+// }
+
+// .logout-button:hover {
+//   background-color: #d32f2f;
+// }
+
+//-------------------------------------------------------
+// .profile-popup {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 15px;
+//   border-radius: 10px;
+//   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+//   background-color: #ffffff;
+//   max-width: 250px;
+//   min-width: 200px;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   transform: translateY(-120%);
+//   /* Move it up */
+//   z-index: 1000;
+// }
+
+.profile-popup {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 70px; // Adjust this value based on your button height
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.user-name {
+  margin: 0 0 5px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.role-tag {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.designation {
+  margin: 0 0 20px;
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+
+.logout-container {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  border-radius: 4px !important;
+  background-color: #f44336 !important;
+  color: white !important;
+  border: none !important;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  width: 80%;
+  max-width: 200px;
+
+  &:hover {
+    background-color: #d32f2f !important;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  i {
+    margin-right: 8px;
+  }
+}
