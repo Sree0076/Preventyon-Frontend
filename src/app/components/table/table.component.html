@@ -101,6 +101,8 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-incident>
+      @if(!incident.isDraft || !isadmin)
+      {
       <tr>
         <td *ngIf="isColumnVisible('id')">{{ incident.id }}</td>
         <td >{{ incident.incidentTitle }}</td>
@@ -150,6 +152,7 @@
           </div>
         </td>
       </tr>
+    }
     </ng-template>
 
     <ng-template pTemplate="paginatorleft">

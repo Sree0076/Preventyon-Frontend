@@ -1,4 +1,4 @@
-import { Incident } from './../../models/incident.interface';
+
 import { Component, Input, ViewChild } from '@angular/core';
 import {
   FormControl,
@@ -28,6 +28,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 
 @Component({
   selector: 'app-incident-report-form',
@@ -91,12 +92,14 @@ export class IncidentReportFormComponent {
   selectedFiles!: File[];
   date1!: Date | null;
   maxDate: Date = new Date();
+  employeeId: number =0;
 
   constructor(
     private router: Router,
     private apiService: IncidentServiceService,
     private messageService: MessageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private employeeDataService: EmployeeDataServiceService,
   ) {}
 
   openDialog() {
@@ -136,7 +139,7 @@ export class IncidentReportFormComponent {
   }
 
   saveAsDraft() {
-    this.viewform.value.employeeId = 2;
+    this.viewform.value.employeeId =this.employeeId
     this.viewform.value.isDraft = true;
     const formData = new FormData();
     this.selectedFiles.forEach((image) => {
@@ -182,6 +185,12 @@ export class IncidentReportFormComponent {
       documentUrls: new FormControl(null),
     });
     console.log(this.viewform);
+
+    this.employeeDataService.employeeData.subscribe(data => {
+      if (data) {
+         this.employeeId= data.id;
+      }
+    });
   }
   onFileUpload(event: any) {
     console.log('fileupload', <File>event.files);
@@ -189,7 +198,8 @@ export class IncidentReportFormComponent {
   }
 
   submitForm() {
-    this.viewform.value.employeeId = 2;
+
+    this.viewform.value.employeeId =this.employeeId
     this.viewform.value.isDraft = false;
     const formData = new FormData();
     if (this.selectedFiles) {
@@ -211,7 +221,7 @@ export class IncidentReportFormComponent {
             formData.append(key, value as string);
           }
         }
-      }     
+      }
     }
 
     console.log(formData.getAll);

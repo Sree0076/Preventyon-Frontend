@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { IncidentData, IncidentStatsDTO } from '../models/incidentData.interface';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { EmployeeDataServiceService } from './sharedService/employee-data.service.service';
+import { Employee } from '../models/employee.interface';
+import { AuthService } from './auth-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +13,12 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 
 export class IncidentServiceService {
 
-  private fetchCardUrl ='http://localhost:7209/Incident/GetIncidentsByEmployeeId?employeeId=2';
+  constructor(private http: HttpClient) {
+  }
   private createBaseUrl: string ='http://localhost:7209/Incident/CreateIncident';
+  getDataBasedOnStatus(employeeid:number): Observable<any> {
 
-  constructor(private http: HttpClient) {}
-
-  getDataBasedOnStatus(): Observable<any> {
-    return this.http.get<any>(`${this.fetchCardUrl}`);
+    return this.http.get<any>(`http://localhost:7209/Incident/GetIncidentsByEmployeeId?employeeId=${employeeid}`);
   }
 
   public getSingleIncident(incidentId: number): Observable<IncidentData> {
