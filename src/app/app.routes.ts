@@ -7,14 +7,18 @@ import { IncidentCreatePageComponent } from './pages/incident-create-page/incide
 import { IncidentVewPageComponent } from './pages/incident-vew-page/incident-vew-page.component';
 import { AdminmanagementComponent } from './pages/adminmanagement/adminmanagement.component';
 import { IncidenteditpageComponent } from './pages/incidenteditpage/incidenteditpage.component';
-
+import { UserEditFormPageComponent } from './pages/user-edit-form-page/user-edit-form-page.component';
+import { MsalGuard } from '@azure/msal-angular';
+import { LoginComponent } from './components/login/login.component';
 
 
 export const routes: Routes = [
-  { path: 'admin', component: AdminDashboardComponent },
-  { path: 'user', component: UserDashboardComponent },
+  { path: '', component: LoginComponent },
+  { path: 'admin', component: AdminDashboardComponent,canActivate: [MsalGuard] },
+  { path: 'user', component: UserDashboardComponent},
   { path: 'create-incident', component: IncidentCreatePageComponent },
   { path: 'view-incident', component:IncidentVewPageComponent },
-  { path: 'edit-incident', component:IncidenteditpageComponent },
+  { path: 'resolve-incident', component:IncidenteditpageComponent },
+  { path: 'edit-incident', component:UserEditFormPageComponent },
   { path: 'usermanage', component: AdminmanagementComponent },
 ];

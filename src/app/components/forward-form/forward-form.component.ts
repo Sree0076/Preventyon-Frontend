@@ -7,13 +7,15 @@ import { userDetails } from '../../models/users_forward_form.interface';
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { NgFor, NgIf } from '@angular/common';
 import { ForwardFormService } from '../../services/forward-form.service';
-import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
 import { Router } from '@angular/router';
+import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-forward-form',
   standalone: true,
   imports: [DialogModule, ButtonModule, InputTextModule,FormsModule,FilterPipe,NgFor,NgIf],
+  providers: [HttpClient],
   templateUrl: './forward-form.component.html',
   styleUrl: './forward-form.component.scss'
 })
@@ -41,14 +43,14 @@ export class ForwardFormComponent {
   message:string='';
 
   constructor(public forwardFormService : ForwardFormService,
-       private incidentService: IncidentServiceTsService,
+       private incidentService: IncidentDataServiceTsService,
        private router: Router,
       ){}
   isForwardform:boolean=true;
 
 
   ngOnInit():void{
-    this.forwardFormService.getAllUsers().subscribe(data => 
+    this.forwardFormService.getAllUsers().subscribe(data =>
     {
       this.user_details = data;
       console.log(data);
@@ -75,8 +77,6 @@ export class ForwardFormComponent {
     }
 
     getSelectedUserIds(): number[] {
-
-
       return this.selectedUsers.map(user => user.id);
 
     }
@@ -85,8 +85,8 @@ export class ForwardFormComponent {
     forward(): void{
       console.log(this.selectedUsers);
       console.log(this.message);
-      this.forwardFormService.forwardIncident(this.forwardIncidentId,this.selectedUsersId).subscribe((response) => {
-        console.log('Incident added successfully', response);
+      this.forwardFormService.forwardIncident(this.forwardIncidentId,this.getSelectedUserIds()).subscribe((response) => {
+        console.log('Incident forwarded successfully', response);
         this.router.navigate(['/admin']);
       });
       this.handleDialogClose();

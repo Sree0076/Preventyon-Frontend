@@ -3,6 +3,7 @@ import { BadgeModule } from 'primeng/badge';
 import { NotificationModalComponent } from '../notification-modal/notification-modal.component';
 import { CommonModule } from '@angular/common';
 
+import { AuthService } from '../../services/auth-service.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -12,6 +13,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './side-bar.component.scss'
 })
 export class SideBarComponent {
-  
-  
+
+
+  constructor(
+    private authService: AuthService, // Inject AuthService
+  ) {}
+  logout() {
+    console.log("logout");
+    this.authService.logout();
+  }
 }

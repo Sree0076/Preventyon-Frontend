@@ -2,13 +2,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
 import { TableComponent } from "../../components/table/table.component";
-import { CardApiService } from '../../services/card-api.service';
 import { CardComponent } from '../../components/card/card.component';
 import { BarChartComponent } from '../../components/bar-chart/bar-chart.component';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { NgClass, NgFor } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { IncidentStatsDTO } from '../../models/incidentData.interface';
 import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
 
 @Component({

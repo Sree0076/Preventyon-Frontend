@@ -1,24 +1,34 @@
-import { Incident } from './../../models/incident.interface';
-import { Component } from '@angular/core';
+
+import { Component, Input, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
+  FormsModule,
+  NgModel,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { IncidentReportFormApiService } from '../../services/incident-report-form-api.service';
 import { DatePipe, NgIf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IncidentServiceTsService } from '../../services/sharedService/incident-service.ts.service';
-import { Subscription } from 'rxjs';
 import { IncidentData } from '../../models/incidentData.interface';
-import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
+import { IncidentServiceService } from '../../services/incident-service.service';
+import { HttpClient } from '@angular/common/http';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 
 @Component({
   selector: 'app-incident-report-form',
@@ -32,15 +42,21 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     DropdownModule,
     FileUploadModule,
     InputTextareaModule,
+    ToastModule,
+    ButtonModule,
+    RippleModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule],
   templateUrl: './incident-report-form.component.html',
   styleUrl: './incident-report-form.component.scss',
 })
 export class IncidentReportFormComponent {
-  editIncidentId: number = 0;
   incident!: IncidentData;
-  editAction: Boolean = false;
 
   incidentTypes = [
     { label: 'Security Incident', value: 'Security Incidents' },
@@ -73,40 +89,91 @@ export class IncidentReportFormComponent {
     { label: 'Medium', value: 'Medium' },
     { label: 'Low', value: 'Low' },
   ];
+  selectedFiles!: File[];
+  date1!: Date | null;
+  maxDate: Date = new Date();
+  employeeId: number =0;
 
   constructor(
     private router: Router,
-    private apiService: IncidentReportFormApiService,
-    private incidentService: IncidentServiceTsService,
-    private route: ActivatedRoute,
-    private datePipe: DatePipe
+    private apiService: IncidentServiceService,
+    private messageService: MessageService,
+    private dialog: MatDialog,
+    private employeeDataService: EmployeeDataServiceService,
   ) {}
-  saveAsDraft() {
-    this.viewform.value.isDraft = true;
-    console.log(this.viewform.value);
-    if (this.editAction) {
-      this.apiService
-        .updateIncident(this.editIncidentId, this.viewform.value)
-        .subscribe((response) => {
-          console.log('Incident updated successfully', response);
-          this.router.navigate(['/user']);
-        });
-    } else {
-      this.apiService.addIncident(this.viewform.value).subscribe((response) => {
-        console.log('Incident added successfully', response);
-        this.router.navigate(['/user']);
-      });
-    }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    dialogRef.componentInstance.dialogResult.subscribe((result) => {
+      console.log(result);
+
+      if (result) {
+        console.log(result);
+
+        this.submitForm();
+      }
+    });
   }
+
+  showSuccess(message: string) {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `${message}`,
+      });
+      setTimeout(() => {
+        this.router.navigate(['/user']);
+      }, 2000);
+    }, 100);
+  }
+
+  showError(message: string) {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `${message}`,
+      });
+    }, 100);
+  }
+
+  saveAsDraft() {
+    this.viewform.value.employeeId =this.employeeId
+    this.viewform.value.isDraft = true;
+    const formData = new FormData();
+    this.selectedFiles.forEach((image) => {
+      formData.append('documentUrls', image);
+    });
+    const files: FileList = this.viewform.get('documentUrls')?.value;
+    if (files) {
+      Array.from(files).forEach((file) =>
+        formData.append('documentUrls', file)
+      );
+    }
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'documentUrls') {
+        if (key === 'incidentOccuredDate') {
+          const dateValue = value as Date;
+          formData.append(key, dateValue.toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+    console.log(formData.getAll);
+    this.apiService.addIncident(formData).subscribe((response) => {
+      this.showSuccess('Incident saved as draft successfully');
+    });
+  }
+
   viewform!: FormGroup;
 
   ngOnInit() {
-    console.log(this.editAction);
     this.viewform = new FormGroup({
       incidentTitle: new FormControl('', Validators.required),
       category: new FormControl(''),
       incidentType: new FormControl(''),
-      incidentAttachment: new FormControl(''),
       incidentOccuredDate: new FormControl('', Validators.required),
       incidentOccuredTime: new FormControl('', Validators.required),
       incidentDescription: new FormControl('', Validators.required),
@@ -114,54 +181,66 @@ export class IncidentReportFormComponent {
       reportedDate: new FormControl('', Validators.required),
       priority: new FormControl(''),
       isDraft: new FormControl(false),
+      employeeId: new FormControl(0),
+      documentUrls: new FormControl(null),
     });
-    this.route.params.subscribe((params) => {
-      if (params['action'] === 'edit') {
-        console.log('edit1');
-        this.editAction = true;
-        this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
-          this.editIncidentId = incidentId;
-          this.fetchIncident();
-          console.log('Selected incident ID:', this.editIncidentId);
-        });
+    console.log(this.viewform);
+
+    this.employeeDataService.employeeData.subscribe(data => {
+      if (data) {
+         this.employeeId= data.id;
       }
+    });
+  }
+  onFileUpload(event: any) {
+    console.log('fileupload', <File>event.files);
+    this.selectedFiles = <File[]>event.files;
+  }
+
+  submitForm() {
+
+    this.viewform.value.employeeId =this.employeeId
+    this.viewform.value.isDraft = false;
+    const formData = new FormData();
+    if (this.selectedFiles) {
+      this.selectedFiles.forEach((image) => {
+        formData.append('documentUrls', image);
+      });
+      const files: FileList = this.viewform.get('documentUrls')?.value;
+      if (files) {
+        Array.from(files).forEach((file) =>
+          formData.append('documentUrls', file)
+        );
+      }
+      for (const [key, value] of Object.entries(this.viewform.value)) {
+        if (key !== 'documentUrls') {
+          if (key === 'incidentOccuredDate') {
+            const dateValue = value as Date;
+            formData.append(key, dateValue.toISOString());
+          } else {
+            formData.append(key, value as string);
+          }
+        }
+      }
+    }
+
+    console.log(formData.getAll);
+    this.apiService.addIncident(formData).subscribe((response) => {
+      this.showSuccess('Incident Reported successfully');
     });
   }
 
   onSubmit() {
-    console.log(this.viewform.value);
-    this.viewform.value.isDraft = false;
-    console.log(this.viewform.value.isDraft);
-    if (this.editAction) {
-      this.apiService
-        .updateIncident(this.editIncidentId, this.viewform.value)
-        .subscribe((response) => {
-          console.log('Incident updated successfully', response);
-          this.router.navigate(['/user']);
-        });
-    } else {
-      this.apiService.addIncident(this.viewform.value).subscribe((response) => {
-        console.log('Incident added successfully', response);
-        this.router.navigate(['/user']);
-      });
+    if (
+      !this.viewform.value.incidentTitle ||
+      !this.viewform.value.incidentOccuredDate ||
+      !this.viewform.value.incidentOccuredTime ||
+      !this.viewform.value.incidentDescription
+    ) {
+      this.showError('Please Fill Out Required Details');
+      return;
     }
-  }
-  fetchIncident() {
-    this.apiService.getIncident(this.editIncidentId).subscribe((response) => {
-      console.log('Incident Fetched successfully', response);
-      response.incidentOccuredDate = this.datePipe.transform(
-        response.incidentOccuredDate,
-        'yyyy-MM-dd'
-      );
-      this.incident = response;
-    });
-  }
 
-  public onUploadSuccess(event: any): void {
-    console.log('File uploaded successfully:', event);
-  }
-
-  public onUploadError(event: any): void {
-    console.log('Error uploading file:', event);
+    this.openDialog();
   }
 }

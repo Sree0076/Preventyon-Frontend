@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ChartDataService } from '../../services/chart-data.service';
 
@@ -13,11 +14,16 @@ export class BarChartComponent implements OnInit {
   data: any;
   options: any;
 
-  constructor(private chartDataService: ChartDataService) {}
+  constructor(
+    private chartDataService: ChartDataService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
     this.loadChartData();
-    this.setupChartOptions();
+    if (isPlatformBrowser(this.platformId)) {
+      this.setupChartOptions();
+    }
   }
 
   loadChartData() {
@@ -35,20 +41,17 @@ export class BarChartComponent implements OnInit {
   setupChartOptions() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.options = {
       responsive: true,
       maintainAspectRatio: false,
-      aspectRatio: 0.6,
+      aspectRatio: 1.8,
       layout: {
         padding: {
-          right: 25,
+          right: 15,
         },
-        width:130,
       },
       plugins: {
         legend: {
@@ -122,12 +125,7 @@ export class BarChartComponent implements OnInit {
     if (!chartArea) {
       return null;
     }
-    const gradient = ctx.createLinearGradient(
-      0,
-      chartArea.bottom,
-      0,
-      chartArea.top
-    );
+    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
 
     switch (index) {
       case 0: // Privacy

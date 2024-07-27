@@ -3,6 +3,7 @@
   import { ForwardFormService } from '../../services/forward-form.service';
   import { userDetails } from '../../models/users_forward_form.interface';
   import { FormsModule } from '@angular/forms';
+import { UserManagementService } from '../../services/user-management.service';
 
   @Component({
     selector: 'app-add-admin-modal',
@@ -14,7 +15,7 @@
   export class AddAdminModalComponent {
     user_details:userDetails[]=[];
     searchTerm:string='';
-    constructor(public forwardFormService : ForwardFormService){}
+    constructor(private forwardFormService : ForwardFormService, private usermanagement: UserManagementService){}
     selectedUser: userDetails |undefined;
     checkboxes: { [key: string]: boolean } = {
       'incidentManagement': false,
@@ -22,7 +23,7 @@
     };
 
     ngOnInit():void{
-      this.forwardFormService.getAllUsers().subscribe(data => 
+      this.forwardFormService.getAllUsers().subscribe(data =>
       {
         this.user_details = data;
         console.log(data);
@@ -37,11 +38,22 @@
       this.selectedUser=undefined;
     }
     add(){
-      console.log(this.selectedUser);
-      console.log("incidentManagement:",this.checkboxes['incidentManagement']);
-      console.log("adminManagement:",this.checkboxes['adminManagement']);
+      if(this.selectedUser)
+      {
+      const data = {
+        "employeeId": this.selectedUser.id,
+        "assignedBy": 2,
+        "isIncidentMangenet": this.checkboxes['incidentManagement'],
+        "isUserMangenet": this.checkboxes['adminManagement'],
+        "status": true,
+      };
+      this.usermanagement.createUser(data).subscribe((response) => {
+        console.log('Incident added successfully', response);
       this.resetForm();
+    });
+
     }
+  }
 
     toggleCheckbox(key: string) {
       this.checkboxes[key] = !this.checkboxes[key];
@@ -58,5 +70,5 @@
         'adminManagement': false
       };
     }
-  
+
   }

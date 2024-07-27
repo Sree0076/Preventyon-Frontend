@@ -3,6 +3,7 @@
   position: relative;
   margin-top: 1%;
 }
+
 .p-input-icon-left
 {
   margin-left: 10px;
@@ -11,6 +12,10 @@
 {
   height: 35px;
   width: 75%;
+}
+.table-top
+{
+  height: 20px !important;
 }
 .bi-eraser
 {
@@ -32,6 +37,10 @@
 
 th {
   position: relative;
+
+}
+td{
+  font-size: 13px;
 }
 
 th p-sortIcon, th p-columnFilter {
@@ -87,7 +96,6 @@ th:hover p-sortIcon, th:hover p-columnFilter {
 
 ::ng-deep .p-inputtext  {
   height: 35px;
-
   padding: 0.25rem 0.1rem;
   font-size: 0.8rem;/* Adjust width as needed */
 }
@@ -98,4 +106,190 @@ th:hover p-sortIcon, th:hover p-columnFilter {
 ::ng-deep .p-dropdown-items
 {
   padding: 0%;
+}
+
+
+th{
+  color: #256fab;
+}
+::ng-deep button
+{
+  border-radius: 50% !important;
+}
+.btn-primary
+{
+  border-radius: 8px !important;
+}
+
+
+:host ::ng-deep {
+  .p-paginator {
+      .p-paginator-current {
+          margin-left: auto;
+      }
+  }
+
+  .p-progressbar {
+      height: .5rem;
+      background-color: #D8DADC;
+
+      .p-progressbar-value {
+          background-color: #607D8B;
+      }
+  }
+
+  .table-header {
+      display: flex;
+      justify-content: space-between;
+  }
+
+  .p-calendar .p-datepicker {
+      min-width: 25rem;
+
+      td {
+          font-weight: 400;
+      }
+  }
+
+  .p-datatable.p-datatable-customers {
+      .p-datatable-header {
+          padding: 1rem;
+          text-align: left;
+          font-size: 1.5rem;
+      }
+
+      .p-paginator {
+          padding: 1rem;
+      }
+
+      .p-datatable-thead > tr > th {
+          text-align: left;
+      }
+
+      .p-datatable-tbody > tr > td {
+          cursor: auto;
+      }
+
+      .p-dropdown-label:not(.p-placeholder) {
+          text-transform: uppercase;
+      }
+  }
+
+  .p-w-100 {
+      width: 100%;
+  }
+
+  /* Responsive */
+  .p-datatable-customers .p-datatable-tbody > tr > td .p-column-title {
+      display: none;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  :host ::ng-deep {
+      .p-datatable {
+          &.p-datatable-customers {
+              .p-datatable-thead > tr > th,
+              .p-datatable-tfoot > tr > td {
+                  display: none !important;
+              }
+
+              .p-datatable-tbody > tr {
+                  border-bottom: 1px solid var(--layer-2);
+
+                  > td {
+                      text-align: left;
+                      width: 100%;
+                      display: flex;
+                      align-items: center;
+                      border: 0 none;
+
+                      .p-column-title {
+                          min-width: 30%;
+                          display: inline-block;
+                          font-weight: bold;
+                      }
+
+                      p-progressbar {
+                          width: 100%;
+                      }
+
+                      &:last-child {
+                          border-bottom: 1px solid var(--surface-d);
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+/* styles.css or component-specific stylesheet */
+.severity-low {
+  color: green;
+  font-weight: bold;
+
+}
+
+.severity-medium {
+  color: rgb(214, 142, 10);
+  font-weight: bold;
+}
+
+.severity-high {
+  color: red;
+  font-weight: bold;
+}
+.faded-icon {
+  opacity: 0.5;
+  color: #607D8B; /* Adjust the opacity value as needed */
+  pointer-events: none;  /* Optional: Disable click events */
+}
+::ng-deep .p-multiselect
+{
+  height: 35px;
+}
+::ng-deep .p-multiselect-token
+{
+  height: 18px;
+  background: none;
+}
+::ng-deep .p-multiselect-token-icon
+{
+  height: 13px;
+  width: 13px;
+}
+::ng-deep .p-multiselect-items
+{
+  z-index: 100;
+  padding-left: 0px;
+  height: 110px;
+}
+::ng-deep .p-multiselect-filter
+{
+ min-height: 3px;
+}
+p-table th, p-table td {
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.resize-handle {
+  font-size: 20px; /* Match the font size */
+  color: #898686; /* Light color to make it distinguishable */
+}
+
+.resize-handle:hover {
+  color: #000; /* Darken color on hover */
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
 }

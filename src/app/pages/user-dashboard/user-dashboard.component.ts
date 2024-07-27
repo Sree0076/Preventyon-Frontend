@@ -1,24 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { TableComponent } from '../../components/table/table.component';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { CardComponent } from '../../components/card/card.component';
-import { NgClass, NgFor } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
-
+import { TabViewModule } from 'primeng/tabview';
+import { TableComponent } from '../../components/table/table.component';
+import { IncidentStatsDTO } from '../../models/incidentData.interface';
+import { Observable } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
   templateUrl: './user-dashboard.component.html',
   styleUrl: './user-dashboard.component.scss',
   imports: [
-    TableComponent,
     MatTabsModule,
     SideBarComponent,
     CardComponent,
     NgClass,
     NgFor,
-  ],
+    NgIf,
+    TabViewModule,
+    TableComponent,
+    ProgressSpinnerModule,
+],
 })
 export class UserDashboardComponent implements OnInit {
   incidentData: any;
@@ -29,11 +35,14 @@ export class UserDashboardComponent implements OnInit {
   ];
   cardClass: string[] = ['privacy-card', 'security-card', 'quality-card'];
   selectedCategory: string = "";
+  incidentData$: Observable<IncidentStatsDTO | null>;
 
-  constructor(private incidentDataService: IncidentDataServiceTsService) {}
+  constructor(private incidentDataService: IncidentDataServiceTsService) {
+  this.incidentData$ = this.incidentDataService.incidentData;
+  }
 
   ngOnInit() {
-    
+
     this.incidentDataService.incidentData.subscribe(data => {
       if (data) {
         this.incidentData = [
@@ -61,7 +70,7 @@ export class UserDashboardComponent implements OnInit {
         ];
       }
     });
-
+    console.log(this.incidentData$);
     this.incidentDataService.fetchIncidentData();
   }
 
