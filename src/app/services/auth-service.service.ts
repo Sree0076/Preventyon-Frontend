@@ -12,21 +12,26 @@ import {
   EventType,
   InteractionStatus,
 } from '@azure/msal-browser';
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, lastValueFrom, Observable, Subject } from 'rxjs';
+import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Employee } from '../models/employee.interface';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { EmployeeDataServiceService } from './sharedService/employee-data.service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements OnDestroy {
   private readonly _destroying$ = new Subject<void>();
-
+   role : string ="";
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
     private router: Router,
+    private http: HttpClient,
+    private employeeService : EmployeeDataServiceService,
   ) {
     this.initialize();
   }
@@ -80,15 +85,29 @@ export class AuthService implements OnDestroy {
     }
   }
 
-  private redirectBasedOnRole() {
-    // Assuming roles are part of the idTokenClaims
+  private async redirectBasedOnRole() {
     const account = this.authService.instance.getActiveAccount();
-    if (account && account.idTokenClaims) {
-      const roles = account.idTokenClaims['roles'] || [];
-      console.log(roles);
-        this.router.navigate(['/user']);
+
+    if (account?.idToken) {
+      // Fetch employee data first
+      await this.employeeService.fetchEmployeeData(account.idToken);
+      // Then get roles
+      await this.getRoles();
+
+      // Perform the redirection based on the role
+      if (account && account.idTokenClaims && account.idToken) {
+        console.log(this.role);
+        if (this.role === 'Admin' || this.role === 'SuperAdmin') {
+          this.router.navigate(['/admin']);
+        } else if (this.role === 'user') {
+          this.router.navigate(['/user']);
+        } else {
+          this.router.navigate(['/unauthorized']);
+        }
+      }
     }
   }
+
 
   loginPopup() {
     if (this.msalGuardConfig.authRequest) {
@@ -96,6 +115,7 @@ export class AuthService implements OnDestroy {
         .loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
         .subscribe((response: AuthenticationResult) => {
           this.authService.instance.setActiveAccount(response.account);
+
           this.redirectBasedOnRole(); // Redirect based on role after successful login
         });
     } else {
@@ -103,6 +123,7 @@ export class AuthService implements OnDestroy {
         .loginPopup()
         .subscribe((response: AuthenticationResult) => {
           this.authService.instance.setActiveAccount(response.account);
+
           this.redirectBasedOnRole(); // Redirect based on role after successful login
         });
     }
@@ -117,5 +138,20 @@ export class AuthService implements OnDestroy {
   ngOnDestroy(): void {
     this._destroying$.next(undefined);
     this._destroying$.complete();
+  }
+
+  getRoles(): Promise<void> {
+    return lastValueFrom(
+      this.employeeService.employeeData.pipe(
+        tap(data => {
+          if (data) {
+            console.log(data);
+            this.role = data.role.name;
+          }
+        }),
+        take(1)  // Ensure the observable completes after one emission
+      )
+    ).then(() => {});
+
   }
 }
