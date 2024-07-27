@@ -2,14 +2,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { userDetails } from '../models/users_forward_form.interface';
 
 @Pipe({
-  name: 'filter',
+  name: 'filterp',
   standalone: true
 })
 export class FilterPipe implements PipeTransform {
 
   transform(items: userDetails[], searchTerm: string, selectedUserIds?: number[], isForwardform?:boolean): userDetails[] {
     console.log(searchTerm);
-    console.log(items);
+    // console.log(items);
     if (!items) {
       return [];
     }
@@ -33,9 +33,8 @@ export class FilterPipe implements PipeTransform {
     searchTerm = searchTerm.toLowerCase();
 
     return nonSelectedUsers.filter(it => {
-        return it.empName.toLowerCase().includes(searchTerm) ||
-               it.empDesignation.toLowerCase().includes(searchTerm) ||
-
+        return it.name.toLowerCase().includes(searchTerm) ||
+               it.designation.toLowerCase().includes(searchTerm) ||
                it.email.toLowerCase().includes(searchTerm);
       });
   }

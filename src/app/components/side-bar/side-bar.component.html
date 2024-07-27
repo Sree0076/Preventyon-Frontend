@@ -4,10 +4,17 @@
             <img src="icons\dashboard-icon.svg" alt="Dashboard icon">
         </div>
         <div class="noti">
-            <button><i class="bi bi-bell" pBadge value="2" ></i></button>
+            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="position-relative bi bi-bell fs-4">
+                <span class="position-absolute top-0 translate-middle badge rounded-pill bg-primary ">
+                4
+              </span>
+            </button> 
         </div>
     </div>
     <div class="profile-icon">
         <img src="icons\profile-circle-svgrepo-com.svg" alt="">
     </div>
 </div>
+
+<app-notification-modal></app-notification-modal>
+  
