@@ -78,7 +78,6 @@ textarea {
 }
 
 ::ng-deep .p-calendar .p-datepicker {
-  width: 100%;
   border: 1px solid rgb(110, 110, 228);
 }
 
@@ -148,11 +147,13 @@ textarea {
 }
 
 .text-3xl {
-  font-size: 2rem; /* Adjust size as needed */
+  font-size: 2rem;
+  /* Adjust size as needed */
 }
 
 .ml-2 {
-  margin-left: 0.5rem; /* Adjust margin as needed */
+  margin-left: 0.5rem;
+  /* Adjust margin as needed */
 }
 
 /* Report Form Specific Styles */
@@ -185,3 +186,8 @@ textarea {
 .report-form .d-flex {
   display: flex;
 }
+
+::ng-deep .p-datepicker table td {
+  padding: 0rem;
+}
+

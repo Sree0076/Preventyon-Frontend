@@ -28,15 +28,21 @@
       <div class="p-grid p-fluid m-3">
         <div class="p-field  ">
           <label for="incident-title">Incident Title <span class="text-danger">*</span></label>
-          <input pInputText type="text" id="incident-title" formControlName="incidentTitle" required class="custom-width title-input">
-          <div *ngIf="viewform.get('incidentTitle')!.hasError('required') && viewform.get('incidentTitle')?.touched" class="text-danger validate">
+          <input pInputText type="text" id="incident-title" formControlName="incidentTitle" required
+            class="custom-width title-input">
+          <div *ngIf="viewform.get('incidentTitle')!.hasError('required') && viewform.get('incidentTitle')?.touched"
+            class="text-danger validate">
             Title is required.
           </div>
         </div>
-        <div class="p-field  ">
-          <label for="incident-occured-date" class="ml-1">Incident Occurred Date <span class="text-danger">*</span></label>
-          <p-calendar id="incident-occured-date" formControlName="incidentOccuredDate" dateFormat="dd-mm-yy" [showIcon]="true" [iconDisplay]="'input'" [showTime]="true"  required></p-calendar>
-          <div *ngIf="viewform.get('incidentOccuredDate')!.hasError('required') && viewform.get('incidentOccuredDate')?.touched" class="text-danger validate ml-1">
+        <div class="p-field ">
+          <label for="incident-occured-date" class="ml-1">Incident Occurred Date <span
+              class="text-danger">*</span></label>
+          <p-calendar id="incident-occured-date" formControlName="incidentOccuredDate" dateFormat="dd-mm-yy"
+            [showIcon]="true" [iconDisplay]="'input'" [showTime]="true" required></p-calendar>
+          <div
+            *ngIf="viewform.get('incidentOccuredDate')!.hasError('required') && viewform.get('incidentOccuredDate')?.touched"
+            class="text-danger validate ml-1">
             Incident Occurred Date is required.
           </div>
         </div>
@@ -51,8 +57,11 @@
 
       <div class="p-field p-fluid m-3">
         <label for="incident-description">Incident Description <span class="text-danger">*</span></label>
-        <textarea pInputTextarea id="incident-description" rows="4" formControlName="incidentDescription" required></textarea>
-        <div *ngIf="viewform.get('incidentDescription')!.hasError('required') && viewform.get('incidentDescription')?.touched" class="text-danger validate">
+        <textarea pInputTextarea id="incident-description" rows="4" formControlName="incidentDescription"
+          required></textarea>
+        <div
+          *ngIf="viewform.get('incidentDescription')!.hasError('required') && viewform.get('incidentDescription')?.touched"
+          class="text-danger validate">
           Incident Description is required.
         </div>
       </div>
@@ -60,10 +69,11 @@
       <div class="p-field m-3">
         <label for="documentUrls">Attach Documents</label>
         <input type="file" (change)="onFileUpload($event)" multiple hidden #fileInput>
-        <p-fileUpload id="documentUrls" [showUploadButton]="false" customUpload="true" (uploadHandler)="onFileUpload($event)" multiple auto>
+        <p-fileUpload id="documentUrls" [showUploadButton]="false" customUpload="true"
+          (uploadHandler)="onFileUpload($event)" multiple auto>
           <ng-template pTemplate="empty">
-            <div class="flex align-items-center justify-content-center flex-column">
-              <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"></i>
+            <div class="d-flex align-items-center justify-content-center flex-column">
+              <i class="pi pi-cloud-upload " style="font-size: 5rem; color:#a27ad7"></i>
               <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
             </div>
           </ng-template>
