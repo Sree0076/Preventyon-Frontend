@@ -4,6 +4,7 @@
     [value]="incidents"
     [rowHover]="true"
     [rows]="10"
+    (onRowSelect)="viewIncidentData($event)"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
@@ -14,6 +15,8 @@
     sortMode="multiple"
     [globalFilterFields]="['incidentTitle', 'id', 'category']"
     (onPage)="pageChange($event)"
+    selectionMode="single"
+    [(selection)]="selectedIncident"
   >
   <ng-template pTemplate="caption">
     <div class="d-flex align-items-center justify-content-between table-top" pResizableColumn>
@@ -23,6 +26,13 @@
           <i class="pi pi-search"></i>
           <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
         </span>
+      </div>
+      <div class="filter-chips">
+        <p-chips
+          *ngFor="let filter of filterChips"
+          [(ngModel)]="filter.label"
+          (onRemove)="removeFilter(filter.field)"
+        ></p-chips>
       </div>
       <p-multiSelect
         class="small-input"
@@ -103,9 +113,9 @@
     <ng-template pTemplate="body" let-incident>
       @if(!incident.isDraft || !isadmin)
       {
-      <tr>
-        <td *ngIf="isColumnVisible('id')">{{ incident.id }}</td>
-        <td >{{ incident.incidentTitle }}</td>
+      <tr >
+        <td *ngIf="isColumnVisible('id')"  [pSelectableRow]="incident">{{ incident.id }}</td>
+        <td [pSelectableRow]="incident">{{ incident.incidentTitle }}</td>
         <!-- Repeat for other columns -->
         <td >
           <span [ngClass]="getTypeSeverityClass(incident.incidentType)">
@@ -131,7 +141,7 @@
 
         </td>
         <td *ngIf="isColumnVisible('action')">
-          <div class="flex justify-content-center">
+          <div class="flex justify-content-center" *ngIf="isadmin">
             <i class="bi bi-three-dots-vertical" (click)="op.toggle($event)"></i>
             <p-overlayPanel #op>
               <div class="custom-overlay">
@@ -140,7 +150,7 @@
                     <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"></i>Edit
                   </li>
                   <li class="flex align-items-center gap-2 custom-item">
-                    <i class="bi bi-eye" (click)="viewIncidentData(incident.id)"></i>View
+                    <i class="bi bi-eye" (click)="viewIncidentData($event)"></i>View
                   </li>
                   <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
                     <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Export
@@ -149,6 +159,9 @@
               </div>
             </p-overlayPanel>
             <i class="bi bi-send" *ngIf="isadmin" (click)="onIconClick(incident)" [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}"></i>
+          </div>
+          <div class="flex justify-content-center" *ngIf="!isadmin">
+            <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"  *ngIf="incident.isDraft || getAssigned"></i>
           </div>
         </td>
       </tr>

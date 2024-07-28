@@ -17,7 +17,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { PrimeIcons } from 'primeng/api';
+import { MessageService,ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { IncidentServiceService } from '../../services/incident-service.service';
@@ -50,8 +52,9 @@ import { EmployeeDataServiceService } from '../../services/sharedService/employe
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    ConfirmDialogModule,
   ],
-  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule],
+  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule,ConfirmationService],
   templateUrl: './incident-report-form.component.html',
   styleUrl: './incident-report-form.component.scss',
 })
@@ -100,19 +103,20 @@ export class IncidentReportFormComponent {
     private messageService: MessageService,
     private dialog: MatDialog,
     private employeeDataService: EmployeeDataServiceService,
+    private confirmationService: ConfirmationService,
   ) {}
 
   openDialog() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
-    dialogRef.componentInstance.dialogResult.subscribe((result) => {
-      console.log(result);
+    this.confirmationService.confirm({
+      header: 'Are you sure?',
+      message: 'Please confirm to proceed.',
+      accept: () => {
+        this.prepareFormData(false);
+      },
+      reject: () => {
 
-      if (result) {
-        console.log(result);
-
-        this.submitForm();
       }
-    });
+  });
   }
 
   showSuccess(message: string) {
@@ -137,34 +141,8 @@ export class IncidentReportFormComponent {
       });
     }, 100);
   }
-
   saveAsDraft() {
-    this.viewform.value.employeeId =this.employeeId
-    this.viewform.value.isDraft = true;
-    const formData = new FormData();
-    this.selectedFiles.forEach((image) => {
-      formData.append('documentUrls', image);
-    });
-    const files: FileList = this.viewform.get('documentUrls')?.value;
-    if (files) {
-      Array.from(files).forEach((file) =>
-        formData.append('documentUrls', file)
-      );
-    }
-    for (const [key, value] of Object.entries(this.viewform.value)) {
-      if (key !== 'documentUrls') {
-        if (key === 'incidentOccuredDate') {
-          const dateValue = value as Date;
-          formData.append(key, dateValue.toISOString());
-        } else {
-          formData.append(key, value as string);
-        }
-      }
-    }
-    console.log(formData.getAll);
-    this.apiService.addIncident(formData).subscribe((response) => {
-      this.showSuccess('Incident saved as draft successfully');
-    });
+    this.prepareFormData(true);
   }
 
   viewform!: FormGroup;
@@ -197,44 +175,12 @@ export class IncidentReportFormComponent {
     this.selectedFiles = <File[]>event.files;
   }
 
-  submitForm() {
 
-    this.viewform.value.employeeId =this.employeeId
-    this.viewform.value.isDraft = false;
-    const formData = new FormData();
-    if (this.selectedFiles) {
-      this.selectedFiles.forEach((image) => {
-        formData.append('documentUrls', image);
-      });
-      const files: FileList = this.viewform.get('documentUrls')?.value;
-      if (files) {
-        Array.from(files).forEach((file) =>
-          formData.append('documentUrls', file)
-        );
-      }
-      for (const [key, value] of Object.entries(this.viewform.value)) {
-        if (key !== 'documentUrls') {
-          if (key === 'incidentOccuredDate') {
-            const dateValue = value as Date;
-            formData.append(key, dateValue.toISOString());
-          } else {
-            formData.append(key, value as string);
-          }
-        }
-      }
-    }
-
-    console.log(formData.getAll);
-    this.apiService.addIncident(formData).subscribe((response) => {
-      this.showSuccess('Incident Reported successfully');
-    });
-  }
 
   onSubmit() {
     if (
       !this.viewform.value.incidentTitle ||
       !this.viewform.value.incidentOccuredDate ||
-      !this.viewform.value.incidentOccuredTime ||
       !this.viewform.value.incidentDescription
     ) {
       this.showError('Please Fill Out Required Details');
@@ -243,4 +189,37 @@ export class IncidentReportFormComponent {
 
     this.openDialog();
   }
+
+  prepareFormData(isDraft: boolean) {
+    this.viewform.value.employeeId = this.employeeId;
+    this.viewform.value.isDraft = isDraft;
+
+    const formData = new FormData();
+    this.selectedFiles.forEach((file) => {
+      formData.append('documentUrls', file);
+    });
+
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'documentUrls') {
+        if (key === 'incidentOccuredDate') {
+          formData.append(key, (value as Date).toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+
+    if (isDraft) {
+      console.log(FormData);
+      this.apiService.addIncident(formData).subscribe(() => {
+        this.showSuccess('Incident saved as draft successfully');
+      });
+    } else {
+      this.apiService.addIncident(formData).subscribe(() => {
+        this.showSuccess('Incident Reported successfully');
+      });
+    }
+  }
+
+
 }

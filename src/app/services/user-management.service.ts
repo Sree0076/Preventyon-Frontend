@@ -8,7 +8,7 @@ import { User } from '../models/user-management.interface';
 })
 export class UserManagementService {
   private apiUrl =
-    'http://localhost:7209/api/Admins';
+    'http://localhost:7209/api/Admins/GetAllAdmins';
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class UserManagementService {
   }
 
   createUser(data: any): Observable<User> {
-    return this.http.post<User>('http://localhost:7209/api/Admins', data);
+    return this.http.post<User>('http://localhost:7209/api/Admins/AddAdmin', data);
   }
 
   updateUser(id: number, user: User): Observable<User> {

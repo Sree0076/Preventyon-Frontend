@@ -20,7 +20,7 @@ export class EmployeeDataServiceService {
     console.log(this.employeeSubject);
   }
 
-  private apiUrl = 'http://localhost:7209/Employee/GetEmployeeByToken/getUserRole';
+  private apiUrl = 'http://localhost:7209/api/Employee/GetEmployeeByToken/getUserRole';
   getEmployeeData(token:string): Observable<Employee> {
     console.log(token);
     const headers = new HttpHeaders().set('Authorization', `${token}`);

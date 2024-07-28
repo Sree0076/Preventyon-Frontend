@@ -23,6 +23,7 @@ import * as XLSX from 'xlsx';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { HttpClient } from '@angular/common/http';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ChipsModule } from 'primeng/chips';
 
 
 interface PriorityOrder {
@@ -38,7 +39,8 @@ interface PriorityOrder {
   styleUrl: './table.component.scss',
   providers: [HttpClient],
   imports: [RouterOutlet, ButtonModule, TableModule, CommonModule, SplitButtonModule, InputIconModule, IconFieldModule,
-      InputTextModule, DropdownModule, DropdownModule, FormsModule, MultiSelectModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent, TagModule]
+      InputTextModule, DropdownModule, DropdownModule, FormsModule, MultiSelectModule, DialogModule, MenuModule,
+       OverlayPanelModule, ForwardFormComponent, TagModule,ChipsModule]
 })
 export class TableComponent {
 
@@ -54,6 +56,9 @@ export class TableComponent {
   @ViewChild('dt2') dt2: Table | undefined;
   incidents: IncidentData[] = [];
   loading: boolean = false;
+  filterChips: { label: string, field: string }[] = [];
+
+
   priorities: any[] = [
     { label: 'High', value: 'High' },
     { label: 'Medium', value: 'Medium' },
@@ -70,7 +75,7 @@ export class TableComponent {
   displayForwardingModal: boolean = false;
   selectedIncidentId: number | null = null;
   menuitems: MenuItem[] | undefined;
-
+  selectedIncident!: IncidentData;
   first = 0;
   rows = 10;
 
@@ -182,8 +187,19 @@ set selectedColumns(val: any[]) {
   clear(table: Table) {
     table.clear();
     this.searchValue = ''
+    this.filterChips = [];
   }
 
+  removeFilter(field: string) {
+    if (field === 'category') {
+      this.filterCategory = '';
+    }
+    this.applyCategoryFilter();
+  }
+  updateFilterChips() {
+    const categoryFilter = this.filterCategory ? { label: `Category: ${this.filterCategory}`, field: 'category' } : null;
+    this.filterChips = [categoryFilter].filter(Boolean) as { label: string, field: string }[];
+  }
   filterGlobal(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const value = inputElement.value;
@@ -226,6 +242,7 @@ set selectedColumns(val: any[]) {
     if (this.dt2) {
       this.dt2.filter(this.filterCategory, 'incidentType', 'contains');
     }
+    this.updateFilterChips();
   }
 
   editIncidentData(incident: IncidentData,incidentId : number): void {
@@ -246,9 +263,11 @@ set selectedColumns(val: any[]) {
     }
   }
 
-  viewIncidentData(incidentId: number): void {
+  viewIncidentData(event :any): void {
     console.log("view");
-    this.incidentDataService.setSelectedIncidentId(incidentId);
+    var incident= event.data;
+    console.log(incident);
+    this.incidentDataService.setSelectedIncidentId(incident.id);
     this.router.navigate(['/view-incident']);
   }
 
@@ -360,6 +379,10 @@ set selectedColumns(val: any[]) {
   isColumnVisible(columnField: string): boolean {
     return this.selectedColumns.some(col => col.field === columnField);
   }
+
+
+
+
   onSubmitReview(incident: IncidentData) {
     const submitData = {
       id: incident.id,
