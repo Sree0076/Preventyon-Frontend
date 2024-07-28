@@ -1,49 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
+import { IncidentDataServiceTsService } from './sharedService/incident-data.service.ts.service';
+import { IncidentStatsDTO } from '../models/incidentData.interface';
+
+interface IncidentCounts {
+  "Privacy Incidents"?: number;
+  "Quality Incidents"?: number;
+  "Security Incidents"?: number;
+}
+
+interface YearlyIncidentCounts {
+  [year: string]: IncidentCounts;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChartDataService {
-  constructor(private http: HttpClient) {}
-  private json =
-    'https://api.jsonsilo.com/public/da8e7333-5488-46ff-a295-a7dfd499d9fa';
+  constructor(private incidentDataService: IncidentDataServiceTsService) {}
 
   getChartData(): Observable<any> {
-    return this.http
-      .get<any[]>(this.json)
-      .pipe(map((data) => this.processData(data)));
-  }
+    return this.incidentDataService.incidentData.pipe(
+      map((data: IncidentStatsDTO | null) => {
+        if (data) {
+          const yearlyIncidentCounts = data.yearlyIncidentCounts;
+          const years = Object.keys(yearlyIncidentCounts);
+          const incidentTypes: (keyof typeof yearlyIncidentCounts[string])[] = ["Privacy Incidents", "Quality Incidents", "Security Incidents"];
 
-  private processData(data: any[]): any {
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 5 }, (_, i) => currentYear - 4 + i);
-    const incidentTypes = ['Privacy', 'Security', 'Quality'];
-    const counts: { [key: string]: number[] } = {};
+          const datasets = incidentTypes.map((type) => {
+            return {
+              label: type,
+              data: years.map((year) => yearlyIncidentCounts[year][type] || 0),
+            };
+          });
 
-    incidentTypes.forEach((type) => {
-      counts[type] = years.map(() => 0);
-    });
-
-    data.forEach((incident) => {
-      const incidentYear = new Date(incident.reported_at).getFullYear();
-      const yearIndex = years.indexOf(incidentYear);
-      if (yearIndex !== -1) {
-        const type = incident.incident_type;
-        if (counts[type]) {
-          counts[type][yearIndex]++;
+          return {
+            labels: years,
+            datasets: datasets,
+          };
+        } else {
+          return { labels: [], datasets: [] };
         }
-      }
-    });
-
-    return {
-      labels: years,
-      datasets: incidentTypes.map((type) => ({
-        label: type,
-        data: counts[type],
-      })),
-    };
+      })
+    );
   }
 }
 

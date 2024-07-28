@@ -38,7 +38,6 @@
               "node_modules/primeng/resources/primeng.min.css",
               "src/styles.scss",
               "@angular/material/prebuilt-themes/cyan-orange.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/bootstrap/dist/css/bootstrap.css"
             ],
@@ -70,7 +69,7 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": false
             }
           },
           "defaultConfiguration": "production"

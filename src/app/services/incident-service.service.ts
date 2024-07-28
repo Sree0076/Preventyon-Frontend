@@ -15,25 +15,25 @@ export class IncidentServiceService {
 
   constructor(private http: HttpClient) {
   }
-  private createBaseUrl: string ='http://localhost:7209/Incident/CreateIncident';
+  private createBaseUrl: string ='http://localhost:7209/api/Incident/CreateIncident';
   getDataBasedOnStatus(employeeid:number): Observable<any> {
 
-    return this.http.get<any>(`http://localhost:7209/Incident/GetIncidentsByEmployeeId?employeeId=${employeeid}`);
+    return this.http.get<any>(`http://localhost:7209/api/Incident/GetIncidentsByEmployeeId?employeeId=${employeeid}`);
   }
 
   public getSingleIncident(incidentId: number): Observable<IncidentData> {
-    return this.http.get<IncidentData>(`http://localhost:7209/Incident/GetUserUpdateIncident/${incidentId}`).pipe(
+    return this.http.get<IncidentData>(`http://localhost:7209/api/Incident/GetUserUpdateIncident/${incidentId}`).pipe(
       catchError(this.handleError)
     );
   }
   public getSingleFullIncident(incidentId: number): Observable<IncidentData> {
-    return this.http.get<IncidentData>(`http://localhost:7209/Incident/GetIncident/${incidentId}`).pipe(
+    return this.http.get<IncidentData>(`http://localhost:7209/api/Incident/GetIncident/${incidentId}`).pipe(
       catchError(this.handleError)
     );
   }
 
   public updateUserIncident(incidentId: number, incident: FormData): Observable<any> {
-    return this.http.put<any>(`http://localhost:7209/Incident/UserUpdateIncident/${incidentId}`, incident);
+    return this.http.put<any>(`http://localhost:7209/api/Incident/UserUpdateIncident/${incidentId}`, incident);
   }
 
   public getAssignedIncident(employeeId: number): Observable<IncidentData> {
@@ -47,7 +47,7 @@ export class IncidentServiceService {
     return this.http.post<IncidentData>(this.createBaseUrl, incident);
   }
   public updateIncident(incidentId: number, incident: IncidentData): Observable<IncidentData> {
-    return this.http.put<IncidentData>(`http://localhost:7209/Incident/UpdateIncident/${incidentId}`, incident);
+    return this.http.put<IncidentData>(`http://localhost:7209/api/Incident/UpdateIncident/${incidentId}`, incident);
   }
   private handleError(error: HttpErrorResponse) {
 

@@ -11,7 +11,7 @@ export class ForwardFormService {
   constructor(private http: HttpClient) {}
 
   getAllUsers():Observable<any>{
-    return this.http.get<any>('http://localhost:7209/Employee/GetEmployees');
+    return this.http.get<any>('http://localhost:7209/api/Employee/GetEmployees');
   }
 
   forwardIncident(incidentId: number, assignedEmployeeIds: number[]): Observable<any> {

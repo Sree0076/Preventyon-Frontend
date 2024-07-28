@@ -1,14 +1,17 @@
+@import "primeicons/primeicons.css";
+
+/* General Styles */
 .report-form {
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem;
   width: 80%;
-  border-radius: 0.3rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
 }
 
 .form-container {
-  background: #fff;
+  background: #ffffff;
   border-radius: 10px;
+  padding: 2rem;
 }
 
 .p-grid {
@@ -32,6 +35,7 @@
   margin: 2px !important;
 }
 
+/* Input and Button Styles */
 ::ng-deep input,
 button,
 select,
@@ -40,12 +44,10 @@ textarea {
   border: 1px solid #a27ad7 !important;
 }
 
-
 ::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,
 .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
   display: block;
   border: none !important;
-
 }
 
 ::ng-deep .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
@@ -56,21 +58,12 @@ textarea {
 
 ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
   background-color: white !important;
-}
-
-::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
   border: 1px solid #a27ad7;
 }
 
-::ng-deep .p-fileupload .p-fileupload-buttonbar {
-  border: 1px solid #a27ad7 !important;
-}
-
+::ng-deep .p-fileupload .p-fileupload-buttonbar,
+::ng-deep .p-fileupload .p-fileupload-content,
 ::ng-deep .p-dropdown {
-  border: 1px solid #a27ad7;
-}
-
-::ng-deep .p-fileupload .p-fileupload-content {
   border: 1px solid #a27ad7;
 }
 
@@ -84,10 +77,7 @@ textarea {
   border: none;
 }
 
-
-
 ::ng-deep .p-calendar .p-datepicker {
-  width: 100%;
   border: 1px solid rgb(110, 110, 228);
 }
 
@@ -101,10 +91,10 @@ textarea {
 }
 
 ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:first-child {
-
   width: 90%;
 }
 
+/* Media Queries */
 @media (min-width: 768px) {
   .p-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -116,3 +106,88 @@ textarea {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* Dialog Styles */
+.enhanced-dialog {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 9px;
+  text-align: center;
+}
+
+.enhanced-header {
+  color: #000000;
+  font-weight: 600;
+}
+
+.enhanced-message {
+  font-size: 1.1rem;
+  color: #555555;
+}
+
+.enhanced-button {
+  font-size: 1rem;
+  padding: 10px;
+}
+
+/* Utility Classes */
+.text-white {
+  color: #ffffff;
+}
+
+.btn-outline-primary,
+.btn-outline-danger {
+  width: 5rem;
+}
+
+.btn-outline-primary {
+  margin-right: 7px;
+}
+
+.text-3xl {
+  font-size: 2rem;
+  /* Adjust size as needed */
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+  /* Adjust margin as needed */
+}
+
+/* Report Form Specific Styles */
+.report-form .title {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.report-form .p-field {
+  margin-bottom: 1.5rem;
+}
+
+.report-form label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.report-form .title-input {
+  width: 100%;
+}
+
+.report-form .validate {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.report-form .d-flex {
+  display: flex;
+}
+
+::ng-deep .p-datepicker table td {
+  padding: 0rem;
+}
+
