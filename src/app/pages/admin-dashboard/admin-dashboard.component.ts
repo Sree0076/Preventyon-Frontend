@@ -77,4 +77,5 @@ getCategory(event: any) {
 
     this.incidentDataService.fetchIncidentData();
   }
+  
 }

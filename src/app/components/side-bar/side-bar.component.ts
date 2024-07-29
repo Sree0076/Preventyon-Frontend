@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { BadgeModule } from 'primeng/badge';
+import { NotificationModalComponent } from '../notification-modal/notification-modal.component';
+import { CommonModule } from '@angular/common';
+
 import { AuthService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
@@ -8,7 +11,7 @@ import { Employee } from '../../models/employee.interface';
 @Component({
   selector: 'app-side-bar',
   standalone: true,
-  imports: [BadgeModule],
+  imports: [BadgeModule,NotificationModalComponent, CommonModule],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.scss'
 })

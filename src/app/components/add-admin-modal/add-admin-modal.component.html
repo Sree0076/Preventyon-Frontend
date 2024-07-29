@@ -12,7 +12,7 @@
                 <p class="text1">Search for users to assign admin permissions</p>
                 <input type="text" placeholder="Search..." [(ngModel)]="searchTerm">
             <div class="search-names">
-                @for(items of user_details | filter: searchTerm; track items.id){
+                @for(items of user_details | filterp: searchTerm; track items.id){
                     <div class="person-details search-padding" type="button" (click)="addUser(items)">
                         <div class="image-icon">
                             <img src="icons/user-icon-men.jpg" alt="">

@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { userDetails } from '../models/users_forward_form.interface';
 
 @Pipe({
-  name: 'filter',
+  name: 'filterp',
   standalone: true
 })
 export class FilterPipe implements PipeTransform {

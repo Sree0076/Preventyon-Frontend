@@ -41,7 +41,7 @@
 
       <div class="forward-names">
 
-        @for(items of user_details | filter: searchTerm: getSelectedUserIds():isForwardform; track items.id){
+        @for(items of user_details | filterp: searchTerm: getSelectedUserIds():isForwardform; track items.id){
 
             <div class="person-details" type="button" (click)="addUser(items)">
                 <div class="image-icon">
