@@ -24,13 +24,12 @@ import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { HttpClient } from '@angular/common/http';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
+
 
 @Component({
   selector: 'app-incident-report-form',
@@ -101,9 +100,9 @@ export class IncidentReportFormComponent {
     private router: Router,
     private apiService: IncidentServiceService,
     private messageService: MessageService,
-    private dialog: MatDialog,
     private employeeDataService: EmployeeDataServiceService,
     private confirmationService: ConfirmationService,
+
   ) {}
 
   openDialog() {
@@ -141,6 +140,7 @@ export class IncidentReportFormComponent {
       });
     }, 100);
   }
+
   saveAsDraft() {
     this.prepareFormData(true);
   }

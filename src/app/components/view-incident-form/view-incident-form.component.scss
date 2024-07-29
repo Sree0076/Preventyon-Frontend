@@ -1,6 +1,7 @@
 .container {
-    max-width: 1200px;
+  max-width: 1200px;
 }
+
 
 .title {
     font-size: 2.5rem;
@@ -58,3 +59,32 @@ textarea.matInput {
         padding: 1.5rem;
     }
 }
+
+mat-form-field {
+  width: 100%;
+  font-size: 15px;
+  stroke: #a27ad7;
+}
+
+.form {
+  background-color: #f9f9f9;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+p {
+  margin: 0;
+}
+
+.editbutton {
+  border: 1px solid white;
+  width: 6rem;
+  height: 2rem;
+  background: var(--privacy-color);
+  color: white;
+  border-radius: 0.4rem;
+  margin: 1rem;
+}
+

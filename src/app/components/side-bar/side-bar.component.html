@@ -9,6 +9,13 @@
       <div class="settings">
           <button><i class="bi bi-gear"></i></button>
       </div>
+       @if(isAdmin)
+       {
+        <div class="user">
+          <button><i class="bi bi-person-fill-add" (click)="usermanage()" ></i></button>
+      </div>
+       }
+
   </div>
   <div class="profile-icon" (click)="logout()">
     <button ><img src="icons/profile-circle-svgrepo-com.svg" alt="Profile icon" ></button>
