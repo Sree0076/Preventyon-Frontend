@@ -15,10 +15,10 @@ import { LoginComponent } from './components/login/login.component';
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'admin', component: AdminDashboardComponent,canActivate: [MsalGuard] },
-  { path: 'user', component: UserDashboardComponent},
+  { path: 'user', component: UserDashboardComponent,canActivate: [MsalGuard] },
   { path: 'create-incident', component: IncidentCreatePageComponent },
   { path: 'view-incident', component:IncidentVewPageComponent },
   { path: 'resolve-incident', component:IncidenteditpageComponent },
   { path: 'edit-incident', component:UserEditFormPageComponent },
-  { path: 'usermanage', component: AdminmanagementComponent },
+  { path: 'usermanage', component: AdminmanagementComponent,canActivate: [MsalGuard] },
 ];
