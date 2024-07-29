@@ -4,7 +4,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
@@ -23,6 +23,9 @@ import * as XLSX from 'xlsx';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { HttpClient } from '@angular/common/http';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ChipsModule } from 'primeng/chips';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 
 interface PriorityOrder {
@@ -36,11 +39,14 @@ interface PriorityOrder {
   standalone: true,
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
-  providers: [HttpClient],
+  providers: [HttpClient,ConfirmationService,MessageService],
   imports: [RouterOutlet, ButtonModule, TableModule, CommonModule, SplitButtonModule, InputIconModule, IconFieldModule,
-      InputTextModule, DropdownModule, DropdownModule, FormsModule, MultiSelectModule, DialogModule, MenuModule, OverlayPanelModule, ForwardFormComponent, TagModule]
+      InputTextModule, DropdownModule, DropdownModule, FormsModule, MultiSelectModule, DialogModule, MenuModule,
+       OverlayPanelModule, ForwardFormComponent, TagModule,ChipsModule,ConfirmDialogModule,
+       ToastModule]
 })
 export class TableComponent {
+
 
 
   cols:any []=[];
@@ -54,6 +60,9 @@ export class TableComponent {
   @ViewChild('dt2') dt2: Table | undefined;
   incidents: IncidentData[] = [];
   loading: boolean = false;
+
+
+
   priorities: any[] = [
     { label: 'High', value: 'High' },
     { label: 'Medium', value: 'Medium' },
@@ -70,7 +79,7 @@ export class TableComponent {
   displayForwardingModal: boolean = false;
   selectedIncidentId: number | null = null;
   menuitems: MenuItem[] | undefined;
-
+  selectedIncident!: IncidentData;
   first = 0;
   rows = 10;
 
@@ -78,7 +87,11 @@ export class TableComponent {
   incidentTypeValue: any;
   selectedIncidents: IncidentData[] = [];
 
-  constructor(private router: Router, private tablefetchService: IncidentServiceService, private incidentDataService: IncidentDataServiceTsService) {}
+  constructor(private router: Router, private tablefetchService: IncidentServiceService,
+     private incidentDataService: IncidentDataServiceTsService,
+     private confirmationService: ConfirmationService,
+     private messageService: MessageService,
+     ) {}
 
   ngOnInit() {
     if (this.getDraft) {
@@ -135,7 +148,8 @@ set selectedColumns(val: any[]) {
   }
 
   fetchAssignedIncidents() {
-    // this.tablefetchService.getAssignedIncident(2).subscribe(data => {
+
+    // this.tablefetchService.getAssignedIncident().subscribe(data => {
     //   if (Array.isArray(data)) {
     //     this.incidents = data;
     //     this.sortByPriority();
@@ -184,6 +198,8 @@ set selectedColumns(val: any[]) {
     this.searchValue = ''
   }
 
+
+
   filterGlobal(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const value = inputElement.value;
@@ -201,9 +217,9 @@ set selectedColumns(val: any[]) {
   }
 
   filterStatus(event: any) {
-    const value = event.value;
+
     if (this.dt2) {
-      this.dt2.filter(value, 'incidentStatus', 'equals');
+      this.dt2.filter(event, 'incidentStatus', 'equals');
     }
   }
 
@@ -244,11 +260,18 @@ set selectedColumns(val: any[]) {
         }
 
     }
+    else{
+      this.showError(" Sorry, The Incident is already Closed !");
+    }
+
+
   }
 
-  viewIncidentData(incidentId: number): void {
+  viewIncidentData(event :any): void {
     console.log("view");
-    this.incidentDataService.setSelectedIncidentId(incidentId);
+    var incident= event.data;
+    console.log(incident);
+    this.incidentDataService.setSelectedIncidentId(incident.id);
     this.router.navigate(['/view-incident']);
   }
 
@@ -360,6 +383,13 @@ set selectedColumns(val: any[]) {
   isColumnVisible(columnField: string): boolean {
     return this.selectedColumns.some(col => col.field === columnField);
   }
+
+  getStatusLabel(statusValue: string): string {
+    const status = this.statuses.find(s => s.value === statusValue);
+    return status ? status.label : statusValue;
+  }
+
+
   onSubmitReview(incident: IncidentData) {
     const submitData = {
       id: incident.id,
@@ -371,5 +401,48 @@ set selectedColumns(val: any[]) {
     });
 
     }
+
+    onApproval(incident: IncidentData) {
+
+        this.confirmationService.confirm({
+          header: 'Are you sure?',
+          message: 'Please confirm to proceed.',
+          accept: () => {
+
+            this.tablefetchService.incidentApproval(incident.id).subscribe(response => {
+              console.log(response);
+              this.showSuccess("Corrective measures aproved sucessfully");
+
+        });
+          },
+          reject: () => {
+
+          }
+      });
+      }
+
+      showSuccess(message: string) {
+        console.log(message);
+        setTimeout(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `${message}`,
+          });
+          setTimeout(() => {
+            this.incidentDataService.fetchIncidentData();
+          }, 2000);
+        }, 100);
+      }
+
+      showError(message: string) {
+        setTimeout(() => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `${message}`,
+          });
+        }, 50);
+      }
 
 }

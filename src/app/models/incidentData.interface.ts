@@ -45,5 +45,15 @@ export interface IncidentStatsDTO {
   qualityClosedIncidents: number;
   incidents: IncidentData[];
   assignedIncidents : IncidentData[];
+  yearlyIncidentCounts: YearlyIncidentCounts;
 }
 
+interface IncidentCounts {
+  "Privacy Incidents"?: number;
+  "Quality Incidents"?: number;
+  "Security Incidents"?: number;
+}
+
+interface YearlyIncidentCounts {
+  [year: string]: IncidentCounts;
+}

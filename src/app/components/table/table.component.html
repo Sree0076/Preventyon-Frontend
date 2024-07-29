@@ -1,9 +1,32 @@
 <div class="table-section">
+  <p-toast></p-toast>
+  <p-confirmDialog #cd>
+    <ng-template pTemplate="headless" let-message>
+      <div class="flex flex-column align-items-center p-5 surface-overlay border-round enhanced-dialog">
+        <div class="inline-flex justify-content-center align-items-center h-4rem w-4rem">
+          <i class="bi bi-question-circle text-3xl text-primary"></i>
+        </div>
+        <span class="font-bold text-2xl block mb-2 mt-4 enhanced-header">
+          {{ message.header }}
+        </span>
+        <p class="mb-0 enhanced-message">{{ message.message }}</p>
+        <div class="flex align-items-center gap-4 mt-4">
+          <button class="btn btn-outline-danger w-9rem cancelconfirm" (click)="cd.reject()">
+            Cancel
+          </button>
+          <button class="btn btn-outline-primary w-9rem cancelconfirm" (click)="cd.accept()">
+            Approve
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
   <p-table
     #dt2
     [value]="incidents"
     [rowHover]="true"
     [rows]="10"
+    (onRowSelect)="viewIncidentData($event)"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
@@ -14,6 +37,8 @@
     sortMode="multiple"
     [globalFilterFields]="['incidentTitle', 'id', 'category']"
     (onPage)="pageChange($event)"
+    selectionMode="single"
+    [(selection)]="selectedIncident"
   >
   <ng-template pTemplate="caption">
     <div class="d-flex align-items-center justify-content-between table-top" pResizableColumn>
@@ -23,6 +48,8 @@
           <i class="pi pi-search"></i>
           <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
         </span>
+      </div>
+      <div class="filter-chips">
       </div>
       <p-multiSelect
         class="small-input"
@@ -89,7 +116,7 @@
             <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false" display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter" [showClearButton]="false">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                 <p-dropdown [options]="statuses"
-                            (onChange)="filter($event.value)"
+                            (onChange)="filterStatus($event.value)"
                             placeholder="Select Status">
                 </p-dropdown>
               </ng-template>
@@ -103,9 +130,9 @@
     <ng-template pTemplate="body" let-incident>
       @if(!incident.isDraft || !isadmin)
       {
-      <tr>
-        <td *ngIf="isColumnVisible('id')">{{ incident.id }}</td>
-        <td >{{ incident.incidentTitle }}</td>
+      <tr >
+        <td *ngIf="isColumnVisible('id')"  [pSelectableRow]="incident">{{ incident.id }}</td>
+        <td [pSelectableRow]="incident">{{ incident.incidentTitle }}</td>
         <!-- Repeat for other columns -->
         <td >
           <span [ngClass]="getTypeSeverityClass(incident.incidentType)">
@@ -120,27 +147,34 @@
           </span>
         </td>
         <td *ngIf="isColumnVisible('incidentStatus')">
-          @if(getAssigned && incident.isCorrectionFilled)
+          @if(getAssigned && incident.isCorrectionFilled && incident.incidentStatus!= "closed")
           {
             <p-tag [value]="'Submit for Review'" [severity]="'success'" (click)="onSubmitReview(incident)"></p-tag>
           }
           @else
           {
-            <p-tag [value]="incident.incidentStatus" [severity]="getSeverity(incident.incidentStatus)" />
+            <!-- {{ incident.incidentStatus }} -->
+              @if(incident.isSubmittedForReview && isadmin && incident.incidentStatus!= "closed")
+              {
+                <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onApproval(incident)"><i class="bi bi-check"></i></button>
+                <button type="button" class="btn btn-outline-danger   rejectbtn" ><i class="bi bi-x"></i></button>
+              }
+              @else
+              {
+                <p-tag [value]="getStatusLabel(incident.incidentStatus)" [severity]="getSeverity(incident.incidentStatus)" />
+              }
+
           }
 
         </td>
         <td *ngIf="isColumnVisible('action')">
-          <div class="flex justify-content-center">
+          <div class="flex justify-content-center" *ngIf="isadmin">
             <i class="bi bi-three-dots-vertical" (click)="op.toggle($event)"></i>
             <p-overlayPanel #op>
               <div class="custom-overlay">
                 <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
                   <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin || getAssigned">
                     <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"></i>Edit
-                  </li>
-                  <li class="flex align-items-center gap-2 custom-item">
-                    <i class="bi bi-eye" (click)="viewIncidentData(incident.id)"></i>View
                   </li>
                   <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
                     <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Export
@@ -149,6 +183,9 @@
               </div>
             </p-overlayPanel>
             <i class="bi bi-send" *ngIf="isadmin" (click)="onIconClick(incident)" [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}"></i>
+          </div>
+          <div class="flex justify-content-center" *ngIf="!isadmin">
+            <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"  *ngIf="incident.isDraft || getAssigned"></i>
           </div>
         </td>
       </tr>
