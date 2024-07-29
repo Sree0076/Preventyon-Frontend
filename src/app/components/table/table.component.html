@@ -149,7 +149,8 @@
         <td *ngIf="isColumnVisible('incidentStatus')">
           @if(getAssigned && incident.isCorrectionFilled && incident.incidentStatus!= "closed")
           {
-            <p-tag [value]="'Submit for Review'" [severity]="'success'" (click)="onSubmitReview(incident)"></p-tag>
+            <button type="button" class="btn btn-outline-primary  reviewbtn  " (click)="onSubmitReview(incident)">Submit for Review</button>
+            <!-- <p-tag [value]="'Submit for Review'" [severity]="'success'" (click)="onSubmitReview(incident)"></p-tag> -->
           }
           @else
           {
