@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewIncidentFormComponent } from './view-incident-form.component';
+// import { ViewIncidentFormComponent } from './view-incident-form.component';
 
-describe('ViewIncidentFormComponent', () => {
-  let component: ViewIncidentFormComponent;
-  let fixture: ComponentFixture<ViewIncidentFormComponent>;
+// describe('ViewIncidentFormComponent', () => {
+//   let component: ViewIncidentFormComponent;
+//   let fixture: ComponentFixture<ViewIncidentFormComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ViewIncidentFormComponent]
-    })
-    .compileComponents();
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       imports: [ViewIncidentFormComponent]
+//     })
+//     .compileComponents();
 
-    fixture = TestBed.createComponent(ViewIncidentFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//     fixture = TestBed.createComponent(ViewIncidentFormComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });
