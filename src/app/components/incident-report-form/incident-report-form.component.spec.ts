@@ -1,184 +1,225 @@
-// import { ComponentFixture, TestBed } from '@angular/core/testing';
-// import { ReactiveFormsModule } from '@angular/forms';
-// import { MatDialog } from '@angular/material/dialog';
-// import { of } from 'rxjs';
-// import { IncidentReportFormComponent } from './incident-report-form.component';
-// import { IncidentServiceService } from '../../services/incident-service.service';
-// import { MessageService } from 'primeng/api';
-// import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-// import { InputTextModule } from 'primeng/inputtext';
-// import { ButtonModule } from 'primeng/button';
-// import { CalendarModule } from 'primeng/calendar';
-// import { DropdownModule } from 'primeng/dropdown';
-// import { FileUploadModule } from 'primeng/fileupload';
-// import { InputTextareaModule } from 'primeng/inputtextarea';
-// import { ToastModule } from 'primeng/toast';
-// import { RippleModule } from 'primeng/ripple';
-// import { MatDatepickerModule } from '@angular/material/datepicker';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatNativeDateModule } from '@angular/material/core';
 
-// describe('IncidentReportFormComponent', () => {
-//   let component: IncidentReportFormComponent;
-//   let fixture: ComponentFixture<IncidentReportFormComponent>;
-//   let mockIncidentService: jasmine.SpyObj<IncidentServiceService>;
-//   let mockMessageService: jasmine.SpyObj<MessageService>;
-//   let mockDialog: jasmine.SpyObj<MatDialog>;
+import { Component, Input, ViewChild } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NgModel,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { DatePipe, NgIf } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IncidentData } from '../../models/incidentData.interface';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { PrimeIcons } from 'primeng/api';
+import { MessageService,ConfirmationService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
+import { IncidentServiceService } from '../../services/incident-service.service';
+import { HttpClient } from '@angular/common/http';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 
-//   beforeEach(async () => {
-//     mockIncidentService = jasmine.createSpyObj('IncidentServiceService', [
-//       'addIncident',
-//     ]);
-//     mockMessageService = jasmine.createSpyObj('MessageService', ['add']);
-//     mockDialog = jasmine.createSpyObj('MatDialog', ['open']);
+@Component({
+  selector: 'app-incident-report-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    InputTextModule,
+    ButtonModule,
+    CalendarModule,
+    DropdownModule,
+    FileUploadModule,
+    InputTextareaModule,
+    ToastModule,
+    ButtonModule,
+    RippleModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ConfirmDialogModule,
+  ],
+  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule,ConfirmationService],
+  templateUrl: './incident-report-form.component.html',
+  styleUrl: './incident-report-form.component.scss',
+})
+export class IncidentReportFormComponent {
+  incident!: IncidentData;
 
-//     await TestBed.configureTestingModule({
-//       imports: [
-//         ReactiveFormsModule,
-//         InputTextModule,
-//         ButtonModule,
-//         CalendarModule,
-//         DropdownModule,
-//         FileUploadModule,
-//         InputTextareaModule,
-//         ToastModule,
-//         RippleModule,
-//         MatDatepickerModule,
-//         MatFormFieldModule,
-//         MatInputModule,
-//         MatNativeDateModule,
-//       ],
-//       declarations: [IncidentReportFormComponent],
-//       providers: [
-//         { provide: IncidentServiceService, useValue: mockIncidentService },
-//         { provide: MessageService, useValue: mockMessageService },
-//         { provide: MatDialog, useValue: mockDialog },
-//       ],
-//     }).compileComponents();
+  incidentTypes = [
+    { label: 'Security Incident', value: 'Security Incidents' },
+    { label: 'Privacy Incident', value: 'Privacy Incidents' },
+    { label: 'Quality Incident', value: 'Quality Incidents' },
+  ];
 
-//     fixture = TestBed.createComponent(IncidentReportFormComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+  categories = [
+    { label: 'Denial of Service', value: 'denialOfService' },
+    { label: 'Loss', value: 'loss' },
+    { label: 'Theft', value: 'theft' },
+    { label: 'Malware', value: 'malware' },
+    { label: 'Ransomware', value: 'ransomware' },
+    { label: 'Unauthorized Use', value: 'unauthorizedUse' },
+    { label: 'Disclosure', value: 'disclosure' },
+    { label: 'Unauthorized Access', value: 'unauthorizedAccess' },
+    { label: 'Phishing', value: 'phishing' },
+    { label: 'Unplanned Downtime', value: 'unplannedDowntime' },
+    { label: 'Insecure Site', value: 'insecureSite' },
+    { label: 'Insecure Coding', value: 'insecureCoding' },
+    { label: 'Physical Security', value: 'physicalSecurity' },
+    { label: 'Spoofing', value: 'spoofing' },
+    { label: 'Botnet Attack', value: 'botnetAttack' },
+    { label: 'Exposed APIs', value: 'exposedAPIs' },
+    { label: 'Disclosing IP Data', value: 'disclosingIPData' },
+  ];
 
-//   it('should create the component', () => {
-//     expect(component).toBeTruthy();
-//   });
+  priorities = [
+    { label: 'High', value: 'High' },
+    { label: 'Medium', value: 'Medium' },
+    { label: 'Low', value: 'Low' },
+  ];
+  selectedFiles!: File[];
+  date1!: Date | null;
+  maxDate: Date = new Date();
+  employeeId: number =0;
 
-//   it('should initialize form with default values', () => {
-//     const form = component.viewform;
-//     expect(form).toBeTruthy();
-//     expect(form.get('incidentTitle')?.value).toBe('');
-//     expect(form.get('incidentOccuredDate')?.value).toBe(null);
-//     expect(form.get('incidentOccuredTime')?.value).toBe('');
-//     expect(form.get('incidentDescription')?.value).toBe('');
-//     expect(form.get('reportedBy')?.value).toBe('');
-//     expect(form.get('reportedDate')?.value).toBe('');
-//     expect(form.get('priority')?.value).toBe('');
-//     expect(form.get('isDraft')?.value).toBe(false);
-//     expect(form.get('employeeId')?.value).toBe(0);
-//     expect(form.get('documentUrls')?.value).toBe(null);
-//   });
+  constructor(
+    private router: Router,
+    private apiService: IncidentServiceService,
+    private messageService: MessageService,
+    private dialog: MatDialog,
+    private employeeDataService: EmployeeDataServiceService,
+    private confirmationService: ConfirmationService,
+  ) {}
 
-//   it('should show validation error for required fields', () => {
-//     component.onSubmit();
-//     expect(
-//       component.viewform.get('incidentTitle')?.hasError('required')
-//     ).toBeTruthy();
-//     expect(
-//       component.viewform.get('incidentOccuredDate')?.hasError('required')
-//     ).toBeTruthy();
-//     expect(
-//       component.viewform.get('incidentOccuredTime')?.hasError('required')
-//     ).toBeTruthy();
-//     expect(
-//       component.viewform.get('incidentDescription')?.hasError('required')
-//     ).toBeTruthy();
-//   });
+  openDialog() {
+    this.confirmationService.confirm({
+      header: 'Are you sure?',
+      message: 'Please confirm to proceed.',
+      accept: () => {
+        this.prepareFormData(false);
+      },
+      reject: () => {
 
-//   it('should handle file uploads', () => {
-//     const mockFile = new File([''], 'test-file.txt', { type: 'text/plain' });
-//     const event = {
-//       files: [mockFile],
-//     };
-//     component.onFileUpload(event);
-//     expect(component.selectedFiles.length).toBe(1);
-//     expect(component.selectedFiles[0].name).toBe('test-file.txt');
-//   });
+      }
+  });
+  }
 
-//   it('should submit form data', () => {
-//     spyOn(component.apiService, 'addIncident').and.returnValue(of({}));
-//     spyOn(component.messageService, 'add');
-//     component.viewform.setValue({
-//       incidentTitle: 'Test Title',
-//       category: 'category1',
-//       incidentType: 'type1',
-//       incidentOccuredDate: new Date(),
-//       incidentOccuredTime: '12:00',
-//       incidentDescription: 'Test Description',
-//       reportedBy: 'John Doe',
-//       reportedDate: new Date(),
-//       priority: 'High',
-//       isDraft: false,
-//       employeeId: 2,
-//       documentUrls: null,
-//     });
-//     component.submitForm();
-//     expect(component.apiService.addIncident).toHaveBeenCalled();
-//     expect(component.messageService.add).toHaveBeenCalledWith(
-//       jasmine.objectContaining({
-//         severity: 'success',
-//         summary: 'Success',
-//         detail: 'Incident Reported successfully',
-//       })
-//     );
-//   });
+  showSuccess(message: string) {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `${message}`,
+      });
+      setTimeout(() => {
+        this.router.navigate(['/user']);
+      }, 2000);
+    }, 100);
+  }
 
-//   it('should save form as draft', () => {
-//     spyOn(component.apiService, 'addIncident').and.returnValue(of({}));
-//     spyOn(component.messageService, 'add');
-//     component.viewform.setValue({
-//       incidentTitle: 'Test Title',
-//       category: 'category1',
-//       incidentType: 'type1',
-//       incidentOccuredDate: new Date(),
-//       incidentOccuredTime: '12:00',
-//       incidentDescription: 'Test Description',
-//       reportedBy: 'John Doe',
-//       reportedDate: new Date(),
-//       priority: 'High',
-//       isDraft: true,
-//       employeeId: 2,
-//       documentUrls: null,
-//     });
-//     component.saveAsDraft();
-//     expect(component.apiService.addIncident).toHaveBeenCalled();
-//     expect(component.messageService.add).toHaveBeenCalledWith(
-//       jasmine.objectContaining({
-//         severity: 'success',
-//         summary: 'Success',
-//         detail: 'Incident saved as draft successfully',
-//       })
-//     );
-//   });
+  showError(message: string) {
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `${message}`,
+      });
+    }, 100);
+  }
+  saveAsDraft() {
+    this.prepareFormData(true);
+  }
 
-//   it('should open confirmation dialog on submit', () => {
-//     spyOn(component.dialog, 'open').and.callThrough();
-//     component.onSubmit();
-//     expect(component.dialog.open).toHaveBeenCalledWith(
-//       ConfirmationDialogComponent
-//     );
-//   });
+  viewform!: FormGroup;
 
-//   it('should submit form when confirmation dialog result is true', () => {
-//     spyOn(component.dialog, 'open').and.callFake(() => {
-//       const dialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
-//       dialogRef.afterClosed.and.returnValue(of(true));
-//       return dialogRef;
-//     });
-//     spyOn(component, 'submitForm');
-//     component.onSubmit();
-//     expect(component.submitForm).toHaveBeenCalled();
-//   });
-// });
+  ngOnInit() {
+    this.viewform = new FormGroup({
+      incidentTitle: new FormControl('', Validators.required),
+      category: new FormControl(''),
+      incidentType: new FormControl(''),
+      incidentOccuredDate: new FormControl('', Validators.required),
+      incidentOccuredTime: new FormControl('', Validators.required),
+      incidentDescription: new FormControl('', Validators.required),
+      reportedBy: new FormControl('', Validators.required),
+      reportedDate: new FormControl('', Validators.required),
+      priority: new FormControl(''),
+      isDraft: new FormControl(false),
+      employeeId: new FormControl(0),
+      documentUrls: new FormControl(null),
+    });
+    console.log(this.viewform);
+
+    this.employeeDataService.employeeData.subscribe(data => {
+      if (data) {
+         this.employeeId= data.id;
+      }
+    });
+  }
+  onFileUpload(event: any) {
+    console.log('fileupload', <File>event.files);
+    this.selectedFiles = <File[]>event.files;
+  }
+
+
+
+  onSubmit() {
+    if (
+      !this.viewform.value.incidentTitle ||
+      !this.viewform.value.incidentOccuredDate ||
+      !this.viewform.value.incidentDescription
+    ) {
+      this.showError('Please Fill Out Required Details');
+      return;
+    }
+
+    this.openDialog();
+  }
+
+  prepareFormData(isDraft: boolean) {
+    this.viewform.value.employeeId = this.employeeId;
+    this.viewform.value.isDraft = isDraft;
+
+    const formData = new FormData();
+    this.selectedFiles.forEach((file) => {
+      formData.append('documentUrls', file);
+    });
+
+    for (const [key, value] of Object.entries(this.viewform.value)) {
+      if (key !== 'documentUrls') {
+        if (key === 'incidentOccuredDate') {
+          formData.append(key, (value as Date).toISOString());
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    }
+
+    if (isDraft) {
+      console.log(FormData);
+      this.apiService.addIncident(formData).subscribe(() => {
+        this.showSuccess('Incident saved as draft successfully');
+      });
+    } else {
+      this.apiService.addIncident(formData).subscribe(() => {
+        this.showSuccess('Incident Reported successfully');
+      });
+    }
+  }
+
+
+}
