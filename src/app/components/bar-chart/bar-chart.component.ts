@@ -129,12 +129,13 @@ export class BarChartComponent implements OnInit {
 
     switch (index) {
       case 0: // Privacy
-        gradient.addColorStop(0, 'rgba(162, 122, 215, 1)');
-        gradient.addColorStop(1, 'rgba(85, 64, 113, 1)');
+        // gradient.addColorStop(0, 'rgb(215, 122, 122)');
+        gradient.addColorStop(0, 'rgb(224, 62, 60)');
+
         break;
       case 1: // Security
-        gradient.addColorStop(0, 'rgba(47, 79, 140, 1)');
-        gradient.addColorStop(1, 'rgba(22, 38, 68, 1)');
+        // gradient.addColorStop(0, '#d47725');
+        gradient.addColorStop(0, '#fd8822');
         break;
       case 2: // Quality
         gradient.addColorStop(0, 'rgba(101, 163, 246, 1)');

@@ -217,12 +217,10 @@ set selectedColumns(val: any[]) {
   }
 
   filterStatus(event: any) {
-
     if (this.dt2) {
       this.dt2.filter(event, 'incidentStatus', 'equals');
     }
   }
-
   openForwardingModal(incidentId: number) {
     this.selectedIncidentId = incidentId;
     this.incidentDataService.setSelectedIncidentId(incidentId);
@@ -250,8 +248,9 @@ set selectedColumns(val: any[]) {
     if (incident.incidentStatus !== 'closed') {
 
       this.incidentDataService.setSelectedIncidentId(incidentId);
-      if(!this.getAssigned)
+      if(!this.getAssigned && !this.isadmin)
         {
+          console.log(this.isadmin);
          this.router.navigate(['/edit-incident']);
         }
         else
@@ -391,15 +390,23 @@ set selectedColumns(val: any[]) {
 
 
   onSubmitReview(incident: IncidentData) {
-    const submitData = {
-      id: incident.id,
-      isSubmittedForReview: true,
-    };
-    console.log(submitData);
-        this.tablefetchService.submitForUser(incident.id,submitData).subscribe(response => {
-          console.log(response);
-    });
+    console.log(incident.isSubmittedForReview);
+    if(incident.isSubmittedForReview)
+    {
 
+        this.showError("Already Submitted For Review");
+    }
+    else{
+      const submitData = {
+        id: incident.id,
+        isSubmittedForReview: true,
+      };
+      console.log(submitData);
+          this.tablefetchService.submitForUser(incident.id,submitData).subscribe(response => {
+            console.log(response);
+            this.showSuccess("Incident Submitted For Review");
+      });
+    }
     }
 
     onApproval(incident: IncidentData) {
