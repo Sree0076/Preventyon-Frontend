@@ -1,225 +1,214 @@
 
-import { Component, Input, ViewChild } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  NgModel,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { DatePipe, NgIf } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IncidentData } from '../../models/incidentData.interface';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { PrimeIcons } from 'primeng/api';
-import { MessageService,ConfirmationService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { RippleModule } from 'primeng/ripple';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { IncidentReportFormComponent } from './incident-report-form.component';
 import { IncidentServiceService } from '../../services/incident-service.service';
-import { HttpClient } from '@angular/common/http';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
+import { of} from 'rxjs';
+import { IncidentData } from '../../models/incidentData.interface';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { Employee} from '../../models/employee.interface';
 
-@Component({
-  selector: 'app-incident-report-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    InputTextModule,
-    ButtonModule,
-    CalendarModule,
-    DropdownModule,
-    FileUploadModule,
-    InputTextareaModule,
-    ToastModule,
-    ButtonModule,
-    RippleModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    ConfirmDialogModule,
-  ],
-  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule,ConfirmationService],
-  templateUrl: './incident-report-form.component.html',
-  styleUrl: './incident-report-form.component.scss',
-})
-export class IncidentReportFormComponent {
-  incident!: IncidentData;
+describe('IncidentReportFormComponent', () => {
+    let component: IncidentReportFormComponent;
+    let fixture: ComponentFixture<IncidentReportFormComponent>;
+    let mockIncidentService: jasmine.SpyObj<IncidentServiceService>;
+    let mockEmployeeDataService: jasmine.SpyObj<EmployeeDataServiceService>;
 
-  incidentTypes = [
-    { label: 'Security Incident', value: 'Security Incidents' },
-    { label: 'Privacy Incident', value: 'Privacy Incidents' },
-    { label: 'Quality Incident', value: 'Quality Incidents' },
-  ];
+  beforeEach(async () => {
+    const incidentServiceSpy = jasmine.createSpyObj('IncidentServiceService', ['getSingleIncident', 'getSingleFullIncident']);
+    const employeeDataServiceSpy = jasmine.createSpyObj('EmployeeDataServiceService', ['fetchEmployeeData', 'employeeData']);
 
-  categories = [
-    { label: 'Denial of Service', value: 'denialOfService' },
-    { label: 'Loss', value: 'loss' },
-    { label: 'Theft', value: 'theft' },
-    { label: 'Malware', value: 'malware' },
-    { label: 'Ransomware', value: 'ransomware' },
-    { label: 'Unauthorized Use', value: 'unauthorizedUse' },
-    { label: 'Disclosure', value: 'disclosure' },
-    { label: 'Unauthorized Access', value: 'unauthorizedAccess' },
-    { label: 'Phishing', value: 'phishing' },
-    { label: 'Unplanned Downtime', value: 'unplannedDowntime' },
-    { label: 'Insecure Site', value: 'insecureSite' },
-    { label: 'Insecure Coding', value: 'insecureCoding' },
-    { label: 'Physical Security', value: 'physicalSecurity' },
-    { label: 'Spoofing', value: 'spoofing' },
-    { label: 'Botnet Attack', value: 'botnetAttack' },
-    { label: 'Exposed APIs', value: 'exposedAPIs' },
-    { label: 'Disclosing IP Data', value: 'disclosingIPData' },
-  ];
+    const mockEmployee: Employee = {
+        id: 1,
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        department: 'IT',
+        designation: 'Developer',
+        roleId: 1,
+        role: {
+          id: 1,
+          name: 'Admin',
+          permission: {
+            id: 1,
+            permissionName: 'Full Access',
+            incidentManagement: true,
+            userManagement: true,
+            incidentCreateOnly: false
+          }
+        },
+        createdAt: new Date('2023-01-01'),
+        updatedAt: new Date('2023-01-01')
+      };
 
-  priorities = [
-    { label: 'High', value: 'High' },
-    { label: 'Medium', value: 'Medium' },
-    { label: 'Low', value: 'Low' },
-  ];
-  selectedFiles!: File[];
-  date1!: Date | null;
-  maxDate: Date = new Date();
-  employeeId: number =0;
+      const mockIncident: IncidentData = {
+        id: 1,
+        incidentNo: 'INC001',
+        incidentTitle: 'Sample Incident',
+        incidentDescription: 'Description of the incident',
+        reportedBy: 'John Doe',
+        roleOfReporter: 'Developer',
+        incidentOccuredDate: new Date('2024-07-01'),
+        monthYear: 'July 2024',
+        incidentType: 'Type1',
+        category: 'Category1',
+        priority: 'High',
+        actionAssignedTo: 'Jane Smith',
+        deptOfAssignee: 'IT',
+        investigationDetails: 'Investigation details here',
+        associatedImpacts: 'No major impacts',
+        collectionOfEvidence: 'Evidence collected',
+        correction: 'Correction applied',
+        correctiveAction: 'Action taken',
+        correctionCompletionTargetDate: '2024-08-01',
+        correctionActualCompletionDate: '2024-08-01',
+        correctiveActualCompletionDate: '2024-08-01',
+        incidentStatus: 'Open',
+        correctionDetailsTimeTakenToCloseIncident: 5,
+        correctiveDetailsTimeTakenToCloseIncident: 3,
+        isDraft: false,
+        isCorrectionFilled: true,
+        IsSubmittedForReview: false,
+        employeeId: 1,
+        documentUrls: 'http://example.com/doc1,http://example.com/doc2',
+        createdAt: new Date().toISOString()
+      };
+  
 
-  constructor(
-    private router: Router,
-    private apiService: IncidentServiceService,
-    private messageService: MessageService,
-    private dialog: MatDialog,
-    private employeeDataService: EmployeeDataServiceService,
-    private confirmationService: ConfirmationService,
-  ) {}
+      employeeDataServiceSpy.employeeData = of(mockEmployee);
+      incidentServiceSpy.getSingleIncident.and.returnValue(of(mockIncident));
 
-  openDialog() {
-    this.confirmationService.confirm({
-      header: 'Are you sure?',
-      message: 'Please confirm to proceed.',
-      accept: () => {
-        this.prepareFormData(false);
-      },
-      reject: () => {
 
-      }
+    await TestBed.configureTestingModule({
+      imports: [IncidentReportFormComponent,ReactiveFormsModule, FormsModule],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: IncidentServiceService, useValue: incidentServiceSpy },
+        { provide: EmployeeDataServiceService, useValue: employeeDataServiceSpy },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(IncidentReportFormComponent);
+    component = fixture.componentInstance;
+    mockIncidentService = TestBed.inject(IncidentServiceService) as jasmine.SpyObj<IncidentServiceService>;
+    mockEmployeeDataService = TestBed.inject(EmployeeDataServiceService) as jasmine.SpyObj<EmployeeDataServiceService>;
+
+    component.ngOnInit();
+    fixture.detectChanges();
+
   });
-  }
 
-  showSuccess(message: string) {
-    setTimeout(() => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: `${message}`,
-      });
-      setTimeout(() => {
-        this.router.navigate(['/user']);
-      }, 2000);
-    }, 100);
-  }
 
-  showError(message: string) {
-    setTimeout(() => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: `${message}`,
-      });
-    }, 100);
-  }
-  saveAsDraft() {
-    this.prepareFormData(true);
-  }
 
-  viewform!: FormGroup;
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  ngOnInit() {
-    this.viewform = new FormGroup({
-      incidentTitle: new FormControl('', Validators.required),
-      category: new FormControl(''),
-      incidentType: new FormControl(''),
-      incidentOccuredDate: new FormControl('', Validators.required),
-      incidentOccuredTime: new FormControl('', Validators.required),
-      incidentDescription: new FormControl('', Validators.required),
-      reportedBy: new FormControl('', Validators.required),
-      reportedDate: new FormControl('', Validators.required),
-      priority: new FormControl(''),
-      isDraft: new FormControl(false),
-      employeeId: new FormControl(0),
-      documentUrls: new FormControl(null),
+  it('should fetch employee data and set employeeId correctly', () => {
+    component.ngOnInit(); // Assuming this method triggers the data fetch
+    fixture.whenStable().then(() => {
+      expect(component.employeeId).toEqual(1); // Assuming employeeId is derived from employee data
     });
-    console.log(this.viewform);
+  });
+  
+  it('should initialize form controls', () => {
+    expect(component.viewform.contains('incidentTitle')).toBeTrue();
+    expect(component.viewform.contains('category')).toBeTrue();
+    expect(component.viewform.contains('incidentType')).toBeTrue();
+    expect(component.viewform.contains('incidentOccuredDate')).toBeTrue();
+    expect(component.viewform.contains('incidentOccuredTime')).toBeTrue();
+    expect(component.viewform.contains('incidentDescription')).toBeTrue();
+    expect(component.viewform.contains('reportedBy')).toBeTrue();
+    expect(component.viewform.contains('reportedDate')).toBeTrue();
+    expect(component.viewform.contains('priority')).toBeTrue();
+    expect(component.viewform.contains('isDraft')).toBeTrue();
+    expect(component.viewform.contains('employeeId')).toBeTrue();
+    expect(component.viewform.contains('documentUrls')).toBeTrue();
+  });
 
-    this.employeeDataService.employeeData.subscribe(data => {
-      if (data) {
-         this.employeeId= data.id;
-      }
+  it('should call openDialog on submit when form is valid', () => {
+    spyOn(component, 'openDialog');
+    component.viewform.setValue({
+      incidentTitle: 'Sample Incident',
+      category: 'denialOfService',
+      incidentType: 'Security Incidents',
+      incidentOccuredDate: new Date(),
+      incidentOccuredTime: new Date(),
+      incidentDescription: 'Sample Description',
+      reportedBy: 'John Doe',
+      reportedDate: new Date(),
+      priority: 'High',
+      isDraft: false,
+      employeeId: 1,
+      documentUrls: null
     });
-  }
-  onFileUpload(event: any) {
-    console.log('fileupload', <File>event.files);
-    this.selectedFiles = <File[]>event.files;
-  }
+    component.onSubmit();
+    expect(component.openDialog).toHaveBeenCalled();
+  });
 
-
-
-  onSubmit() {
-    if (
-      !this.viewform.value.incidentTitle ||
-      !this.viewform.value.incidentOccuredDate ||
-      !this.viewform.value.incidentDescription
-    ) {
-      this.showError('Please Fill Out Required Details');
-      return;
-    }
-
-    this.openDialog();
-  }
-
-  prepareFormData(isDraft: boolean) {
-    this.viewform.value.employeeId = this.employeeId;
-    this.viewform.value.isDraft = isDraft;
-
-    const formData = new FormData();
-    this.selectedFiles.forEach((file) => {
-      formData.append('documentUrls', file);
+  it('should show error message if required fields are missing', () => {
+    spyOn(component, 'showError');
+    component.viewform.setValue({
+      incidentTitle: '',
+      category: '',
+      incidentType: '',
+      incidentOccuredDate: '',
+      incidentOccuredTime: '',
+      incidentDescription: '',
+      reportedBy: '',
+      reportedDate: '',
+      priority: '',
+      isDraft: false,
+      employeeId: 1,
+      documentUrls: null
     });
+    component.onSubmit();
+    expect(component.showError).toHaveBeenCalledWith('Please Fill Out Required Details');
+  });
 
-    for (const [key, value] of Object.entries(this.viewform.value)) {
-      if (key !== 'documentUrls') {
-        if (key === 'incidentOccuredDate') {
-          formData.append(key, (value as Date).toISOString());
-        } else {
-          formData.append(key, value as string);
-        }
-      }
-    }
+  it('should call prepareFormData with isDraft=true when saveAsDraft is called', () => {
+    spyOn(component, 'prepareFormData');
+    component.saveAsDraft();
+    expect(component.prepareFormData).toHaveBeenCalledWith(true);
+  });
 
-    if (isDraft) {
-      console.log(FormData);
-      this.apiService.addIncident(formData).subscribe(() => {
-        this.showSuccess('Incident saved as draft successfully');
-      });
-    } else {
-      this.apiService.addIncident(formData).subscribe(() => {
-        this.showSuccess('Incident Reported successfully');
-      });
-    }
-  }
+  it('should handle file uploads correctly', () => {
+    const file = new File([''], 'test-file.txt', { type: 'text/plain' });
+    const event = { files: [file] };
+    component.onFileUpload(event);
+    expect(component.selectedFiles).toContain(file);
+  });
 
 
-}
+it('should enable submit button if form is valid', () => {
+    component.viewform.setValue({
+        incidentTitle: 'Valid Title',
+        category: 'Valid Category',
+        incidentType: 'Valid Type',
+        incidentOccuredDate: new Date(),
+        incidentOccuredTime: new Date(),
+        incidentDescription: 'Valid Description',
+        reportedBy: 'Valid Reporter',
+        reportedDate: new Date(),
+        priority: 'High',
+        isDraft: false,
+        employeeId: 1,
+        documentUrls: null
+    });
+    fixture.detectChanges();
+    const submitButton = fixture.nativeElement.querySelector('button[type="submit"]');
+    expect(submitButton.disabled).toBeFalse();
+});
+
+it('should call prepareFormData with correct parameters when saveAsDraft is called', () => {
+    spyOn(component, 'prepareFormData');
+    const isDraft = true;
+    component.saveAsDraft();
+    expect(component.prepareFormData).toHaveBeenCalledWith(isDraft);
+});
+
+});
