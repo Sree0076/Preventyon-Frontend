@@ -1,23 +1,23 @@
-// import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { UserEditFormComponent } from './user-edit-form.component';
+import { UserEditFormComponent } from './user-edit-form.component';
 
-// describe('UserEditFormComponent', () => {
-//   let component: UserEditFormComponent;
-//   let fixture: ComponentFixture<UserEditFormComponent>;
+describe('UserEditFormComponent', () => {
+  let component: UserEditFormComponent;
+  let fixture: ComponentFixture<UserEditFormComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       imports: [UserEditFormComponent]
-//     })
-//     .compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UserEditFormComponent]
+    })
+    .compileComponents();
 
-//     fixture = TestBed.createComponent(UserEditFormComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+    fixture = TestBed.createComponent(UserEditFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
-// });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
