@@ -37,7 +37,7 @@ export class IncidentServiceService {
   }
 
   public getAssignedIncident(employeeId: number): Observable<IncidentData> {
-    return this.http.get<IncidentData>(`http://localhost:7209/api/AssignedIncident/${employeeId}`).pipe(
+    return this.http.get<IncidentData>(`http://localhost:7209/api/AssignedIncident/GetAssignedIncidentsForEmployee/${employeeId}`).pipe(
       catchError(this.handleError)
     );
   }
@@ -58,5 +58,9 @@ export class IncidentServiceService {
 
   public submitForUser(incidentId: number, incident: any): Observable<any> {
     return this.http.put<any>(`http://localhost:7209/api/updateIncidentByReview/${incidentId}`, incident);
+  }
+
+  public incidentApproval(incidentId: number): Observable<any> {
+    return this.http.get<any>(`http://localhost:7209/api/incidentApproval/${incidentId}`);
   }
 }

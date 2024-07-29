@@ -3,6 +3,7 @@ import { BadgeModule } from 'primeng/badge';
 import { AuthService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
+import { Employee } from '../../models/employee.interface';
 
 @Component({
   selector: 'app-side-bar',
@@ -13,36 +14,50 @@ import { EmployeeDataServiceService } from '../../services/sharedService/employe
 })
 export class SideBarComponent {
 
+isAdmin :boolean =false;
+employeeData !: Employee;
 
-dasboard() {
-  this.employeeService.employeeData.subscribe(data => {
-    if (data) {
+constructor(
+  private router: Router,
+  private authService: AuthService,
+  private employeeService : EmployeeDataServiceService, // Inject AuthService
+) {
 
-      if(data.role.name=="SuperAdmin")
-      {
-        console.log(data.role.name);
-        this.router.navigate(['/admin']);
-      }
-      else{
-        this.router.navigate(['/user']);
-      }
-
-    }
-  });
 
 }
 
+ngOnInit() {
+  this.employeeService.employeeData.subscribe(data => {
+    if (data) {
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private employeeService : EmployeeDataServiceService, // Inject AuthService
-  ) {
+      this.employeeData=data;
+      if(this.employeeData.role.name=="SuperAdmin")
+        {
+          this.isAdmin=true;
+        }
+      }
+  });
+}
 
+dasboard() {
+  if(this.employeeData.role.name=="SuperAdmin")
+    {
 
+      console.log(this.employeeData.role.name);
+      this.router.navigate(['/admin']);
+    }
+    else{
+      this.router.navigate(['/user']);
+    }
+
+}
+usermanage() {
+  this.router.navigate(['/usermanage']);
   }
-  logout() {
-    console.log("logout");
-    this.authService.logout();
-  }
+
+logout() {
+  console.log("logout");
+  this.authService.logout();
+}
+
 }

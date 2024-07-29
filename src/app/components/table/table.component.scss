@@ -283,3 +283,74 @@ p-table td {
 .flex {
   display: flex;
 }
+.approvebtn,
+.rejectbtn {
+  border-radius: 8px !important;
+  width: 2.2rem;
+  height: 1.5rem;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.approvebtn {
+  margin-right: 10px;
+}
+
+.bi-check,
+.bi-x {
+  font-size: 30px;
+}
+
+
+.enhanced-dialog {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 9px;
+  text-align: center;
+}
+
+.enhanced-header {
+  color: #000000;
+  font-weight: 600;
+}
+
+.enhanced-message {
+  font-size: 1.1rem;
+  color: #555555;
+}
+
+.enhanced-button {
+  font-size: 1rem;
+  padding: 10px;
+}
+
+/* Utility Classes */
+.text-white {
+  color: #ffffff;
+}
+
+.cancelconfirm,
+.confirmapprove {
+  border-radius: 8px !important;
+  width: 5rem;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmapprove {
+  margin-right: 7px;
+}
+
+.text-3xl {
+  font-size: 2rem; /* Adjust size as needed */
+}
+
+.ml-2 {
+  margin-left: 0.5rem; /* Adjust margin as needed */
+}
