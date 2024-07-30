@@ -1,4 +1,3 @@
-
 import { Component, Input, ViewChild } from '@angular/core';
 import {
   FormControl,
@@ -19,7 +18,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PrimeIcons } from 'primeng/api';
-import { MessageService,ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { IncidentServiceService } from '../../services/incident-service.service';
@@ -29,7 +28,6 @@ import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
-
 
 @Component({
   selector: 'app-incident-report-form',
@@ -53,7 +51,13 @@ import { EmployeeDataServiceService } from '../../services/sharedService/employe
     MatNativeDateModule,
     ConfirmDialogModule,
   ],
-  providers: [DatePipe, MessageService, HttpClient, MatNativeDateModule,ConfirmationService],
+  providers: [
+    DatePipe,
+    MessageService,
+    HttpClient,
+    MatNativeDateModule,
+    ConfirmationService,
+  ],
   templateUrl: './incident-report-form.component.html',
   styleUrl: './incident-report-form.component.scss',
 })
@@ -94,15 +98,15 @@ export class IncidentReportFormComponent {
   selectedFiles!: File[];
   date1!: Date | null;
   maxDate: Date = new Date();
-  employeeId: number =0;
+  employeeId: number = 0;
+  today!: Date;
 
   constructor(
     private router: Router,
     private apiService: IncidentServiceService,
     private messageService: MessageService,
     private employeeDataService: EmployeeDataServiceService,
-    private confirmationService: ConfirmationService,
-
+    private confirmationService: ConfirmationService
   ) {}
 
   openDialog() {
@@ -112,10 +116,8 @@ export class IncidentReportFormComponent {
       accept: () => {
         this.prepareFormData(false);
       },
-      reject: () => {
-
-      }
-  });
+      reject: () => {},
+    });
   }
 
   showSuccess(message: string) {
@@ -148,6 +150,8 @@ export class IncidentReportFormComponent {
   viewform!: FormGroup;
 
   ngOnInit() {
+    this.today = new Date();
+
     this.viewform = new FormGroup({
       incidentTitle: new FormControl('', Validators.required),
       category: new FormControl(''),
@@ -164,9 +168,9 @@ export class IncidentReportFormComponent {
     });
     console.log(this.viewform);
 
-    this.employeeDataService.employeeData.subscribe(data => {
+    this.employeeDataService.employeeData.subscribe((data) => {
       if (data) {
-         this.employeeId= data.id;
+        this.employeeId = data.id;
       }
     });
   }
@@ -174,8 +178,6 @@ export class IncidentReportFormComponent {
     console.log('fileupload', <File>event.files);
     this.selectedFiles = <File[]>event.files;
   }
-
-
 
   onSubmit() {
     if (
@@ -221,5 +223,5 @@ export class IncidentReportFormComponent {
     }
   }
 
-
+  
 }

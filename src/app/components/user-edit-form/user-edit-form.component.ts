@@ -124,7 +124,7 @@ export class UserEditFormComponent implements OnInit {
       reportedDate: new FormControl('', Validators.required),
       priority: new FormControl(''),
       isDraft: new FormControl(false),
-      documentUrls: new FormControl(null),
+      oldDocumentUrls: new FormControl(null),
     });
 
     this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
@@ -169,8 +169,10 @@ export class UserEditFormComponent implements OnInit {
           reportedBy: response.reportedBy,
           priority: response.priority,
           isDraft: response.isDraft,
-          documentUrls: response.documentUrls,
+          oldDocumentUrls: response.documentUrls,
         });
+
+        console.log('document fetched:', response.documentUrls);
 
         const baseUrl = 'http://localhost:7209';
 
@@ -217,18 +219,13 @@ export class UserEditFormComponent implements OnInit {
     const formData = new FormData();
     if (this.selectedFiles) {
       this.selectedFiles.forEach((file) => {
-        formData.append('documentUrls', file);
+        formData.append('NewDocumentUrls', file);
       });
     }
 
-    if (this.uploadedFiles) {
-      this.uploadedFiles.forEach((file) => {
-        console.log(new URL(file.url).pathname);
-
-        const path = new URL(file.url).pathname;
-        formData.append('documentUrls', path);
-      });
-    }
+    this.viewform.value.oldDocumentUrls.forEach((url: string) => {
+      formData.append('OldDocumentUrls', url);
+    });
 
     for (const [key, value] of Object.entries(this.viewform.value)) {
       if (key !== 'documentUrls') {
@@ -241,10 +238,12 @@ export class UserEditFormComponent implements OnInit {
     }
 
     if (isDraft) {
-      console.log(FormData);
+      console.log(formData);
       this.apiService
         .updateUserIncident(this.editIncidentId, formData)
         .subscribe((response) => {
+          console.log('response after update: ', response);
+
           this.showSuccess('Draft Incident Reported successfully');
         });
     } else {
@@ -274,6 +273,7 @@ export class UserEditFormComponent implements OnInit {
       this.selectedFiles.map((file) => ({
         name: file.name,
         url: URL.createObjectURL(file),
+        file: file,
       }))
     );
   }
@@ -284,10 +284,9 @@ export class UserEditFormComponent implements OnInit {
 
     const updatedDocumentUrls = this.uploadedFiles.map((file) => file.url);
     console.log(updatedDocumentUrls);
-    
 
     this.viewform.patchValue({
-      documentUrls: updatedDocumentUrls,
+      oldDocumentUrls: updatedDocumentUrls,
     });
 
     this.messageService.add({

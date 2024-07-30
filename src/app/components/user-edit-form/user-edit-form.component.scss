@@ -191,10 +191,23 @@ textarea {
   padding: 0rem;
 }
 
-::ng-deep .report-form[_ngcontent-ng-c289648894]   .title-input[_ngcontent-ng-c289648894]{
+::ng-deep .report-form[_ngcontent-ng-c289648894] .title-input[_ngcontent-ng-c289648894] {
   width: 30rem;
 }
 
 ::ng-deep .p-fluid .p-calendar .p-inputtext {
   width: 13rem;
 }
+
+::ng-deep .bi-x::before {
+  font-size: 2rem;
+}
+
+bi::before,
+[class^=bi-]::before,
+[class*=" bi-"]::before {
+
+  vertical-align: -.525em;
+
+}
+
