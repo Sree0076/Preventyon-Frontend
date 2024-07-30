@@ -8,12 +8,12 @@
             <span class="position-absolute top-0 translate-middle badge rounded-pill bg-primary ">
             4
           </span>
-        </button> 
+        </button>
     </div>
       <div class="settings">
-          <button><i class="bi bi-gear"></i></button>
+          <button ><i class="bi bi-gear" (click)="switchtouserdashboard()"></i></button>
       </div>
-       @if(isAdmin)
+       @if(isAdmin && !isUserSwitched && isUserManagement)
        {
         <div class="user">
           <button><i class="bi bi-person-fill-add" (click)="usermanage()" ></i></button>
@@ -27,4 +27,3 @@
 </div>
 
 <app-notification-modal></app-notification-modal>
-  

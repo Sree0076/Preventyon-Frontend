@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe,CommonModule  } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,6 +22,7 @@ import { IncidentDataServiceTsService } from '../../services/sharedService/incid
     MatNativeDateModule,
     MatButtonModule,
     MatCardModule,
+    CommonModule ,
   ],
   templateUrl: './view-incident-form.component.html',
   styleUrl: './view-incident-form.component.scss',

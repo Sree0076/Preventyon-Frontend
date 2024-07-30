@@ -26,10 +26,10 @@
                   </mat-form-field>
               </div>
               <div class="col-md-3">
-                  <mat-form-field appearance="outline" class="w-100">
-                      <mat-label>Incident Occurred Date</mat-label>
-                      <input matInput [value]="data.incidentOccuredDate" readonly>
-                  </mat-form-field>
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Incident Occurred Date</mat-label>
+                  <input matInput [value]="data.incidentOccuredDate | date: 'dd-MM-yyyy, hh:mm a'" readonly>
+                </mat-form-field>
               </div>
               <div class="col-md-3">
                   <mat-form-field appearance="outline" class="w-100">

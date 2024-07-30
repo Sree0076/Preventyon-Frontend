@@ -61,7 +61,7 @@
         <div class="text-message">
           <textarea placeholder="Type a message" class="dialog-textarea" [(ngModel)]="message" (input)="autoResize($event)"></textarea>
           <div class="d-flex align-items-center">
-            <button type="submit" class="d-flex align-items-center"(click)="forward()">Forward <i class="bi bi-send"></i></button>
+            <button type="submit" class="d-flex align-items-center forwardbtn"(click)="forward()">Forward <i class="bi bi-send"></i></button>
           </div>
         </div>
       </ng-template>

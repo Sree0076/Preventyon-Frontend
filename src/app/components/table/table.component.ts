@@ -149,15 +149,6 @@ set selectedColumns(val: any[]) {
 
   fetchAssignedIncidents() {
 
-    // this.tablefetchService.getAssignedIncident().subscribe(data => {
-    //   if (Array.isArray(data)) {
-    //     this.incidents = data;
-    //     this.sortByPriority();
-    //     console.log(data);
-    //   } else {
-    //     console.error("Unexpected data format for assigned incidents:", data);
-    //   }
-    // });
 
     this.incidentDataService.incidentData.subscribe(data => {
       if (data) {
