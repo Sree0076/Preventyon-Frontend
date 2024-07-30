@@ -16,6 +16,7 @@ export class IncidentServiceService {
   constructor(private http: HttpClient) {
   }
   private createBaseUrl: string ='http://localhost:7209/api/Incident/CreateIncident';
+  
   getDataBasedOnStatus(employeeid:number): Observable<any> {
 
     return this.http.get<any>(`http://localhost:7209/api/Incident/GetIncidentsByEmployeeId?employeeId=${employeeid}`);

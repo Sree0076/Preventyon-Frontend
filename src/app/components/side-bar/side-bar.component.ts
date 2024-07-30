@@ -17,9 +17,28 @@ import { Employee } from '../../models/employee.interface';
 })
 export class SideBarComponent {
 
-isAdmin :boolean =false;
-employeeData !: Employee;
+switchtouserdashboard() {
 
+
+
+  if(this.isAdmin && !this.isUserSwitched)
+  {
+    this.isAdmin=false;
+    this.employeeService.setUserSwitch(true);
+    this.router.navigate(['/user']);
+  }
+  else
+  {
+    console.log('switching');
+    this.employeeService.setUserSwitch(false);
+    this.router.navigate(['/admin']);
+  }
+
+}
+isAdmin :boolean =false;
+isUserSwitched :boolean =false;
+employeeData !: Employee;
+isUserManagement:boolean=false;
 constructor(
   private router: Router,
   private authService: AuthService,
@@ -30,11 +49,18 @@ constructor(
 }
 
 ngOnInit() {
+
+  this.employeeService.userSwitch.subscribe(value => {
+    this.isUserSwitched = value;
+
+  });
+
   this.employeeService.employeeData.subscribe(data => {
     if (data) {
-
+     this.isUserManagement= data.role.permission.userManagement;
+     console.log("management",this.isUserManagement);
       this.employeeData=data;
-      if(this.employeeData.role.name=="SuperAdmin")
+      if(this.isUserManagement)
         {
           this.isAdmin=true;
         }
@@ -43,7 +69,7 @@ ngOnInit() {
 }
 
 dasboard() {
-  if(this.employeeData.role.name=="SuperAdmin")
+  if(this.employeeData.role.name=="SuperAdmin" && !this.isUserSwitched)
     {
 
       console.log(this.employeeData.role.name);

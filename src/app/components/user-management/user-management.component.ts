@@ -1,76 +1,119 @@
-
-
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../models/user-management.interface';
+import { CommonModule } from '@angular/common';
 import { UserManagementService } from '../../services/user-management.service';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { AddAdminModalComponent } from "../add-admin-modal/add-admin-modal.component";
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
+import { Admin, UpdateAdmin } from '../../models/user-management.interface';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [FormsModule, NgFor, NgIf, CommonModule, AddAdminModalComponent],
+  providers:[ConfirmationService,MessageService],
+  imports: [FormsModule, CommonModule, AddAdminModalComponent,ConfirmDialogModule,
+    ToastModule],
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
 })
 export class UserManagementComponent implements OnInit {
-  users: any[] = [];
-  filteredUsers: any[] = [];
+  users: Admin[] = [];
+  filteredUsers: Admin[] = [];
   nameFilter: string = '';
   statusFilter: 'all' | 'active' | 'inactive' = 'all';
 
-  constructor(private userManagementService: UserManagementService) {}
+  constructor(
+    private userManagementService: UserManagementService,
+    private employeeDataService: EmployeeDataServiceService,
+    private confirmationService: ConfirmationService,
+     private messageService: MessageService,
+  ) {}
 
   ngOnInit(): void {
     this.fetchUsers();
   }
 
   fetchUsers(): void {
-    this.userManagementService.getUsers().subscribe((users) => {
-      this.users = users;
-      this.filteredUsers = users;
+    this.employeeDataService.employeeData.subscribe((data) => {
+      if (data) {
+        this.userManagementService.getUsers(data.id).subscribe((users) => {
+          this.users = users;
+          console.log(users);
+          this.filteredUsers = users;
+        });
+      }
     });
   }
 
   filterUsers(): void {
     this.filteredUsers = this.users.filter(
       (user) =>
-        user.name.toLowerCase().includes(this.nameFilter.toLowerCase()) &&
-        (this.statusFilter === 'all' || user.status === this.statusFilter)
+        user.employeeName.toLowerCase().includes(this.nameFilter.toLowerCase()) &&
+        (this.statusFilter === 'all' ||
+          (this.statusFilter === 'active' && user.status) ||
+          (this.statusFilter === 'inactive' && !user.status))
     );
   }
 
-  toggleStatus(user: User): void {
+  toggleStatus(user: Admin): void {
     if (user.isEditing) {
-      user.status = user.status === 'active' ? 'inactive' : 'active';
+      user.status = !user.status;
     }
   }
 
-  saveUser(user: User): void {
-    if (user.id === undefined) {
-      // New user, send POST request
-      this.userManagementService.createUser(user).subscribe((newUser) => {
-        this.users.push(newUser);
-        this.filterUsers();
-        console.log('Created new user:', JSON.stringify(newUser, null, 2));
-      });
-    } else {
-      // Existing user, send PUT request
-      this.userManagementService.updateUser(user.id, user).subscribe((updatedUser) => {
-        const index = this.users.findIndex((u) => u.id === updatedUser.id);
-        this.users[index] = updatedUser;
-        this.filterUsers();
-        console.log('Updated user:', JSON.stringify(updatedUser, null, 2));
-      });
-    }
+  saveUser(user: Admin): void {
+    user.isEditing = false;
+    let adminData: UpdateAdmin = {
+      adminId: user.adminId,
+      isIncidentMangenet: user.isIncidentMangenet,
+      isUserMangenet: user.isUserMangenet,
+      status: user.status,
+    };
+    this.userManagementService.updateUser(user.adminId, adminData).subscribe(
+      (updatedUser) => {
+          this.showSuccess("Admin data updated Succesfully");
+          this.filterUsers();
+
+          console.log('Updated user:', JSON.stringify(updatedUser, null, 2));
+        }
+    );
+  }
+
+  editUser(user: Admin): void {
+    user.isEditing = true;
+  }
+  cancelEdit(user: Admin)
+  {
     user.isEditing = false;
   }
 
-  editUser(user: User): void {
-    user.isEditing = true;
+  onApproval(user: Admin ) {
+
+    this.confirmationService.confirm({
+      header: 'Are you sure?',
+      message: 'Please confirm to proceed.',
+      accept: () => {
+
+       this.saveUser(user);
+      },
+      reject: () => {
+
+      }
+  });
+  }
+  showSuccess(message: string) {
+    console.log(message);
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `${message}`,
+      });
+      setTimeout(() => {
+         this.fetchUsers();
+      }, 2000);
+    }, 100);
   }
 }
-
-
-

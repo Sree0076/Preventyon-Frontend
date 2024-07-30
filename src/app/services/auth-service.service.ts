@@ -25,6 +25,7 @@ import { EmployeeDataServiceService } from './sharedService/employee-data.servic
 export class AuthService implements OnDestroy {
   private readonly _destroying$ = new Subject<void>();
    role : string ="";
+   userswitch : boolean =false;
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private authService: MsalService,
@@ -96,13 +97,22 @@ export class AuthService implements OnDestroy {
 
       // Perform the redirection based on the role
       if (account && account.idTokenClaims && account.idToken) {
+        this.employeeService.userSwitch.subscribe(value => {
+          this.userswitch = value;
+          // Handle the switch state as needed
+        });
         console.log(this.role);
-        if (this.role === 'Admin' || this.role === 'SuperAdmin') {
-          this.router.navigate(['/admin']);
+        if (this.role === 'Admin-Incidents' || this.role === 'SuperAdmin'||this.role === 'Admins-User') {
+          if(this.userswitch )
+          {
+            this.router.navigate(['/user']);
+          }
+          else{
+            this.router.navigate(['/admin']);
+          }
+
         } else if (this.role === 'user') {
           this.router.navigate(['/user']);
-        } else {
-          this.router.navigate(['/unauthorized']);
         }
       }
     }
@@ -147,6 +157,7 @@ export class AuthService implements OnDestroy {
           if (data) {
             console.log(data);
             this.role = data.role.name;
+            
           }
         }),
         take(1)  // Ensure the observable completes after one emission
