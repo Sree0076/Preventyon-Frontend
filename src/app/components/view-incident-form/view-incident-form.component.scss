@@ -4,60 +4,60 @@
 
 
 .title {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    font-weight: 700;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 2.5rem;
+  color: #2c3e50;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .form {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: 1px solid #e1e1e1;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e1e1e1;
 }
 
 .custom-form-field {
-    width: 100%;
-    font-size: 16px;
-    border: 1px solid #3498db;
-    border-radius: 8px;
-    padding: 0.5rem;
+  width: 100%;
+  font-size: 16px;
+  border: 1px solid #3498db;
+  border-radius: 8px;
+  padding: 0.5rem;
 }
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
-    border-color: #3498db;
+  border-color: #3498db;
 }
 
 .mat-form-field-label {
-    color: #3498db;
-    font-weight: 500;
+  color: #3498db;
+  font-weight: 500;
 }
 
 input.matInput {
-    color: #2c3e50;
-    background-color: #f7f9fc;
-    border-radius: 4px;
+  color: #2c3e50;
+  background-color: #f7f9fc;
+  border-radius: 4px;
 }
 
 textarea.matInput {
-    color: #2c3e50;
-    background-color: #f7f9fc;
-    border-radius: 4px;
+  color: #2c3e50;
+  background-color: #f7f9fc;
+  border-radius: 4px;
 }
 
 .row.mb-4 {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 @media (max-width: 768px) {
-    .title {
-        font-size: 2rem;
-    }
+  .title {
+    font-size: 2rem;
+  }
 
-    .form {
-        padding: 1.5rem;
-    }
+  .form {
+    padding: 1.5rem;
+  }
 }
 
 mat-form-field {
@@ -88,3 +88,10 @@ p {
   margin: 1rem;
 }
 
+mat-label {
+  color: rgba(16, 107, 230, 1);
+}
+
+::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: gray !important;
+}

@@ -11,13 +11,14 @@
           {{ message.header }}
         </span>
         <p class="mb-0 enhanced-message">{{ message.message }}</p>
-        <div class="flex align-items-center gap-4 mt-4">
+        <div class="flex align-items-center gap-4">
+          <button class="btn btn-outline-danger w-9rem" style="margin-right: 0.4rem;" (click)="cd.reject()">
+            Cancel
+          </button>
           <button class="btn btn-outline-primary w-9rem" (click)="cd.accept()">
             Save
           </button>
-          <button class="btn btn-outline-danger w-9rem" (click)="cd.reject()">
-            Cancel
-          </button>
+
         </div>
       </div>
     </ng-template>

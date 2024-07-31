@@ -150,11 +150,11 @@ th {
       padding: 1rem;
     }
 
-    .p-datatable-thead > tr > th {
+    .p-datatable-thead>tr>th {
       text-align: left;
     }
 
-    .p-datatable-tbody > tr > td {
+    .p-datatable-tbody>tr>td {
       cursor: auto;
     }
 
@@ -168,7 +168,7 @@ th {
   }
 
   /* Responsive */
-  .p-datatable-customers .p-datatable-tbody > tr > td .p-column-title {
+  .p-datatable-customers .p-datatable-tbody>tr>td .p-column-title {
     display: none;
   }
 }
@@ -177,15 +177,16 @@ th {
   :host ::ng-deep {
     .p-datatable {
       &.p-datatable-customers {
-        .p-datatable-thead > tr > th,
-        .p-datatable-tfoot > tr > td {
+
+        .p-datatable-thead>tr>th,
+        .p-datatable-tfoot>tr>td {
           display: none !important;
         }
 
-        .p-datatable-tbody > tr {
+        .p-datatable-tbody>tr {
           border-bottom: 1px solid var(--layer-2);
 
-          > td {
+          >td {
             text-align: left;
             width: 100%;
             display: flex;
@@ -238,8 +239,7 @@ th {
 }
 
 ::ng-deep .p-multiselect-token {
-  height: 18px;
-  background: none;
+  height: 20px;
 }
 
 ::ng-deep .p-multiselect-token-icon {
@@ -283,6 +283,7 @@ p-table td {
 .flex {
   display: flex;
 }
+
 .approvebtn,
 .rejectbtn {
   border-radius: 8px !important;
@@ -293,12 +294,13 @@ p-table td {
   align-items: center;
   justify-content: center;
 }
-.reviewbtn{
+
+.reviewbtn {
   border-radius: 6px !important;
   // width: 5.1rem !important;
   height: 1.5rem;
   text-align: center;
-  display:flex;
+  display: flex;
   align-items: center;
   font-size: 12px;
   justify-content: center;
@@ -358,9 +360,28 @@ p-table td {
 }
 
 .text-3xl {
-  font-size: 2rem; /* Adjust size as needed */
+  font-size: 2rem;
+  /* Adjust size as needed */
 }
 
 .ml-2 {
-  margin-left: 0.5rem; /* Adjust margin as needed */
+  margin-left: 0.5rem;
+  /* Adjust margin as needed */
+}
+
+::ng-deep .p-datatable .p-paginator-bottom {
+
+  display: flex;
+  transform: translate(-9rem);
+}
+
+
+::ng-deep .p-inputtext {
+
+  padding-left: 0.5rem;
+}
+
+::ng-deep .p-paginator .p-dropdown .p-dropdown-label {
+  position: relative;
+  transform: translateY(0.4rem);
 }

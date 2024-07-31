@@ -26,7 +26,7 @@ import { RippleModule } from 'primeng/ripple';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-user-edit-form',
   standalone: true,
@@ -174,16 +174,14 @@ export class UserEditFormComponent implements OnInit {
 
         console.log('document fetched:', response.documentUrls);
 
-        const baseUrl = 'http://localhost:7209';
-
         if (Array.isArray(response.documentUrls)) {
           this.uploadedFiles = response.documentUrls.map((url) => ({
             name: url.split('/').pop()!, // Extract file name
-            url: `${baseUrl}${url}`, // Prepend base URL
+            url: `${environment.serverConfig.baseUrl}${url}`, // Prepend base URL
           }));
         }
 
-        console.log(this.uploadedFiles);
+        console.log('Old files', this.uploadedFiles);
       });
   }
 
@@ -282,8 +280,9 @@ export class UserEditFormComponent implements OnInit {
       (file) => file !== fileToRemove
     );
 
-    const updatedDocumentUrls = this.uploadedFiles.map((file) => file.url);
-    console.log(updatedDocumentUrls);
+    const updatedDocumentUrls = this.uploadedFiles.map((file) =>
+      file.url.replace(environment.serverConfig.baseUrl, '')
+    );
 
     this.viewform.patchValue({
       oldDocumentUrls: updatedDocumentUrls,

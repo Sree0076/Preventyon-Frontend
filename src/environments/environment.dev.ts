@@ -13,4 +13,7 @@ export const environment = {
     scopes: ['user.read'],
     uri: 'https://graph.microsoft.com/v1.0/me',
   },
+  serverConfig: {
+    baseUrl: 'http://localhost:7209',
+  },
 };

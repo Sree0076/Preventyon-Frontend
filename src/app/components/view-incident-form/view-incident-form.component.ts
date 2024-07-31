@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DatePipe,CommonModule  } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,7 +22,7 @@ import { IncidentDataServiceTsService } from '../../services/sharedService/incid
     MatNativeDateModule,
     MatButtonModule,
     MatCardModule,
-    CommonModule ,
+    CommonModule,
   ],
   templateUrl: './view-incident-form.component.html',
   styleUrl: './view-incident-form.component.scss',
@@ -33,7 +33,6 @@ export class ViewIncidentFormComponent {
     private router: Router,
     private incidentService: IncidentDataServiceTsService,
     private datePipe: DatePipe
-
   ) {}
   data: any = {};
   id: number = 0;
@@ -52,7 +51,7 @@ export class ViewIncidentFormComponent {
       console.log(response);
       if (response.incidentOccuredDate) {
         const incidentDate = new Date(response.incidentOccuredDate);
-        response.incidentOccuredDate = incidentDate
+        response.incidentOccuredDate = incidentDate;
       }
       this.data = response;
     });
