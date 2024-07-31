@@ -21,69 +21,53 @@
       </div>
     </ng-template>
   </p-confirmDialog>
-  <p-table
-    #dt2
-    [value]="incidents"
-    [rowHover]="true"
-    [rows]="10"
-    (onRowSelect)="viewIncidentData($event)"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    [loading]="loading"
-    [paginator]="true"
-    [resizableColumns]="true"
-    currentPageReportTemplate="Showing {last} of {totalRecords} entries"
-    [filterDelay]="0"
-    sortMode="multiple"
-    [globalFilterFields]="['incidentTitle', 'id', 'category']"
-    (onPage)="pageChange($event)"
-    selectionMode="single"
-    [(selection)]="selectedIncident"
-  >
-  <ng-template pTemplate="caption">
-    <div class="d-flex align-items-center justify-content-between table-top" pResizableColumn>
-      <div class="d-flex align-items-center">
-        <i class="bi bi-eraser" (click)="clear(dt2)"></i>
-        <span class="p-input-icon-left ml-2">
-          <i class="pi pi-search"></i>
-          <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
-        </span>
+  <p-table #dt2 [value]="incidents" [rowHover]="true" [rows]="10" (onRowSelect)="viewIncidentData($event)"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+    [resizableColumns]="true" currentPageReportTemplate="Showing {last} of {totalRecords} entries" [filterDelay]="0"
+    sortMode="multiple" [globalFilterFields]="['incidentTitle', 'id', 'category']" (onPage)="pageChange($event)"
+    paginatorPosition="top" selectionMode="single" [(selection)]="selectedIncident">
+    <ng-template pTemplate="caption">
+      <div class="d-flex align-items-center justify-content-between table-top" pResizableColumn>
+        <div class="d-flex align-items-center">
+          <i class="bi bi-eraser" (click)="clear(dt2)"></i>
+          <span class="p-input-icon-left ml-2">
+            <i class="pi pi-search"></i>
+            <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)"
+              placeholder="Search keyword" />
+          </span>
+        </div>
+        <div class="filter-chips">
+        </div>
+        <p-multiSelect display="chip" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+          selectedItemsLabel="{0} columns selected" [style]="{'min-width': '200px'}" placeholder="Choose Columns">
+        </p-multiSelect>
+        <button type="button" class="btn btn-sm btn-primary ml-auto" [hidden]="!isadmin"
+          (click)="exportExcel(dt2)">Export <i class="bi bi-cloud-download"></i></button>
+        <button type="button" class="btn btn-sm btn-primary ml-auto" [hidden]="isadmin" (click)="onAddItem()">Add
+          Incident</button>
       </div>
-      <div class="filter-chips">
-      </div>
-      <p-multiSelect
-        class="small-input"
-        display="chip"
-        [options]="cols"
-        [(ngModel)]="selectedColumns"
-        optionLabel="header"
-        selectedItemsLabel="{0} columns selected"
-        [style]="{'min-width': '200px'}"
-        placeholder="Choose Columns">
-      </p-multiSelect>
-      <button type="button" class="btn btn-primary ml-auto" [hidden]="!isadmin" (click)="exportExcel(dt2)">Export <i class="bi bi-cloud-download"></i></button>
-      <button type="button" class="btn btn-primary ml-auto" [hidden]="isadmin" (click)="onAddItem()">Add Incident</button>
-    </div>
-  </ng-template>
+    </ng-template>
 
     <ng-template pTemplate="header">
       <tr>
-        <th *ngIf="isColumnVisible('id')" style="width: 10%" pSortableColumn="id" >
+        <th *ngIf="isColumnVisible('id')" style="width: 10%" pSortableColumn="id">
           <div class="flex align-items-center">
             ID
-            <p-columnFilter type="text" field="id" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" display="options" [showClearButton]="false"></p-columnFilter>
+            <p-columnFilter type="text" field="id" [showApplyButton]="false" [showAddButton]="false"
+              [showOperator]="false" display="options" [showClearButton]="false"></p-columnFilter>
           </div>
         </th>
-        <th  style="width: 16%" pResizableColumn>
-          <div class="flex align-items-center header-content" >
+        <th style="width: 16%" pResizableColumn>
+          <div class="flex align-items-center header-content">
             Title
 
-            <p-columnFilter type="text" field="incidentTitle" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" display="options" [showClearButton]="false"></p-columnFilter>
+            <p-columnFilter type="text" field="incidentTitle" [showApplyButton]="false" [showAddButton]="false"
+              [showOperator]="false" display="options" [showClearButton]="false"></p-columnFilter>
             <span class="resize-handle">&#x21C6;</span>
           </div>
         </th>
         <!-- Repeat for other columns -->
-        <th  style="width: 17%" pSortableColumn="incidentType" class="column-visible">
+        <th style="width: 17%" pSortableColumn="incidentType" class="column-visible">
           <div class="flex align-items-center">
             Type
           </div>
@@ -91,20 +75,22 @@
         <th *ngIf="isColumnVisible('category')" style="width: 13%">
           <div class="flex align-items-center">
             Categories
-            <p-columnFilter type="text" field="category" display="options" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" [showClearButton]="false"></p-columnFilter>
+            <p-columnFilter type="text" field="category" display="options" [showApplyButton]="false"
+              [showAddButton]="false" [showOperator]="false" [showClearButton]="false"></p-columnFilter>
           </div>
         </th>
-        <th *ngIf="isColumnVisible('reportedBy')" style="width: 15%"  pSortableColumn="reportedBy" >Reported By
-          <p-columnFilter type="text" field="reportedBy" display="options" [showApplyButton]="false" [showAddButton]="false" [showOperator]="false" [showClearButton]="false"></p-columnFilter>
+        <th *ngIf="isColumnVisible('reportedBy')" style="width: 15%" pSortableColumn="reportedBy">Reported By
+          <p-columnFilter type="text" field="reportedBy" display="options" [showApplyButton]="false"
+            [showAddButton]="false" [showOperator]="false" [showClearButton]="false"></p-columnFilter>
         </th>
-        <th *ngIf="isColumnVisible('priority')" style="width: 10%" class="column-visible" >
+        <th *ngIf="isColumnVisible('priority')" style="width: 10%" class="column-visible">
           <div class="flex align-items-center">
             Priority
-            <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false" display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter" [showClearButton]="false">
+            <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false"
+              display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter"
+              [showClearButton]="false">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-dropdown [options]="priorities"
-                            (onChange)="filter($event.value)"
-                            placeholder="Select Priority">
+                <p-dropdown [options]="priorities" (onChange)="filter($event.value)" placeholder="Select Priority">
                 </p-dropdown>
               </ng-template>
             </p-columnFilter>
@@ -113,11 +99,11 @@
         <th *ngIf="isColumnVisible('incidentStatus')" style="width: 10%">
           <div class="flex align-items-center">
             Status
-            <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false" display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter" [showClearButton]="false">
+            <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false"
+              display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter"
+              [showClearButton]="false">
               <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                <p-dropdown [options]="statuses"
-                            (onChange)="filterStatus($event.value)"
-                            placeholder="Select Status">
+                <p-dropdown [options]="statuses" (onChange)="filterStatus($event.value)" placeholder="Select Status">
                 </p-dropdown>
               </ng-template>
             </p-columnFilter>
@@ -125,16 +111,17 @@
         </th>
         <th *ngIf="isColumnVisible('action')" style="width: 15%">Action</th>
       </tr>
+
     </ng-template>
 
     <ng-template pTemplate="body" let-incident>
       @if(!incident.isDraft || !isadmin)
       {
-      <tr >
-        <td *ngIf="isColumnVisible('id')"  [pSelectableRow]="incident">{{ incident.id }}</td>
+      <tr>
+        <td *ngIf="isColumnVisible('id')" [pSelectableRow]="incident">{{ incident.id }}</td>
         <td [pSelectableRow]="incident">{{ incident.incidentTitle }}</td>
         <!-- Repeat for other columns -->
-        <td >
+        <td>
           <span [ngClass]="getTypeSeverityClass(incident.incidentType)">
             {{ incident.incidentType }}
           </span>
@@ -149,6 +136,7 @@
         <td *ngIf="isColumnVisible('incidentStatus')">
           @if(getAssigned && incident.isCorrectionFilled && incident.incidentStatus!= "closed")
           {
+
             <button type="button" class="btn btn-outline-primary  reviewbtn  " [disabled]="incident.isSubmittedForReview" (click)="onSubmitReview(incident)">Submit for Review</button>
 
           }
@@ -168,6 +156,7 @@
                 <p-tag [value]="getStatusLabel(incident.incidentStatus)" [severity]="getSeverity(incident.incidentStatus)" />
               }
 
+
           }
 
         </td>
@@ -177,23 +166,28 @@
             <p-overlayPanel #op>
               <div class="custom-overlay">
                 <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
+
                   <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin || getAssigned">
                     <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)" [ngClass]="{'faded-edit-icon': incident.incidentStatus === 'closed'}"  ></i>Edit
                   </li>
                   <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
                     <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Report
+
                   </li>
                 </ul>
               </div>
             </p-overlayPanel>
-            <i class="bi bi-send" *ngIf="isadmin" (click)="onIconClick(incident)" [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}"></i>
+            <i class="bi bi-send" *ngIf="isadmin" (click)="onIconClick(incident)"
+              [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}"></i>
           </div>
           <div class="flex justify-content-center" *ngIf="!isadmin">
-            <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"  *ngIf="incident.isDraft || getAssigned"></i>
+            <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"
+              *ngIf="incident.isDraft || getAssigned"></i>
+            <i class="bi bi-trash3" *ngIf="incident.isDraft" style="color: rgb(224, 51, 51);"></i>
           </div>
         </td>
       </tr>
-    }
+      }
     </ng-template>
 
     <ng-template pTemplate="paginatorleft">

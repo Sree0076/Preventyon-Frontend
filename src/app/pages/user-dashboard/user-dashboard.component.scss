@@ -10,29 +10,25 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* Fixed sidebar */
 
 
-/* Main content area */
 .main-content {
-  margin-left: 80px; /* Should match sidebar width */
-  padding: 40px;
-  padding-top: 100px;
-  width: calc(100% - 80px); /* Adjust based on sidebar width */
+  margin-left: 80px;
+  padding: 5px 25px;
+  width: calc(100% - 80px);
 }
 
-/* Card container */
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
- /* Adjust space between cards and tabs as needed */
+  justify-content: center;
+  column-gap: 15px;
+  margin-bottom: 5px;
 }
 
-/* Individual card */
 app-card {
-  flex: 1 1 20%; /* Adjust width of each card */
-  margin: 10px; /* Adjust space between cards */
+  flex: 1 1 20%;
+  margin: 10px;
 }
 
 
@@ -47,6 +43,8 @@ app-card {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a semi-transparent background */
-  z-index: 9999; /* Ensure it is on top of other elements */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Optional: Add a semi-transparent background */
+  z-index: 9999;
+  /* Ensure it is on top of other elements */
 }

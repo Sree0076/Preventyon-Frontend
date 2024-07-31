@@ -197,9 +197,11 @@ export class IncidentReportFormComponent {
     this.viewform.value.isDraft = isDraft;
 
     const formData = new FormData();
-    this.selectedFiles.forEach((file) => {
-      formData.append('documentUrls', file);
-    });
+    if (this.selectedFiles) {
+      this.selectedFiles.forEach((file) => {
+        formData.append('documentUrls', file);
+      });
+    }
 
     for (const [key, value] of Object.entries(this.viewform.value)) {
       if (key !== 'documentUrls') {
@@ -212,7 +214,6 @@ export class IncidentReportFormComponent {
     }
 
     if (isDraft) {
-      console.log(FormData);
       this.apiService.addIncident(formData).subscribe(() => {
         this.showSuccess('Incident saved as draft successfully');
       });
@@ -222,6 +223,4 @@ export class IncidentReportFormComponent {
       });
     }
   }
-
-  
 }
