@@ -21,10 +21,15 @@
       box-shadow: 3px 3px 5px grey;
       cursor: pointer;
   }
+  .switchuser
+  {
+    display: flex;
+    justify-content: center;
+  }
   .profile-icon {
       display: flex;
       justify-content: center;
-      margin-top: 60px;
+      margin-top: 30px;
       img {
           width: 40px;
           border-radius: 50%;

@@ -42,7 +42,7 @@
           selectedItemsLabel="{0} columns selected" [style]="{'min-width': '200px'}" placeholder="Choose Columns">
         </p-multiSelect>
         <button type="button" class="btn btn-sm btn-primary ml-auto" [hidden]="!isadmin"
-          (click)="exportExcel(dt2)">Export <i class="bi bi-cloud-download"></i></button>
+          (click)="exportExcel(dt2)"><i class="bi bi-file-earmark-arrow-up-fill"> </i>Export</button>
         <button type="button" class="btn btn-sm btn-primary ml-auto addincidentbtn" [hidden]="isadmin" (click)="onAddItem()">Add
           Incident</button>
       </div>
@@ -118,7 +118,7 @@
       @if(!incident.isDraft || !isadmin)
       {
       <tr>
-        <td *ngIf="isColumnVisible('id')" [pSelectableRow]="incident">{{ incident.id }}</td>
+        <td *ngIf="isColumnVisible('id')" [pSelectableRow]="incident">{{ incident.incidentNo }}</td>
         <td [pSelectableRow]="incident">{{ incident.incidentTitle }}</td>
         <!-- Repeat for other columns -->
         <td>
@@ -171,7 +171,7 @@
                     <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)" [ngClass]="{'faded-edit-icon': incident.incidentStatus === 'closed'}"  ></i>Edit
                   </li>
                   <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
-                    <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Report
+                    <i class="bi bi-file-earmark-pdf-fill" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Pdf
 
                   </li>
                 </ul>
