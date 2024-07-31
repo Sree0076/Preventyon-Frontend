@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgFor } from '@angular/common';
+import { CommonModule, DatePipe, NgFor } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -32,6 +32,7 @@ import { ToastModule } from 'primeng/toast';
     MatOptionModule,
     NgFor,
     ToastModule,
+    CommonModule,
   ],
   templateUrl: './edit-incident-form.component.html',
   styleUrls: ['./edit-incident-form.component.scss'], // Ensure this is correct
@@ -113,13 +114,13 @@ export class EditIncidentFormComponent implements OnInit {
     this.apiService.getSingleFullIncident(this.editIncidentId).subscribe((response) => {
       console.log(response);
       this.data = response;
-      const incidentOccuredDate = new Date(response.incidentOccuredDate);
-      this.dateString = incidentOccuredDate.toISOString().split('T')[0];
-      this.timeString = incidentOccuredDate.toISOString().split('T')[1].split('Z')[0];
+      // const incidentOccuredDate = new Date(response.incidentOccuredDate);
+      // this.dateString = incidentOccuredDate.toISOString().split('T')[0];
+      // this.timeString = incidentOccuredDate.toISOString().split('T')[1].split('Z')[0];
       this.editform.patchValue({
         incidentid : response.id,
         incidentTitle: response.incidentTitle,
-        incidentOccuredDate  : this.dateString,
+        incidentOccuredDate  : response.incidentOccuredDate,
         incidentOccuredTime: this.timeString,
         incidentDescription: response.incidentDescription,
         incidentType: response.incidentType,
