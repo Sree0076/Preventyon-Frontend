@@ -40,7 +40,8 @@
           <label for="incident-occured-date" class="ml-1">Incident Occurred Date <span
               class="text-danger">*</span></label>
           <p-calendar id="incident-occured-date" formControlName="incidentOccuredDate" dateFormat="dd-mm-yy"
-            [showIcon]="true" [iconDisplay]="'input'" [showTime]="true" [maxDate]="today" required></p-calendar>
+            timeFormat="hh:mm a" [showIcon]="true" [iconDisplay]="'input'" [showTime]="true" [maxDate]="today"
+            required></p-calendar>
           <div
             *ngIf="viewform.get('incidentOccuredDate')!.hasError('required') && viewform.get('incidentOccuredDate')?.touched"
             class="text-danger validate ml-1">
