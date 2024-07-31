@@ -149,16 +149,19 @@
         <td *ngIf="isColumnVisible('incidentStatus')">
           @if(getAssigned && incident.isCorrectionFilled && incident.incidentStatus!= "closed")
           {
-            <button type="button" class="btn btn-outline-primary  reviewbtn  " (click)="onSubmitReview(incident)">Submit for Review</button>
-            <!-- <p-tag [value]="'Submit for Review'" [severity]="'success'" (click)="onSubmitReview(incident)"></p-tag> -->
+            <button type="button" class="btn btn-outline-primary  reviewbtn  " [disabled]="incident.isSubmittedForReview" (click)="onSubmitReview(incident)">Submit for Review</button>
+
           }
           @else
           {
-            <!-- {{ incident.incidentStatus }} -->
+
               @if(incident.isSubmittedForReview && isadmin && incident.incidentStatus!= "closed")
               {
                 <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onApproval(incident)"><i class="bi bi-check"></i></button>
                 <button type="button" class="btn btn-outline-danger   rejectbtn" ><i class="bi bi-x"></i></button>
+              }
+              @else if (getAssigned && !incident.accepted) {
+                <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onIncidentAccept(incident)"><i class="bi bi-check"></i></button>
               }
               @else
               {
@@ -175,10 +178,10 @@
               <div class="custom-overlay">
                 <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
                   <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin || getAssigned">
-                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"></i>Edit
+                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)" [ngClass]="{'faded-edit-icon': incident.incidentStatus === 'closed'}"  ></i>Edit
                   </li>
                   <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
-                    <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Export
+                    <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Report
                   </li>
                 </ul>
               </div>

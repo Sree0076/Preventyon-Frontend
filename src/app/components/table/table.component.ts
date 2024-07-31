@@ -26,6 +26,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ChipsModule } from 'primeng/chips';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 
 
 interface PriorityOrder {
@@ -72,7 +73,8 @@ export class TableComponent {
     { label: 'Pending', value: 'pending' },
     { label: 'In Progress', value: 'progress' },
     { label: 'In Review', value: 'review' },
-    { label: 'Closed', value: 'closed' }
+    { label: 'Closed', value: 'closed' },
+    { label: 'Draft', value: 'draft' }
   ];
 
   searchValue: string | undefined;
@@ -91,6 +93,7 @@ export class TableComponent {
      private incidentDataService: IncidentDataServiceTsService,
      private confirmationService: ConfirmationService,
      private messageService: MessageService,
+     private employeeDataService: EmployeeDataServiceService,
      ) {}
 
   ngOnInit() {
@@ -234,7 +237,7 @@ set selectedColumns(val: any[]) {
   }
 
   editIncidentData(incident: IncidentData,incidentId : number): void {
-    console.log(this.getAssigned);
+    console.log("assign",this.getAssigned);
     console.log(incident.id);
     if (incident.incidentStatus !== 'closed') {
 
@@ -268,10 +271,23 @@ set selectedColumns(val: any[]) {
   sortByPriority() {
     const priorityOrder: PriorityOrder = { High: 1, Medium: 2, Low: 3 };
 
-    this.incidents.sort((a, b) => {
+    const activeIncidents = this.incidents.filter(incident => incident.incidentStatus !== 'closed');
+    const closedIncidents = this.incidents.filter(incident => incident.incidentStatus === 'closed');
+
+
+    activeIncidents.sort((a, b) => {
+
+      if (a.isSubmittedForReview && !b.isSubmittedForReview) {
+        return -1;
+      } else if (!a.isSubmittedForReview && b.isSubmittedForReview) {
+        return 1;
+      }
       return priorityOrder[a.priority as keyof PriorityOrder] - priorityOrder[b.priority as keyof PriorityOrder];
     });
+    this.incidents = [...activeIncidents, ...closedIncidents];
   }
+
+
 
   getSeverity(status: string) {
     switch (status) {
@@ -334,11 +350,15 @@ set selectedColumns(val: any[]) {
 
   }
 
-  exportPDF(incident: any): void {
-    // Create a new jsPDF instance
+  async exportPDF(incidents: any): Promise<void> {
+
+   await this.tablefetchService.getSingleFullIncident(incidents.id).subscribe(response => {
+      console.log(response);
+           const  incident=response;
+
     const doc = new jsPDF();
 
-    // Add Title
+
     doc.setFontSize(18);
     doc.text('Incident Report', 14, 20);
     doc.setFontSize(12);
@@ -368,6 +388,8 @@ set selectedColumns(val: any[]) {
 
     // Save the PDF
     doc.save(`incident_${incident.incidentTitle}.pdf`);
+
+  });
   }
 
   isColumnVisible(columnField: string): boolean {
@@ -428,7 +450,7 @@ set selectedColumns(val: any[]) {
             detail: `${message}`,
           });
           setTimeout(() => {
-            this.incidentDataService.fetchIncidentData();
+            this.incidentDataService.fetchIncidentData(this.isadmin);
           }, 2000);
         }, 100);
       }
@@ -443,4 +465,17 @@ set selectedColumns(val: any[]) {
         }, 50);
       }
 
+
+      onIncidentAccept(incident:IncidentData)
+      {
+        this.employeeDataService.employeeData.subscribe((data) => {
+          if (data) {
+
+            this.tablefetchService.incidentAccept(incident.id,data.id).subscribe(response => {
+              console.log(response);
+              this.showSuccess("Incident Aceepted for Resolving");
+            });
+          }
+        });
+      }
 }

@@ -7,11 +7,15 @@ import { AuthService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 import { Employee } from '../../models/employee.interface';
+import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { AvatarModule } from 'primeng/avatar';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
-  imports: [BadgeModule,NotificationModalComponent, CommonModule],
+  imports: [BadgeModule,NotificationModalComponent, CommonModule,OverlayPanelModule,ButtonModule,AvatarModule],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.scss'
 })
@@ -25,11 +29,13 @@ switchtouserdashboard() {
   {
     this.isAdmin=false;
     this.employeeService.setUserSwitch(true);
+
     this.router.navigate(['/user']);
   }
   else
   {
     console.log('switching');
+    this.incidentDataService.fetchIncidentData(false);
     this.employeeService.setUserSwitch(false);
     this.router.navigate(['/admin']);
   }
@@ -42,7 +48,8 @@ isUserManagement:boolean=false;
 constructor(
   private router: Router,
   private authService: AuthService,
-  private employeeService : EmployeeDataServiceService, // Inject AuthService
+  private employeeService : EmployeeDataServiceService,
+  private incidentDataService: IncidentDataServiceTsService // Inject AuthService
 ) {
 
 
@@ -60,7 +67,7 @@ ngOnInit() {
      this.isUserManagement= data.role.permission.userManagement;
      console.log("management",this.isUserManagement);
       this.employeeData=data;
-      if(this.isUserManagement)
+      if(this.isUserManagement || data.role.permission.incidentManagement)
         {
           this.isAdmin=true;
         }
@@ -69,7 +76,8 @@ ngOnInit() {
 }
 
 dasboard() {
-  if(this.employeeData.role.name=="SuperAdmin" && !this.isUserSwitched)
+  const adminRoles = ['SuperAdmin', 'Admin-Incidents','Admins-User'];
+  if(adminRoles.includes(this.employeeData.role.name)   && !this.isUserSwitched)
     {
 
       console.log(this.employeeData.role.name);
