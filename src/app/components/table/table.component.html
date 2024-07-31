@@ -15,7 +15,7 @@
             Cancel
           </button>
           <button class="btn btn-outline-primary w-9rem cancelconfirm" (click)="cd.accept()">
-            Approve
+            Proceed
           </button>
         </div>
       </div>
@@ -43,7 +43,7 @@
         </p-multiSelect>
         <button type="button" class="btn btn-sm btn-primary ml-auto" [hidden]="!isadmin"
           (click)="exportExcel(dt2)">Export <i class="bi bi-cloud-download"></i></button>
-        <button type="button" class="btn btn-sm btn-primary ml-auto" [hidden]="isadmin" (click)="onAddItem()">Add
+        <button type="button" class="btn btn-sm btn-primary ml-auto addincidentbtn" [hidden]="isadmin" (click)="onAddItem()">Add
           Incident</button>
       </div>
     </ng-template>
@@ -146,7 +146,7 @@
               @if(incident.isSubmittedForReview && isadmin && incident.incidentStatus!= "closed")
               {
                 <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onApproval(incident)"><i class="bi bi-check"></i></button>
-                <button type="button" class="btn btn-outline-danger   rejectbtn" ><i class="bi bi-x"></i></button>
+                <button type="button" class="btn btn-outline-danger   rejectbtn" (click)="onReject(incident)" ><i class="bi bi-x"></i></button>
               }
               @else if (getAssigned && !incident.accepted) {
                 <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onIncidentAccept(incident)"><i class="bi bi-check"></i></button>

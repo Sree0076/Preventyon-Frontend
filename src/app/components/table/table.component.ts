@@ -505,7 +505,30 @@ export class TableComponent {
             this.showSuccess('Corrective measures aproved sucessfully');
           });
       },
-      reject: () => {},
+      reject: () => {
+
+      },
+    });
+  }
+  onReject(incident: IncidentData) {
+    this.confirmationService.confirm({
+      header: 'Are you sure?',
+      message: 'Please confirm to proceed.',
+      accept: () => {
+        const submitData = {
+          id: incident.id,
+          isSubmittedForReview: false,
+        };
+        this.tablefetchService
+        .submitForUser(incident.id,submitData)
+        .subscribe((response) => {
+          console.log(response);
+          this.showError('Incident returned');
+        });
+      },
+      reject: () => {
+
+      },
     });
   }
 
@@ -530,6 +553,10 @@ export class TableComponent {
         summary: 'Error',
         detail: `${message}`,
       });
+      setTimeout(() => {
+
+        this.incidentDataService.fetchIncidentData(this.getAssigned);
+      }, 2000);
     }, 50);
   }
 

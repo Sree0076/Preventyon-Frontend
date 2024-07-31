@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgFor, NgIf } from '@angular/common';
+
+import { CommonModule,DatePipe, NgFor, NgIf} from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -117,44 +119,36 @@ export class EditIncidentFormComponent implements OnInit {
   }
 
   fetchIncident() {
-    this.apiService
-      .getSingleFullIncident(this.editIncidentId)
-      .subscribe((response) => {
-        console.log(response);
-        this.data = response;
-        this.editform.patchValue({
-          incidentid: response.id,
-          incidentTitle: response.incidentTitle,
-          incidentOccuredDate: response.incidentOccuredDate,
-          incidentDescription: response.incidentDescription,
-          incidentType: response.incidentType,
-          category: response.category,
-          priority: response.priority,
-          investigationDetails: response.investigationDetails,
-          associatedImpacts: response.associatedImpacts,
-          collectionOfEvidence: response.collectionOfEvidence,
-          correction: response.correction,
-          correctiveAction: response.correctiveAction,
-          correctionCompletionTargetDate:
-            response.correctionCompletionTargetDate,
-          correctionActualCompletionDate:
-            response.correctionActualCompletionDate,
-          correctiveActualCompletionDate:
-            response.correctiveActualCompletionDate,
-          incidentStatus: response.incidentStatus,
-          correctionDetailsTimeTakenToCloseIncident:
-            response.correctionDetailsTimeTakenToCloseIncident,
-          correctiveDetailsTimeTakenToCloseIncident:
-            response.correctiveDetailsTimeTakenToCloseIncident,
-        });
-
-        if (Array.isArray(response.documentUrls)) {
+    this.apiService.getSingleFullIncident(this.editIncidentId).subscribe((response) => {
+      console.log(response);
+      this.data = response;
+      this.editform.patchValue({
+        incidentid : response.id,
+        incidentTitle: response.incidentTitle,
+        incidentOccuredDate  : response.incidentOccuredDate,
+        incidentOccuredTime: this.timeString,
+        incidentDescription: response.incidentDescription,
+        incidentType: response.incidentType,
+        category: response.category,
+        priority: response.priority,
+        investigationDetails: response.investigationDetails,
+        associatedImpacts: response.associatedImpacts,
+        collectionOfEvidence: response.collectionOfEvidence,
+        correction: response.correction,
+        correctiveAction: response.correctiveAction,
+        correctionCompletionTargetDate: response.correctionCompletionTargetDate,
+        correctionActualCompletionDate: response.correctionActualCompletionDate,
+        correctiveActualCompletionDate: response.correctiveActualCompletionDate,
+        incidentStatus: response.incidentStatus,
+        correctionDetailsTimeTakenToCloseIncident: response.correctionDetailsTimeTakenToCloseIncident,
+        correctiveDetailsTimeTakenToCloseIncident: response.correctiveDetailsTimeTakenToCloseIncident
+      });
+              if (Array.isArray(response.documentUrls)) {
           this.documentUrls = response.documentUrls.map((url) => ({
             name: url.split('/').pop()!,
             url: `${environment.serverConfig.baseUrl}${url}`,
           }));
         }
-      });
   }
 
   onSubmit() {
