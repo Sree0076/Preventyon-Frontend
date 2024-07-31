@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { IncidentServiceService } from '../../services/incident-service.service';
 import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
+import { environment } from '../../../environments/environment.dev';
 
 @Component({
   selector: 'app-view-incident-form',
@@ -31,11 +32,11 @@ export class ViewIncidentFormComponent {
   constructor(
     private apiService: IncidentServiceService,
     private router: Router,
-    private incidentService: IncidentDataServiceTsService,
-    private datePipe: DatePipe
+    private incidentService: IncidentDataServiceTsService
   ) {}
   data: any = {};
   id: number = 0;
+  documentUrls: { name: string; url: string }[] = [];
 
   ngOnInit() {
     this.incidentService.selectedIncidentId$.subscribe((incidentId) => {
@@ -54,6 +55,13 @@ export class ViewIncidentFormComponent {
         response.incidentOccuredDate = incidentDate;
       }
       this.data = response;
+
+      if (Array.isArray(response.documentUrls)) {
+        this.documentUrls = response.documentUrls.map((url) => ({
+          name: url.split('/').pop()!,
+          url: `${environment.serverConfig.baseUrl}${url}`,
+        }));
+      }
     });
   }
   // extractDateTime(): { date: string; time: string } {

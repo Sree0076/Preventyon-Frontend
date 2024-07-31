@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgFor } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,7 +15,8 @@ import { IncidentServiceService } from '../../services/incident-service.service'
 import { IncidentDataServiceTsService } from '../../services/sharedService/incident-data.service.ts.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-
+import { environment } from '../../../environments/environment.dev';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-incident-form',
@@ -32,10 +33,12 @@ import { ToastModule } from 'primeng/toast';
     MatOptionModule,
     NgFor,
     ToastModule,
+    NgIf,
+    CommonModule,
   ],
   templateUrl: './edit-incident-form.component.html',
   styleUrls: ['./edit-incident-form.component.scss'], // Ensure this is correct
-  providers: [DatePipe,MessageService],
+  providers: [DatePipe, MessageService],
 })
 export class EditIncidentFormComponent implements OnInit {
   timeString!: string;
@@ -46,6 +49,7 @@ export class EditIncidentFormComponent implements OnInit {
   editIncidentId: number = 0;
   incident!: IncidentData;
   editAction: Boolean = false;
+  documentUrls: { name: string; url: string }[] = [];
 
   incidentTypes = [
     { label: 'Security Incident', value: 'SecurityIncident' },
@@ -74,15 +78,18 @@ export class EditIncidentFormComponent implements OnInit {
     private messageService: MessageService
   ) {}
 
-  showSuccess(message:string) {
+  showSuccess(message: string) {
     setTimeout(() => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message}` });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: `${message}`,
+      });
       setTimeout(() => {
         this.router.navigate(['/user']);
       }, 2000);
     }, 100);
-
-}
+  }
   ngOnInit() {
     this.editform = this.fb.group({
       incidentTitle: [''],
@@ -110,44 +117,54 @@ export class EditIncidentFormComponent implements OnInit {
   }
 
   fetchIncident() {
-    this.apiService.getSingleFullIncident(this.editIncidentId).subscribe((response) => {
-      console.log(response);
-      this.data = response;
-      const incidentOccuredDate = new Date(response.incidentOccuredDate);
-      this.dateString = incidentOccuredDate.toISOString().split('T')[0];
-      this.timeString = incidentOccuredDate.toISOString().split('T')[1].split('Z')[0];
-      this.editform.patchValue({
-        incidentid : response.id,
-        incidentTitle: response.incidentTitle,
-        incidentOccuredDate  : this.dateString,
-        incidentOccuredTime: this.timeString,
-        incidentDescription: response.incidentDescription,
-        incidentType: response.incidentType,
-        category: response.category,
-        priority: response.priority,
-        investigationDetails: response.investigationDetails,
-        associatedImpacts: response.associatedImpacts,
-        collectionOfEvidence: response.collectionOfEvidence,
-        correction: response.correction,
-        correctiveAction: response.correctiveAction,
-        correctionCompletionTargetDate: response.correctionCompletionTargetDate,
-        correctionActualCompletionDate: response.correctionActualCompletionDate,
-        correctiveActualCompletionDate: response.correctiveActualCompletionDate,
-        incidentStatus: response.incidentStatus,
-        correctionDetailsTimeTakenToCloseIncident: response.correctionDetailsTimeTakenToCloseIncident,
-        correctiveDetailsTimeTakenToCloseIncident: response.correctiveDetailsTimeTakenToCloseIncident
+    this.apiService
+      .getSingleFullIncident(this.editIncidentId)
+      .subscribe((response) => {
+        console.log(response);
+        this.data = response;
+        this.editform.patchValue({
+          incidentid: response.id,
+          incidentTitle: response.incidentTitle,
+          incidentOccuredDate: response.incidentOccuredDate,
+          incidentDescription: response.incidentDescription,
+          incidentType: response.incidentType,
+          category: response.category,
+          priority: response.priority,
+          investigationDetails: response.investigationDetails,
+          associatedImpacts: response.associatedImpacts,
+          collectionOfEvidence: response.collectionOfEvidence,
+          correction: response.correction,
+          correctiveAction: response.correctiveAction,
+          correctionCompletionTargetDate:
+            response.correctionCompletionTargetDate,
+          correctionActualCompletionDate:
+            response.correctionActualCompletionDate,
+          correctiveActualCompletionDate:
+            response.correctiveActualCompletionDate,
+          incidentStatus: response.incidentStatus,
+          correctionDetailsTimeTakenToCloseIncident:
+            response.correctionDetailsTimeTakenToCloseIncident,
+          correctiveDetailsTimeTakenToCloseIncident:
+            response.correctiveDetailsTimeTakenToCloseIncident,
+        });
+
+        if (Array.isArray(response.documentUrls)) {
+          this.documentUrls = response.documentUrls.map((url) => ({
+            name: url.split('/').pop()!,
+            url: `${environment.serverConfig.baseUrl}${url}`,
+          }));
+        }
       });
-    });
   }
 
   onSubmit() {
     if (this.editform.valid) {
-      this.apiService.updateIncident(this.editIncidentId, this.editform.value).subscribe((response) => {
-        console.log(response);
-
-      });
+      this.apiService
+        .updateIncident(this.editIncidentId, this.editform.value)
+        .subscribe((response) => {
+          console.log(response);
+        });
     }
-    this.showSuccess("Incident Updated successfully");
+    this.showSuccess('Incident Updated successfully');
   }
-
 }
