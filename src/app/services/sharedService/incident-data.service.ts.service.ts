@@ -15,11 +15,11 @@ export class IncidentDataServiceTsService {
 
   constructor(private cardApiService: IncidentServiceService,private employeeDataService: EmployeeDataServiceService) {}
 
-  fetchIncidentData(): void {
+  fetchIncidentData(isUser:boolean): void {
 
     this.employeeDataService.employeeData.subscribe(data => {
       if (data) {
-        this.cardApiService.getDataBasedOnStatus(data.id).subscribe((data: IncidentStatsDTO) => {
+        this.cardApiService.getDataBasedOnStatus(data.id,isUser).subscribe((data: IncidentStatsDTO) => {
           this.incidentDataSubject.next(data);
 
         });

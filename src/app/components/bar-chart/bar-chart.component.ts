@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ChartDataService } from '../../services/chart-data.service';
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 
 @Component({
   selector: 'app-bar-chart',
@@ -16,15 +17,25 @@ export class BarChartComponent implements OnInit {
 
   constructor(
     private chartDataService: ChartDataService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private employeeService : EmployeeDataServiceService,
   ) {}
 
   ngOnInit() {
+    this.employeeService.userSwitch.subscribe(value => {
+      if(!value)
+      {
+        this.loadChartData();
+        if (isPlatformBrowser(this.platformId)) {
+          this.setupChartOptions();
+        }
+      }
+
+    });
+
     this.loadChartData();
-    if (isPlatformBrowser(this.platformId)) {
-      this.setupChartOptions();
-    }
   }
+
 
   loadChartData() {
     this.chartDataService.getChartData().subscribe((chartData) => {

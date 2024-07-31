@@ -71,7 +71,7 @@ export class UserDashboardComponent implements OnInit {
       }
     });
     console.log(this.incidentData$);
-    this.incidentDataService.fetchIncidentData();
+    this.incidentDataService.fetchIncidentData(true);
   }
 
   getCategory(event: any) {

@@ -16,10 +16,10 @@ export class IncidentServiceService {
   constructor(private http: HttpClient) {
   }
   private createBaseUrl: string ='http://localhost:7209/api/Incident/CreateIncident';
-  
-  getDataBasedOnStatus(employeeid:number): Observable<any> {
 
-    return this.http.get<any>(`http://localhost:7209/api/Incident/GetIncidentsByEmployeeId?employeeId=${employeeid}`);
+  getDataBasedOnStatus(employeeid:number,isUser:boolean): Observable<any> {
+
+    return this.http.get<any>(`http://localhost:7209/api/Incident/GetIncidentsByEmployeeId/${employeeid}/${isUser}`);
   }
 
   public getSingleIncident(incidentId: number): Observable<IncidentData> {
@@ -64,4 +64,9 @@ export class IncidentServiceService {
   public incidentApproval(incidentId: number): Observable<any> {
     return this.http.get<any>(`http://localhost:7209/api/incidentApproval/${incidentId}`);
   }
+
+  public incidentAccept(incidentId: number,employeeId : number): Observable<any> {
+    return this.http.put<any>(`http://localhost:7209/api/acceptIncidents/${incidentId}`,employeeId);
+  }
+
 }
