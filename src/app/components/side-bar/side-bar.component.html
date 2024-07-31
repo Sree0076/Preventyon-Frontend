@@ -11,7 +11,8 @@
         </button>
     </div>
       <div class="settings">
-          <button ><i class="bi bi-gear" (click)="switchtouserdashboard()"></i></button>
+
+          <button ><i class="bi bi-gear" ></i></button>
       </div>
        @if(isAdmin && !isUserSwitched && isUserManagement)
        {
@@ -21,6 +22,12 @@
        }
 
   </div>
+  <div class="switchuser">
+    @if(isAdmin ||isUserSwitched )
+    {
+    <button ><i class="bi bi-people" (click)="switchtouserdashboard()"></i></button>
+    }
+</div>
   <div class="profile-icon" (click)="op.toggle($event)">
     <button ><img src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" alt="Profile icon" ></button>
   </div>
