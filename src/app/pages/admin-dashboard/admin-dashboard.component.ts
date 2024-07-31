@@ -75,7 +75,7 @@ getCategory(event: any) {
       }
     });
 
-    this.incidentDataService.fetchIncidentData();
+    this.incidentDataService.fetchIncidentData(false);
   }
-  
+
 }

@@ -233,6 +233,11 @@ th {
   color: #607D8B;
   pointer-events: none;
 }
+.faded-edit-icon {
+  opacity: 0.2;
+  color: #666768;
+
+}
 
 ::ng-deep .p-multiselect {
   height: 35px;

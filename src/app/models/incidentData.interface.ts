@@ -27,6 +27,7 @@ export interface IncidentData {
   correctiveDetailsTimeTakenToCloseIncident: number;
   isDraft: boolean;
   isCorrectionFilled : boolean;
+  accepted : number;
   isSubmittedForReview :boolean;
   employeeId: number;
   documentUrls : string;
