@@ -64,12 +64,6 @@ export class ViewIncidentFormComponent {
       }
     });
   }
-  // extractDateTime(): { date: string; time: string } {
-  //   const parsedDate = new Date(this.data.monthYear);
-  //   const date = this.datePipe.transform(parsedDate, 'yyyy-MM-dd')!;
-  //   const time = this.datePipe.transform(parsedDate, 'HH:mm:ss')!;
-  //   return { date, time };
-  // }
   redirectToEditPage(): void {
     this.router.navigate(['/edit-form', this.data.incidentNo]);
   }

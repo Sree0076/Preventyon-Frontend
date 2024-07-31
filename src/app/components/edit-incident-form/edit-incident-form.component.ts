@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule,DatePipe, NgFor, NgIf} from '@angular/common';
-
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,7 +16,7 @@ import { IncidentDataServiceTsService } from '../../services/sharedService/incid
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { environment } from '../../../environments/environment.dev';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-edit-incident-form',
@@ -88,7 +86,7 @@ export class EditIncidentFormComponent implements OnInit {
         detail: `${message}`,
       });
       setTimeout(() => {
-        this.router.navigate(['/user']);
+        this.incidentService.triggerDashboard();
       }, 2000);
     }, 100);
   }
@@ -149,7 +147,8 @@ export class EditIncidentFormComponent implements OnInit {
             url: `${environment.serverConfig.baseUrl}${url}`,
           }));
         }
-  }
+  });
+}
 
   onSubmit() {
     if (this.editform.valid) {
