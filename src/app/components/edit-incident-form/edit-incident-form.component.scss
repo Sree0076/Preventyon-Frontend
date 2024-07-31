@@ -1,0 +1,53 @@
+.container {
+  max-width: 1200px;
+}
+
+::ng-deep mat-form-field {
+  width: 100%;
+  font-size: 15px;
+  stroke: #a27ad7;
+}
+
+.form {
+  background-color: #ffffff;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+p {
+  margin: 0;
+}
+
+.editbutton {
+  border: 1px solid white;
+  width: 6rem;
+  height: 2rem;
+  background: var(--quality-color);
+  color: white;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.mat-datepicker-content.year-picker .mat-calendar {
+  width: 300px;
+  /* Adjust width as needed */
+}
+
+.mat-datepicker-content.year-picker .mat-calendar-period-button {
+  display: none;
+}
+
+.mat-datepicker-content.year-picker .mat-calendar-body-cell {
+  line-height: 2.5em;
+  /* Adjust line height as needed */
+}
+
+mat-label {
+  color: rgba(16, 107, 230, 1);
+}
+
+::ng-deep mat-form-field input[readonly] {
+  color: gray !important;
+}

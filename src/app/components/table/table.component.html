@@ -1,135 +1,202 @@
-
-
 <div class="table-section">
-  <p-table
-    #dt2
-    [value]="incidents"
-    [paginator]="true"
-    [first]="first"
-    [showCurrentPageReport]="true"
-    [(selection)]="selectedIncidents"
-    [rows]="5"
-    [rowsPerPageOptions]="[5,10, 25, 50]"
-    [paginator]="true"
-    sortMode="multiple"
-    [globalFilterFields]="['title','incidentId','categoryId']"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    (onPage)="pageChange($event)"
-  >
-  <ng-template pTemplate="caption">
-    <div class="flex">
-      <i class="bi bi-eraser" (click)="clear(dt2)"></i>
-        <span class="p-input-icon-left ml-auto">
-            <i class="pi pi-search"></i>
-            <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)" placeholder="Search keyword" />
+  <p-toast></p-toast>
+  <p-confirmDialog #cd>
+    <ng-template pTemplate="headless" let-message>
+      <div class="flex flex-column align-items-center p-5 surface-overlay border-round enhanced-dialog">
+        <div class="inline-flex justify-content-center align-items-center h-4rem w-4rem">
+          <i class="bi bi-question-circle text-3xl text-primary"></i>
+        </div>
+        <span class="font-bold text-2xl block mb-2 mt-4 enhanced-header">
+          {{ message.header }}
         </span>
-    </div>
-  </ng-template>
+        <p class="mb-0 enhanced-message">{{ message.message }}</p>
+        <div class="flex align-items-center gap-4 mt-4">
+          <button class="btn btn-outline-danger w-9rem cancelconfirm" (click)="cd.reject()">
+            Cancel
+          </button>
+          <button class="btn btn-outline-primary w-9rem cancelconfirm" (click)="cd.accept()">
+            Proceed
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
+  <p-table #dt2 [value]="incidents" [rowHover]="true" [rows]="10" (onRowSelect)="viewIncidentData($event)"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+    [resizableColumns]="true" currentPageReportTemplate="Showing {last} of {totalRecords} entries" [filterDelay]="0"
+    sortMode="multiple" [globalFilterFields]="['incidentTitle', 'id', 'category']" (onPage)="pageChange($event)"
+    paginatorPosition="top" selectionMode="single" [(selection)]="selectedIncident">
+    <ng-template pTemplate="caption">
+      <div class="d-flex align-items-center justify-content-between table-top" pResizableColumn>
+        <div class="d-flex align-items-center">
+          <i class="bi bi-eraser" (click)="clear(dt2)"></i>
+          <span class="p-input-icon-left ml-2">
+            <i class="pi pi-search"></i>
+            <input class="search" pInputText type="text" [(ngModel)]="searchValue" (input)="filterGlobal($event)"
+              placeholder="Search keyword" />
+          </span>
+        </div>
+        <div class="filter-chips">
+        </div>
+        <p-multiSelect display="chip" [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+          selectedItemsLabel="{0} columns selected" [style]="{'min-width': '200px'}" placeholder="Choose Columns">
+        </p-multiSelect>
+        <button type="button" class="btn btn-sm btn-primary ml-auto" [hidden]="!isadmin"
+          (click)="exportExcel(dt2)">Export <i class="bi bi-cloud-download"></i></button>
+        <button type="button" class="btn btn-sm btn-primary ml-auto addincidentbtn" [hidden]="isadmin" (click)="onAddItem()">Add
+          Incident</button>
+      </div>
+    </ng-template>
+
     <ng-template pTemplate="header">
-        <tr>
-          <th style="width: 4rem">
-            <p-tableHeaderCheckbox />
+      <tr>
+        <th *ngIf="isColumnVisible('id')" style="width: 10%" pSortableColumn="id">
+          <div class="flex align-items-center">
+            ID
+            <p-columnFilter type="text" field="id" [showApplyButton]="false" [showAddButton]="false"
+              [showOperator]="false" display="options" [showClearButton]="false"></p-columnFilter>
+          </div>
         </th>
-            <th style="width:12%" pSortableColumn="incidentId">
-              <div class="flex align-items-center">
-                <p-sortIcon field="incidentId" />ID
-                <p-columnFilter type="text" field="incidentId" display="menu" />
-              </div>
-            </th>
+        <th style="width: 16%" pResizableColumn>
+          <div class="flex align-items-center header-content">
+            Title
 
-            <th style="width:20%">
-              <div class="flex align-items-center">
-                  Title
-                  <p-columnFilter type="text" field="title" display="menu" />
-              </div>
-            </th>
+            <p-columnFilter type="text" field="incidentTitle" [showApplyButton]="false" [showAddButton]="false"
+              [showOperator]="false" display="options" [showClearButton]="false"></p-columnFilter>
+            <span class="resize-handle">&#x21C6;</span>
+          </div>
+        </th>
+        <!-- Repeat for other columns -->
+        <th style="width: 17%" pSortableColumn="incidentType" class="column-visible">
+          <div class="flex align-items-center">
+            Type
+          </div>
+        </th>
+        <th *ngIf="isColumnVisible('category')" style="width: 13%">
+          <div class="flex align-items-center">
+            Categories
+            <p-columnFilter type="text" field="category" display="options" [showApplyButton]="false"
+              [showAddButton]="false" [showOperator]="false" [showClearButton]="false"></p-columnFilter>
+          </div>
+        </th>
+        <th *ngIf="isColumnVisible('reportedBy')" style="width: 15%" pSortableColumn="reportedBy">Reported By
+          <p-columnFilter type="text" field="reportedBy" display="options" [showApplyButton]="false"
+            [showAddButton]="false" [showOperator]="false" [showClearButton]="false"></p-columnFilter>
+        </th>
+        <th *ngIf="isColumnVisible('priority')" style="width: 10%" class="column-visible">
+          <div class="flex align-items-center">
+            Priority
+            <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false"
+              display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter"
+              [showClearButton]="false">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [options]="priorities" (onChange)="filter($event.value)" placeholder="Select Priority">
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+        <th *ngIf="isColumnVisible('incidentStatus')" style="width: 10%">
+          <div class="flex align-items-center">
+            Status
+            <p-columnFilter field="priority" matchMode="equals" [showMatchModes]="false" [showOperator]="false"
+              display="options" [showApplyButton]="false" [showAddButton]="false" styleClass="custom-filter"
+              [showClearButton]="false">
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-dropdown [options]="statuses" (onChange)="filterStatus($event.value)" placeholder="Select Status">
+                </p-dropdown>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+        <th *ngIf="isColumnVisible('action')" style="width: 15%">Action</th>
+      </tr>
 
-            <th style="width:10%">
-              <div class="flex align-items-center">
-                  Type
-                  <p-columnFilter type="text" field="incidentType" display="menu" />
-              </div>
-              </th>
-              <th style="width:13%">
-              <div class="flex align-items-center">
-                  Categories
-                  <p-columnFilter type="text" field="category_id" display="menu" />
-              </div>
-              </th>
-            <th style="width:15%">Reported By
-              <p-columnFilter type="text" field="type" display="menu" />
-            </th>
-            <th style="width:10%" class="column-visible">
-              <div class="flex align-items-center ">
-                  Priority
-                  <p-columnFilter field="priority" display="menu">
-                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                        <p-dropdown
-                            [options]="priorities"
-                            [(ngModel)]="priorityValue"
-                            (onChange)="filter($event.value)"
-                            placeholder="Select Priority">
-                        </p-dropdown>
-                    </ng-template>
-                </p-columnFilter>
-              </div>
-              </th>
-              <th style="width:10%">
-                <div class="flex align-items-center">
-                    Status
-                    <p-columnFilter type="text" field="status" display="menu" />
-                </div>
-                </th>
-            <th style="width:15%">Action</th>
-        </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-incident>
-        <tr>
-            <td>
-            <p-tableCheckbox [value]="incident" />
-            </td>
-            <td>{{ incident.incidentId }}</td>
-            <td>{{ incident.title }}</td>
-            <td>{{ incident.incidentType}}</td>
-            <td>{{ incident.categoryId }}</td>
-            <td>{{ incident.reportedBy }}</td>
-            <td>{{ incident.priority}}</td>
-            <td>{{ incident.status }}</td>
-            <td>
-              <div class="flex justify-content-center">
-               <i class="bi bi-three-dots-vertical" (click)="op.toggle($event)"></i>
-               <p-overlayPanel #op>
-                <div class="custom-overlay">
-                  <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
-                    <li class="flex align-items-center gap-2 custom-item">
-                      <i class="bi bi-pencil-square"> </i>Edit
-                    </li>
-                    <li class="flex align-items-center gap-2 custom-item">
-                      <i class="bi bi-eye"></i>View
-                    </li>
-                  </ul>
-                </div>
-              </p-overlayPanel>
+      @if(!incident.isDraft || !isadmin)
+      {
+      <tr>
+        <td *ngIf="isColumnVisible('id')" [pSelectableRow]="incident">{{ incident.id }}</td>
+        <td [pSelectableRow]="incident">{{ incident.incidentTitle }}</td>
+        <!-- Repeat for other columns -->
+        <td>
+          <span [ngClass]="getTypeSeverityClass(incident.incidentType)">
+            {{ incident.incidentType }}
+          </span>
+        </td>
+        <td *ngIf="isColumnVisible('category')">{{ incident.category }}</td>
+        <td *ngIf="isColumnVisible('reportedBy')">{{ incident.reportedBy }}</td>
+        <td *ngIf="isColumnVisible('priority')">
+          <span [ngClass]="getSeverityClass(incident.priority)">
+            {{ incident.priority }}
+          </span>
+        </td>
+        <td *ngIf="isColumnVisible('incidentStatus')">
+          @if(getAssigned && incident.isCorrectionFilled && incident.incidentStatus!= "closed")
+          {
 
-                <i class="bi bi-send" (click)="openForwardingModal(incident.incidentId)"></i>
-            </div>
+            <button type="button" class="btn btn-outline-primary  reviewbtn  " [disabled]="incident.isSubmittedForReview" (click)="onSubmitReview(incident)">Submit for Review</button>
+
+          }
+          @else
+          {
+
+              @if(incident.isSubmittedForReview && isadmin && incident.incidentStatus!= "closed")
+              {
+                <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onApproval(incident)"><i class="bi bi-check"></i></button>
+                <button type="button" class="btn btn-outline-danger   rejectbtn" (click)="onReject(incident)" ><i class="bi bi-x"></i></button>
+              }
+              @else if (getAssigned && !incident.accepted) {
+                <button type="button" class="btn btn-outline-primary  approvebtn  " (click)="onIncidentAccept(incident)"><i class="bi bi-check"></i></button>
+              }
+              @else
+              {
+                <p-tag [value]="getStatusLabel(incident.incidentStatus)" [severity]="getSeverity(incident.incidentStatus)" />
+              }
 
 
+          }
 
-     </td>
-        </tr>
+        </td>
+        <td *ngIf="isColumnVisible('action')">
+          <div class="flex justify-content-center" *ngIf="isadmin">
+            <i class="bi bi-three-dots-vertical" (click)="op.toggle($event)"></i>
+            <p-overlayPanel #op>
+              <div class="custom-overlay">
+                <ul class="list-none p-0 m-0 flex flex-column gap-3 custom-list">
+
+                  <li class="flex align-items-center gap-2 custom-item" *ngIf="incident.isDraft || isadmin || getAssigned">
+                    <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)" [ngClass]="{'faded-edit-icon': incident.incidentStatus === 'closed'}"  ></i>Edit
+                  </li>
+                  <li class="flex align-items-center gap-2 custom-item" [hidden]="!isadmin">
+                    <i class="bi bi-cloud-download" [hidden]="!isadmin" (click)="exportPDF(incident)" ></i>Report
+
+                  </li>
+                </ul>
+              </div>
+            </p-overlayPanel>
+            <i class="bi bi-send" *ngIf="isadmin" (click)="onIconClick(incident)"
+              [ngClass]="{'faded-icon': incident.incidentStatus === 'closed'}"></i>
+          </div>
+          <div class="flex justify-content-center" *ngIf="!isadmin">
+            <i class="bi bi-pencil-square" (click)="editIncidentData(incident,incident.id)"
+              *ngIf="incident.isDraft || getAssigned"></i>
+            <i class="bi bi-trash3" *ngIf="incident.isDraft" style="color: rgb(224, 51, 51);" (click)="deleteDraftIncidentById(incident.id)"></i>
+          </div>
+        </td>
+      </tr>
+      }
     </ng-template>
+
     <ng-template pTemplate="paginatorleft">
-        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" />
+      <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
     </ng-template>
     <ng-template pTemplate="paginatorright">
-        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text" />
+      <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
     </ng-template>
   </p-table>
-  </div>
+</div>
 
-  <!-- <p-dialog header="Forward Incident" [(visible)]="displayForwardingModal" [modal]="true" [style]="{width: '100%' }"> -->
-   <app-forward-form [visibility]="displayForwardingModal "   (dialogClosed)="onDialogClosed()"></app-forward-form>>
-  <!-- </p-dialog> -->
-
+<app-forward-form [visibility]="displayForwardingModal" (dialogClosed)="onDialogClosed()"></app-forward-form>

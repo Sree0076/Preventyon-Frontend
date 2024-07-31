@@ -1,85 +1,99 @@
-<div>
-    <h2 class="text-center title">Incident Report Form</h2>
+<div class="report-form">
+  <h4 class="text-center title">Incident Report Form</h4>
 
-    <div class="container vh-100">
-        <form [formGroup]="viewform" (ngSubmit)="onSubmit()" class="form">
-            <div class="form-group p-4">
-                <label for="incident-title">Incident Title</label>
-                <input type="text" class="form-control" id="incident-title" formControlName="incidentTitle" required>
-                <div *ngIf="viewform.get('incidentTitle')!.hasError('required') && viewform.get('incidentTitle')?.touched"
-                    class="text-danger validate">
-                    Title is required.
-                </div>
-            </div>
+  <p-confirmDialog #cd>
+    <ng-template pTemplate="headless" let-message>
+      <div class="flex flex-column align-items-center p-5 surface-overlay border-round enhanced-dialog">
+        <div class="inline-flex justify-content-center align-items-center h-4rem w-4rem">
+          <i class="bi bi-question-circle text-3xl text-primary"></i>
+        </div>
+        <span class="font-bold text-2xl block mb-2 mt-4 enhanced-header">
+          {{ message.header }}
+        </span>
+        <p class="mb-0 enhanced-message">{{ message.message }}</p>
+        <div class="flex align-items-center gap-4">
+          <button class="btn btn-outline-danger w-9rem" style="margin-right: 0.4rem;" (click)="cd.reject()">
+            Cancel
+          </button>
+          <button class="btn btn-outline-primary w-9rem" (click)="cd.accept()">
+            Save
+          </button>
 
-            <div class="d-flex justify-content-between">
-                <div class="form-group p-4">
-                    <label for="incident-occured-date">Incident Occurred Date</label>
-                    <input type="date" class="form-control" id="incident-occured-date"
-                        formControlName="incidentOccuredDate" required>
-                    <div *ngIf="viewform.get('incidentOccuredDate')!.hasError('required') && viewform.get('incidentOccuredDate')?.touched"
-                        class="text-danger validate">
-                        Incident Occured Date is required.
-                    </div>
-                </div>
-                <div class="form-group p-4">
-                    <label for="incident-occured-time">Incident Occurred Time</label>
-                    <input type="time" class="form-control" id="incident-occured-time"
-                        formControlName="incidentOccuredTime" required>
-                    <div *ngIf="viewform.get('incidentOccuredTime')!.hasError('required') && viewform.get('incidentOccuredTime')?.touched"
-                        class="text-danger validate">
-                        Incident Occured Time is required.
-                    </div>
-                </div>
-            </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
 
-            <div class="form-group p-4">
-                <label for="incident-description">Incident Description</label>
-                <textarea class="form-control" id="incident-description" rows="4" formControlName="incidentDescription"
-                    required></textarea>
-                <div *ngIf="viewform.get('incidentDescription')!.hasError('required') && viewform.get('incidentDescription')?.touched"
-                    class="text-danger validate">
-                    Incident Description is required.
-                </div>
-            </div>
+  <div class="form-container">
+    <form [formGroup]="viewform" (ngSubmit)="onSubmit()" class="form p-fluid form-container">
+      <div class="p-grid p-fluid m-3">
+        <div class="p-field  ">
+          <label for="incident-title">Incident Title <span class="text-danger">*</span></label>
+          <input pInputText type="text" id="incident-title" formControlName="incidentTitle" required
+            class="custom-width title-input">
+          <div *ngIf="viewform.get('incidentTitle')!.hasError('required') && viewform.get('incidentTitle')?.touched"
+            class="text-danger validate">
+            Title is required.
+          </div>
+        </div>
+        <div class="p-field">
+          <label for="incident-occured-date" class="ml-1">Incident Occurred Date <span
+              class="text-danger">*</span></label>
+          <p-calendar id="incident-occured-date" formControlName="incidentOccuredDate" dateFormat="dd-mm-yy"
+            timeFormat="hh:mm a" [showIcon]="true" [iconDisplay]="'input'" [showTime]="true" [maxDate]="today"
+            required></p-calendar>
+          <div
+            *ngIf="viewform.get('incidentOccuredDate')!.hasError('required') && viewform.get('incidentOccuredDate')?.touched"
+            class="text-danger validate ml-1">
+            Incident Occurred Date is required.
+          </div>
+        </div>
+      </div>
 
-            <div class="form-group p-4">
-                <label for="incident-attachment">Attach Documents</label>
-                <input type="file" class="form-control-file" id="incident-attachment"
-                    formControlName="incidentAttachment" multiple>
-            </div>
+      <div class="p-field p-fluid m-3">
+        <label for="incident-description">Incident Description <span class="text-danger">*</span></label>
+        <textarea pInputTextarea id="incident-description" rows="4" formControlName="incidentDescription"
+          required></textarea>
+        <div
+          *ngIf="viewform.get('incidentDescription')!.hasError('required') && viewform.get('incidentDescription')?.touched"
+          class="text-danger validate">
+          Incident Description is required.
+        </div>
+      </div>
 
-            <div class="form-group p-4">
-                <label for="incidents-type">Incident Type</label>
-                <select class="form-control" id="incidents-type" formControlName="incidentsType">
-                    <option value="option1">Security Incident</option>
-                    <option value="option2">Privacy Incident</option>
-                    <option value="option3">Quality Incident</option>
-                </select>
+      <div class="p-field m-3">
+        <label for="documentUrls">Attach Documents</label>
+        <input type="file" (change)="onFileUpload($event)" multiple hidden #fileInput>
+        <p-fileUpload id="documentUrls" [showUploadButton]="false" customUpload="true"
+          (uploadHandler)="onFileUpload($event)" multiple auto>
+          <ng-template pTemplate="empty">
+            <div class="d-flex align-items-center justify-content-center flex-column">
+              <i class="pi pi-cloud-upload " style="font-size: 5rem; color:#a27ad7"></i>
+              <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
             </div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
 
-            <div class="form-group p-4">
-                <label for="category">Category</label>
-                <select class="form-control" id="category" formControlName="category">
-                    <option value="option1">Security Incident</option>
-                    <option value="option2">Privacy Incident</option>
-                    <option value="option3">Quality Incident</option>
-                </select>
-            </div>
-
-            <div class="form-group p-4">
-                <label for="priority">Incident Priority</label>
-                <select class="form-control" id="priority" formControlName="priority">
-                    <option value="option1">High</option>
-                    <option value="option2">Medium</option>
-                    <option value="option3">Low</option>
-                </select>
-            </div>
-
-            <div class="d-flex p-4 justify-content-center align-items-center">
-                <button type="submit" class="submit">Submit</button>
-                <button type="button" class="draft" (click)="saveAsDraft()">Save as Draft</button>
-            </div>
-        </form>
-    </div>
+      <div class="p-grid p-fluid m-3">
+        <div class="p-field p-col-12 p-md-4">
+          <label for="incidents-type">Incident Type</label>
+          <p-dropdown id="incidents-type" [options]="incidentTypes" formControlName="incidentType"></p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label for="category">Category</label>
+          <p-dropdown id="category" [options]="categories" formControlName="category"></p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+          <label for="priority">Incident Priority</label>
+          <p-dropdown id="priority" [options]="priorities" formControlName="priority"></p-dropdown>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-center">
+        <button type="button" class="btn btn-primary mx-2 savebutton" (click)="saveAsDraft()">Save as Draft</button>
+        <button type="submit" class="btn btn-success mx-2 savebutton">Submit</button>
+      </div>
+    </form>
+    <p-toast></p-toast>
+  </div>
 </div>

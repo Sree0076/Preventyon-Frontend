@@ -1,13 +1,54 @@
 <div class="side-bar">
-    <div class="icons">
-        <div class="dash-icon">
-            <img src="icons\dashboard-icon.svg" alt="Dashboard icon">
-        </div>
-        <div class="noti">
-            <button><i class="bi bi-bell" pBadge value="2" ></i></button>
-        </div>
+  <div class="icons">
+      <div class="dash-icon" (click)="dasboard()">
+          <img src="icons/dashboard-icon.svg" alt="Dashboard icon">
+      </div>
+      <div class="noti">
+        <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" class="position-relative bi bi-bell fs-4">
+            <span class="position-absolute top-0 translate-middle badge rounded-pill bg-primary ">
+            4
+          </span>
+        </button>
     </div>
-    <div class="profile-icon">
-        <img src="icons\profile-circle-svgrepo-com.svg" alt="">
-    </div>
+      <div class="settings">
+          <button ><i class="bi bi-gear" (click)="switchtouserdashboard()"></i></button>
+      </div>
+       @if(isAdmin && !isUserSwitched && isUserManagement)
+       {
+        <div class="user">
+          <button><i class="bi bi-person-fill-add" (click)="usermanage()" ></i></button>
+      </div>
+       }
+
+  </div>
+  <div class="profile-icon" (click)="op.toggle($event)">
+    <button ><img src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" alt="Profile icon" ></button>
+  </div>
 </div>
+
+<app-notification-modal></app-notification-modal>
+
+<p-overlayPanel #op>
+  <div class="profile-popup">
+    <div class="profile-header">
+      <p-avatar
+      image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+      size="large"
+      shape="circle" />
+      <div class="user-info">
+        <h6 class="user-name">{{ employeeData.name }}</h6>
+        <p class="role-tag">{{ employeeData.designation }}</p>
+      </div>
+    </div>
+    <p class="designation">{{ employeeData.email }}</p>
+    <div class="logout">
+
+      <button  type="button" label="Logout" icon="bi bi-box-arrow-right" class="logout-button" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+</p-overlayPanel>

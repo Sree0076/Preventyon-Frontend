@@ -1,26 +1,17 @@
-/* Sidebar styles */
-.side-bar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 270px; /* Adjust the width as needed */
-  background-color: #f8f9fa; /* Optional: background color for sidebar */
 
-}
-
-/* Main content styles */
 .main-content {
-  margin-left: 80px; /* Same width as the sidebar */
-  padding: 1rem;
+  margin-left: 80px; /* Should match sidebar width */
+  padding: 40px;
+  padding-top: 100px;
+  padding-left: 40px;
+  width: calc(100% - 80px); /* Adjust based on sidebar width */
 }
-
 .top-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
-  margin-top: 2rem; /* Add space on top of the entire section */
+  margin-top: 0.7rem; /* Add space on top of the entire section */
 }
 
 .card-container {

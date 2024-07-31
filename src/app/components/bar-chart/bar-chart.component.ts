@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ChartDataService } from '../../services/chart-data.service';
+import { EmployeeDataServiceService } from '../../services/sharedService/employee-data.service.service';
 
 @Component({
   selector: 'app-bar-chart',
@@ -13,12 +15,27 @@ export class BarChartComponent implements OnInit {
   data: any;
   options: any;
 
-  constructor(private chartDataService: ChartDataService) {}
+  constructor(
+    private chartDataService: ChartDataService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private employeeService : EmployeeDataServiceService,
+  ) {}
 
   ngOnInit() {
+    this.employeeService.userSwitch.subscribe(value => {
+      if(!value)
+      {
+        this.loadChartData();
+        if (isPlatformBrowser(this.platformId)) {
+          this.setupChartOptions();
+        }
+      }
+
+    });
+
     this.loadChartData();
-    this.setupChartOptions();
   }
+
 
   loadChartData() {
     this.chartDataService.getChartData().subscribe((chartData) => {
@@ -35,18 +52,16 @@ export class BarChartComponent implements OnInit {
   setupChartOptions() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.options = {
       responsive: true,
       maintainAspectRatio: false,
-      aspectRatio: 0.6,
+      aspectRatio: 1.8,
       layout: {
         padding: {
-          right: 25,
+          right: 15,
         },
       },
       plugins: {
@@ -121,21 +136,17 @@ export class BarChartComponent implements OnInit {
     if (!chartArea) {
       return null;
     }
-    const gradient = ctx.createLinearGradient(
-      0,
-      chartArea.bottom,
-      0,
-      chartArea.top
-    );
+    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
 
     switch (index) {
       case 0: // Privacy
-        gradient.addColorStop(0, 'rgba(162, 122, 215, 1)');
-        gradient.addColorStop(1, 'rgba(85, 64, 113, 1)');
+        // gradient.addColorStop(0, 'rgb(215, 122, 122)');
+        gradient.addColorStop(0, 'rgb(224, 62, 60)');
+
         break;
       case 1: // Security
-        gradient.addColorStop(0, 'rgba(47, 79, 140, 1)');
-        gradient.addColorStop(1, 'rgba(22, 38, 68, 1)');
+        // gradient.addColorStop(0, '#d47725');
+        gradient.addColorStop(0, '#fd8822');
         break;
       case 2: // Quality
         gradient.addColorStop(0, 'rgba(101, 163, 246, 1)');
