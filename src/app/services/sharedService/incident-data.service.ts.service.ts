@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { IncidentStatsDTO } from '../../models/incidentData.interface';
 import { IncidentServiceService } from '../incident-service.service';
 import { EmployeeDataServiceService } from './employee-data.service.service';
@@ -12,6 +12,14 @@ export class IncidentDataServiceTsService {
   public incidentData: Observable<IncidentStatsDTO | null> = this.incidentDataSubject.asObservable();
   private selectedIncidentIdSource = new BehaviorSubject<number>(0);
   selectedIncidentId$ = this.selectedIncidentIdSource.asObservable();
+
+  private navigateToDashboard = new Subject<void>();
+
+  navigateToDashboard$ = this.navigateToDashboard.asObservable();
+
+  triggerDashboard() {
+    this.navigateToDashboard.next();
+  }
 
   constructor(private cardApiService: IncidentServiceService,private employeeDataService: EmployeeDataServiceService) {}
 

@@ -73,6 +73,9 @@ ngOnInit() {
         }
       }
   });
+  this.incidentDataService.navigateToDashboard$.subscribe(() => {
+    this.dasboard();
+  });
 }
 
 dasboard() {
