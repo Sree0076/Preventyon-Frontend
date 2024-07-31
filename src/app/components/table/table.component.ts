@@ -541,7 +541,7 @@ export class TableComponent {
         detail: `${message}`,
       });
       setTimeout(() => {
-        this.incidentDataService.fetchIncidentData(this.isadmin);
+        this.incidentDataService.fetchIncidentData(this.getAssigned);
       }, 2000);
     }, 100);
   }
