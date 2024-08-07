@@ -28,7 +28,7 @@
     <form [formGroup]="viewform" (ngSubmit)="onSubmit()" class="form p-fluid form-container">
       <div class="p-grid p-fluid m-3">
         <div class="p-field  ">
-          <label for="incident-title">Incident Title <span class="text-danger">*</span></label>
+          <label for="incident-title">Title <span class="text-danger">*</span></label>
           <input pInputText type="text" id="incident-title" formControlName="incidentTitle" required
             class="custom-width title-input">
           <div *ngIf="viewform.get('incidentTitle')!.hasError('required') && viewform.get('incidentTitle')?.touched"
@@ -37,8 +37,7 @@
           </div>
         </div>
         <div class="p-field">
-          <label for="incident-occured-date" class="ml-1">Incident Occurred Date <span
-              class="text-danger">*</span></label>
+          <label for="incident-occured-date" class="ml-1">Occurred Date <span class="text-danger">*</span></label>
           <p-calendar id="incident-occured-date" formControlName="incidentOccuredDate" dateFormat="dd-mm-yy"
             timeFormat="hh:mm a" [showIcon]="true" [iconDisplay]="'input'" [showTime]="true" [maxDate]="today"
             required></p-calendar>
@@ -51,7 +50,7 @@
       </div>
 
       <div class="p-field p-fluid m-3">
-        <label for="incident-description">Incident Description <span class="text-danger">*</span></label>
+        <label for="incident-description">Description <span class="text-danger">*</span></label>
         <textarea pInputTextarea id="incident-description" rows="4" formControlName="incidentDescription"
           required></textarea>
         <div
@@ -85,7 +84,7 @@
           <p-dropdown id="category" [options]="categories" formControlName="category"></p-dropdown>
         </div>
         <div class="p-field p-col-12 p-md-4">
-          <label for="priority">Incident Priority</label>
+          <label for="priority">Priority</label>
           <p-dropdown id="priority" [options]="priorities" formControlName="priority"></p-dropdown>
         </div>
       </div>
