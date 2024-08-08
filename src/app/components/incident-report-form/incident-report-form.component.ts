@@ -65,9 +65,9 @@ export class IncidentReportFormComponent {
   incident!: IncidentData;
 
   incidentTypes = [
-    { label: 'Security Incident', value: 'Security Incidents' },
-    { label: 'Privacy Incident', value: 'Privacy Incidents' },
-    { label: 'Quality Incident', value: 'Quality Incidents' },
+    { label: 'Security', value: 'Security Incidents' },
+    { label: 'Privacy', value: 'Privacy Incidents' },
+    { label: 'Quality', value: 'Quality Incidents' },
   ];
 
   categories = [

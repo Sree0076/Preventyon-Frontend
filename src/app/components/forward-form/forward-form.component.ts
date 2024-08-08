@@ -85,7 +85,7 @@ export class ForwardFormComponent {
     forward(): void{
       console.log(this.selectedUsers);
       console.log(this.message);
-      this.forwardFormService.forwardIncident(this.forwardIncidentId,this.getSelectedUserIds()).subscribe((response) => {
+      this.forwardFormService.forwardIncident(this.forwardIncidentId,this.getSelectedUserIds(),this.message).subscribe((response) => {
         console.log('Incident forwarded successfully', response);
         this.router.navigate(['/admin']);
       });
